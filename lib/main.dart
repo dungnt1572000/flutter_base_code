@@ -1,4 +1,5 @@
 import 'package:baseproject/data/providers/theme_provider.dart';
+import 'package:baseproject/data/services/network_service/network_action_manager.dart';
 import 'package:baseproject/presentation/injection/app_modules.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/navigation/app_router.dart';
@@ -25,6 +26,16 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    injector.get<NetworkActionManager>().registerNavigateTo404NotFound(
+      () async{
+        await ref.read(appNavigatorProvider).navigateTo(Approutes.notFound404Error);
+      }
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final isDarkMode = ref.watch(themeProvider);
