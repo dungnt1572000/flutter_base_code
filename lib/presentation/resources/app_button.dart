@@ -1,0 +1,228 @@
+import 'package:baseproject/presentation/resources/app_colors.dart';
+import 'package:baseproject/presentation/resources/app_text_styles.dart';
+import 'package:flutter/material.dart';
+
+enum ButtonState {
+  normal,
+  loading,
+  disable;
+}
+
+enum ButtonSize {
+  large,
+  medium,
+  small,
+}
+
+enum ButtonType {
+  primary,
+  secondary,
+  textOnly,
+  red,
+}
+
+class AppButton extends StatelessWidget {
+  const AppButton({
+    this.leftIcon,
+    this.titleView,
+    this.title = '',
+    this.gradient,
+    this.isExpanded = false,
+    this.onButtonTap,
+    this.buttonState = ButtonState.normal,
+    this.buttonType = ButtonType.primary,
+    this.buttonSize = ButtonSize.large,
+    this.textAlign,
+    this.backgroundColor,
+    this.padding,
+    Key? key,
+  }) : super(key: key);
+
+  final Widget? leftIcon;
+  final Widget? titleView;
+
+  final String title;
+  final Gradient? gradient;
+  final bool isExpanded;
+  final VoidCallback? onButtonTap;
+  final TextAlign? textAlign;
+  final Color? backgroundColor;
+  final EdgeInsets? padding;
+
+  final ButtonState buttonState;
+  final ButtonType buttonType;
+  final ButtonSize buttonSize;
+
+  Color _backgroundColor(BuildContext context) {
+    switch (buttonType) {
+      case ButtonType.primary:
+        return context.colors.primaryMain;
+      case ButtonType.secondary:
+        return context.colors.primaryBackground;
+      case ButtonType.textOnly:
+        return Colors.transparent;
+      case ButtonType.red:
+        return context.colors.error;
+    }
+  }
+
+  Color _textColor(BuildContext context) {
+    switch (buttonType) {
+      case ButtonType.primary:
+      case ButtonType.red:
+        return context.colors.textContrastOnDark;
+      case ButtonType.secondary:
+        return context.colors.primaryText;
+      case ButtonType.textOnly:
+        return context.colors.primaryMain;
+    }
+  }
+
+  TextStyle _textStyle(BuildContext context) {
+    switch (buttonSize) {
+      case ButtonSize.large:
+        return AppTextStyles.labelLarge.copyWith(color: _textColor(context));
+      case ButtonSize.medium:
+        return AppTextStyles.labelMedium.copyWith(color: _textColor(context));
+      case ButtonSize.small:
+        return AppTextStyles.labelSmall.copyWith(color: _textColor(context));
+    }
+  }
+
+  EdgeInsets defaultPadding() {
+    switch (buttonSize) {
+      case ButtonSize.large:
+        return const EdgeInsets.symmetric(horizontal: 18);
+      case ButtonSize.medium:
+        return const EdgeInsets.symmetric(horizontal: 16);
+      case ButtonSize.small:
+        return const EdgeInsets.symmetric(horizontal: 12);
+    }
+  }
+
+  double _cornerRadius() {
+    switch (buttonSize) {
+      case ButtonSize.large:
+      case ButtonSize.medium:
+        return 8;
+      case ButtonSize.small:
+        return 4;
+    }
+  }
+
+  double _height() {
+    switch (buttonSize) {
+      case ButtonSize.large:
+        return 48;
+      case ButtonSize.medium:
+        return 34;
+      case ButtonSize.small:
+        return 24;
+    }
+  }
+
+  Color _splashColor(BuildContext context) {
+    switch (buttonType) {
+      case ButtonType.primary:
+      case ButtonType.red:
+        return Colors.black.withOpacity(0.3);
+      case ButtonType.secondary:
+        return Colors.black.withOpacity(0.1);
+      case ButtonType.textOnly:
+        return Colors.transparent;
+    }
+  }
+
+  VoidCallback? get _onButtonTap {
+    switch (buttonState) {
+      case ButtonState.normal:
+        return onButtonTap;
+      case ButtonState.loading:
+      case ButtonState.disable:
+        return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: buttonState == ButtonState.disable ? 0.5 : 1,
+      child: SizedBox(
+        height: _height(),
+        child: Material(
+          color: Colors.transparent,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(_cornerRadius())),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: backgroundColor ?? _backgroundColor(context),
+              gradient: gradient,
+              borderRadius: BorderRadius.circular(_cornerRadius()),
+            ),
+            child: InkWell(
+              splashColor: _splashColor(context),
+              borderRadius: BorderRadius.circular(_cornerRadius()),
+              onTap: _onButtonTap,
+              child: isExpanded
+                  ? Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: _buttonChild(context),
+                    )
+                  : _buttonChild(context),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buttonChild(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        _titleView(context),
+        _loadingIndicatorView(context),
+      ],
+    );
+  }
+
+  Widget _titleView(BuildContext context) {
+    return Opacity(
+      opacity: buttonState == ButtonState.loading ? 0 : 1,
+      child: Padding(
+        padding: padding == null ? defaultPadding() : padding!,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (leftIcon != null) ...[
+              leftIcon!,
+              const SizedBox(width: 4.5),
+            ],
+            titleView ??
+                Text(
+                  title,
+                  textAlign: textAlign,
+                  style: _textStyle(context),
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _loadingIndicatorView(BuildContext context) {
+    return Opacity(
+      opacity: buttonState == ButtonState.loading ? 1 : 0,
+      child: SizedBox(
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: _textColor(context),
+        ),
+      ),
+    );
+  }
+}

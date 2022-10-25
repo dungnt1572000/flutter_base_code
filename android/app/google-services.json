@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "924366898855",
+    "firebase_url": "https://loginanggandfb-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "loginanggandfb",
+    "storage_bucket": "loginanggandfb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924366898855:android:8067ec08baff3248217d82",
+        "android_client_info": {
+          "package_name": "com.example.baseproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924366898855-lrvsfuknfku6c46pc17g6ml8fr26juv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_RSsIMCgJD3JIcXlu2DaCaJEVjtw1SPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924366898855-lrvsfuknfku6c46pc17g6ml8fr26juv4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "924366898855-00o2ihd19a92ujbjl21j5mchq14bo00i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.monstarlab.dwangoAppCh"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924366898855:android:f12123edc530f60f217d82",
+        "android_client_info": {
+          "package_name": "com.example.gg_fb_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924366898855-msbfvafsqpsudmia3jdocldq0rkiepck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gg_fb_login",
+            "certificate_hash": "8104e0528b70d182e4170492ef821b717e17ed8a"
+          }
+        },
+        {
+          "client_id": "924366898855-lrvsfuknfku6c46pc17g6ml8fr26juv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_RSsIMCgJD3JIcXlu2DaCaJEVjtw1SPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924366898855-lrvsfuknfku6c46pc17g6ml8fr26juv4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "924366898855-00o2ihd19a92ujbjl21j5mchq14bo00i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.monstarlab.dwangoAppCh"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924366898855:android:de8c9dca3261b8e3217d82",
+        "android_client_info": {
+          "package_name": "com.example.use_all_firebase_func"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924366898855-lrvsfuknfku6c46pc17g6ml8fr26juv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_RSsIMCgJD3JIcXlu2DaCaJEVjtw1SPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924366898855-lrvsfuknfku6c46pc17g6ml8fr26juv4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "924366898855-00o2ihd19a92ujbjl21j5mchq14bo00i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.monstarlab.dwangoAppCh"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
