@@ -17,7 +17,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
     Future.delayed(
       const Duration(seconds: 2),
       () => ref.read(appNavigatorProvider).navigateTo(
-            Approutes.notFound404Error,
+            Approutes.home,
             shouldClearStack: true,
           ),
     );
