@@ -20,4 +20,16 @@ class SharePreferencesManager{
   Future<bool> removeIsDarkMode() async{
      return _sharePreferences.remove(PreferenceKeys.isDarkMode.name);
   }
+
+  Future<void> saveAccessToken({required String uId}) async{
+    _sharePreferences.setString(PreferenceKeys.accessToken.name, uId);
+  }
+
+  String? getAccessToken(){
+    return _sharePreferences.getString(PreferenceKeys.accessToken.name);
+  }
+
+  Future<bool> removeAccessToken(){
+    return _sharePreferences.remove(PreferenceKeys.accessToken.name);
+  }
 }

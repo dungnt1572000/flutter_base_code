@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
             onPressed: () async {
               await signIn();
             },
-            child: Text('hello')),
+            child: const Text('hello')),
       ),
     );
   }
