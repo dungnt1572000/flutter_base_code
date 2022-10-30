@@ -21,12 +21,12 @@ class LoginViewModel extends StateNotifier<LoginState> {
       saveAccessTokenUseCase.run(
         user.user?.uid ?? '',
       );
-          state = state.copyWith(status: LoadingStatus.success);
-          return true;
+      state = state.copyWith(status: LoadingStatus.success);
+      return true;
     } on FirebaseException catch (error) {
       state = state.copyWith(
         status: LoadingStatus.error,
-        errorMessage: error.message??'Unknow',
+        errorMessage: error.message ?? 'Unknow',
       );
     }
     return false;

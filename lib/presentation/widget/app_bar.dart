@@ -2,7 +2,7 @@ import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BasicAppBar extends ConsumerStatefulWidget {
+class BasicAppBar extends ConsumerStatefulWidget implements PreferredSizeWidget {
   const BasicAppBar(
       {super.key,
       this.title,
@@ -33,6 +33,9 @@ class BasicAppBar extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<BasicAppBar> createState() => _BasicAppBarState();
+  
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class _BasicAppBarState extends ConsumerState<BasicAppBar> {
@@ -41,6 +44,9 @@ class _BasicAppBarState extends ConsumerState<BasicAppBar> {
     return AppBar(
         title: widget.title,
         actions: widget.widgets,
+        backgroundColor: context.colors.backgroundPrimary.withOpacity(0.0),
+        centerTitle: true,
+        elevation: 0,
         leading: widget.shouldShowBackButton
             ? IconButton(
                 onPressed: () {
