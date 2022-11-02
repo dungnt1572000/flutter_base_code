@@ -49,6 +49,8 @@ dependencies:
   json_annotation: ^4.4.0
   get_it: ^7.2.0
   flutter_map: ^3.0.0
+  location: ^4.4.0
+  latlong2: ^0.8.1
 
 dev_dependencies:
   flutter_test:
