@@ -15,7 +15,7 @@ class AppRouter{
         case Approutes.home:
           return MaterialPageRoute(
             settings: settings,
-            builder: (context) => const HomeView(),);
+            builder: (context) => const HomePage(),);
             case Approutes.notFound404Error:
             return MaterialPageRoute(
               settings: settings,
