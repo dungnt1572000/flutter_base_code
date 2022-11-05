@@ -41,6 +41,25 @@ class HomeViewModel extends StateNotifier<HomeState> {
   }
 
   void addMarker(LatLng latLng) {
-    state = state.copyWith(markers: [...state.markers, latLng]);
+    if (state.markers.length > 1) {
+      state = state.copyWith(markers: []);
+    } else {
+      state = state.copyWith(markers: [...state.markers, latLng]);
+    }
+  }
+
+  Future<bool> getRouteByDrive() async {
+    var distance = '';
+    if (state.markers.isNotEmpty) {
+      if (state.markers.length == 2) {
+        distance =
+            '${state.markers[0].longitude},${state.markers[0].latitude};${state.markers[1].longitude},${state.markers[1].latitude}';
+      }
+      if (state.markers.length == 1) {
+        distance =
+            '${state.longLng},${state.latLng};${state.markers[0].longitude},${state.markers[0].latitude}';
+      }
+      
+    }
   }
 }

@@ -25,6 +25,7 @@ class _$HomeStateTearOff {
       double latLng = 10.762622,
       double longLng = 106.660172,
       List<LatLng> markers = const [],
+      List<LatLng> listForPolyLine = const [],
       bool isDisplaySearchingBar = true,
       bool isDisplayDetailIntroduction = false,
       List<Feature> listSearchingPlace = const []}) {
@@ -35,6 +36,7 @@ class _$HomeStateTearOff {
       latLng: latLng,
       longLng: longLng,
       markers: markers,
+      listForPolyLine: listForPolyLine,
       isDisplaySearchingBar: isDisplaySearchingBar,
       isDisplayDetailIntroduction: isDisplayDetailIntroduction,
       listSearchingPlace: listSearchingPlace,
@@ -53,6 +55,7 @@ mixin _$HomeState {
   double get latLng => throw _privateConstructorUsedError;
   double get longLng => throw _privateConstructorUsedError;
   List<LatLng> get markers => throw _privateConstructorUsedError;
+  List<LatLng> get listForPolyLine => throw _privateConstructorUsedError;
   bool get isDisplaySearchingBar => throw _privateConstructorUsedError;
   bool get isDisplayDetailIntroduction => throw _privateConstructorUsedError;
   List<Feature> get listSearchingPlace => throw _privateConstructorUsedError;
@@ -73,6 +76,7 @@ abstract class $HomeStateCopyWith<$Res> {
       double latLng,
       double longLng,
       List<LatLng> markers,
+      List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
       List<Feature> listSearchingPlace});
@@ -94,6 +98,7 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
     Object? latLng = freezed,
     Object? longLng = freezed,
     Object? markers = freezed,
+    Object? listForPolyLine = freezed,
     Object? isDisplaySearchingBar = freezed,
     Object? isDisplayDetailIntroduction = freezed,
     Object? listSearchingPlace = freezed,
@@ -122,6 +127,10 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
       markers: markers == freezed
           ? _value.markers
           : markers // ignore: cast_nullable_to_non_nullable
+              as List<LatLng>,
+      listForPolyLine: listForPolyLine == freezed
+          ? _value.listForPolyLine
+          : listForPolyLine // ignore: cast_nullable_to_non_nullable
               as List<LatLng>,
       isDisplaySearchingBar: isDisplaySearchingBar == freezed
           ? _value.isDisplaySearchingBar
@@ -152,6 +161,7 @@ abstract class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
       double latLng,
       double longLng,
       List<LatLng> markers,
+      List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
       List<Feature> listSearchingPlace});
@@ -174,6 +184,7 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
     Object? latLng = freezed,
     Object? longLng = freezed,
     Object? markers = freezed,
+    Object? listForPolyLine = freezed,
     Object? isDisplaySearchingBar = freezed,
     Object? isDisplayDetailIntroduction = freezed,
     Object? listSearchingPlace = freezed,
@@ -203,6 +214,10 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
           ? _value.markers
           : markers // ignore: cast_nullable_to_non_nullable
               as List<LatLng>,
+      listForPolyLine: listForPolyLine == freezed
+          ? _value.listForPolyLine
+          : listForPolyLine // ignore: cast_nullable_to_non_nullable
+              as List<LatLng>,
       isDisplaySearchingBar: isDisplaySearchingBar == freezed
           ? _value.isDisplaySearchingBar
           : isDisplaySearchingBar // ignore: cast_nullable_to_non_nullable
@@ -229,6 +244,7 @@ class _$_HomeState implements _HomeState {
       this.latLng = 10.762622,
       this.longLng = 106.660172,
       this.markers = const [],
+      this.listForPolyLine = const [],
       this.isDisplaySearchingBar = true,
       this.isDisplayDetailIntroduction = false,
       this.listSearchingPlace = const []});
@@ -253,6 +269,9 @@ class _$_HomeState implements _HomeState {
   final List<LatLng> markers;
   @JsonKey()
   @override
+  final List<LatLng> listForPolyLine;
+  @JsonKey()
+  @override
   final bool isDisplaySearchingBar;
   @JsonKey()
   @override
@@ -263,7 +282,7 @@ class _$_HomeState implements _HomeState {
 
   @override
   String toString() {
-    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng, markers: $markers, isDisplaySearchingBar: $isDisplaySearchingBar, isDisplayDetailIntroduction: $isDisplayDetailIntroduction, listSearchingPlace: $listSearchingPlace)';
+    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng, markers: $markers, listForPolyLine: $listForPolyLine, isDisplaySearchingBar: $isDisplaySearchingBar, isDisplayDetailIntroduction: $isDisplayDetailIntroduction, listSearchingPlace: $listSearchingPlace)';
   }
 
   @override
@@ -278,6 +297,8 @@ class _$_HomeState implements _HomeState {
             const DeepCollectionEquality().equals(other.latLng, latLng) &&
             const DeepCollectionEquality().equals(other.longLng, longLng) &&
             const DeepCollectionEquality().equals(other.markers, markers) &&
+            const DeepCollectionEquality()
+                .equals(other.listForPolyLine, listForPolyLine) &&
             const DeepCollectionEquality()
                 .equals(other.isDisplaySearchingBar, isDisplaySearchingBar) &&
             const DeepCollectionEquality().equals(
@@ -296,6 +317,7 @@ class _$_HomeState implements _HomeState {
       const DeepCollectionEquality().hash(latLng),
       const DeepCollectionEquality().hash(longLng),
       const DeepCollectionEquality().hash(markers),
+      const DeepCollectionEquality().hash(listForPolyLine),
       const DeepCollectionEquality().hash(isDisplaySearchingBar),
       const DeepCollectionEquality().hash(isDisplayDetailIntroduction),
       const DeepCollectionEquality().hash(listSearchingPlace));
@@ -314,6 +336,7 @@ abstract class _HomeState implements HomeState {
       double latLng,
       double longLng,
       List<LatLng> markers,
+      List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
       List<Feature> listSearchingPlace}) = _$_HomeState;
@@ -330,6 +353,8 @@ abstract class _HomeState implements HomeState {
   double get longLng;
   @override
   List<LatLng> get markers;
+  @override
+  List<LatLng> get listForPolyLine;
   @override
   bool get isDisplaySearchingBar;
   @override

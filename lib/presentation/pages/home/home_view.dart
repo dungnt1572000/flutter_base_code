@@ -92,6 +92,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   : CrossFadeState.showSecond,
               duration: const Duration(milliseconds: 300),
             ),
+            Positioned(right: 15, child: _buildFindButton(context)),
           ],
         ),
       ),
@@ -102,6 +103,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     return FlutterMap(
       mapController: mapController,
       options: MapOptions(
+        onTap: (tapPosition, point) {
+          mapController.move(point, 15.5);
+          _viewModel.addMarker(point);
+        },
         onMapReady: () {
           mapController.move(LatLng(state.latLng, state.longLng), 15);
         },
@@ -117,6 +122,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           markers: state.markers
               .map(
                 (e) => Marker(
+                  height: 32,
                   point: LatLng(e.latitude, e.longitude),
                   builder: (context) => const Icon(Icons.location_on_rounded),
                 ),
@@ -171,7 +177,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   onPressed: () async {
                     await _viewModel
                         .getSearchingList(_lastLocation.text.trim());
-
                   },
                   icon: Icon(
                     Icons.search,
@@ -190,7 +195,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   side: BorderSide(color: context.colors.primaryMain),
                 ),
               ),
-              child: Text('Find',
+              child: Text('Close',
                   style: AppTextStyles.labelMedium
                       .copyWith(color: context.colors.primaryText)),
             ),
@@ -223,12 +228,32 @@ class _HomePageState extends ConsumerState<HomePage> {
                             title:
                                 Text('${state.listSearchingPlace[index].text}'),
                           );
-                        }),
+                        },
+                      ),
               ),
             ),
           ],
         ),
       ),
     ));
+  }
+
+  Widget _buildFindButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        _viewModel.isDisplaySearchingBar(false);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: context.colors.surface,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: context.colors.primaryMain),
+        ),
+      ),
+      child: Text(
+        'Find',
+        style: AppTextStyles.labelMedium
+            .copyWith(color: context.colors.primaryText),
+      ),
+    );
   }
 }

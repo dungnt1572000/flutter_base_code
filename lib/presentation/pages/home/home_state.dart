@@ -14,6 +14,7 @@ class HomeState with _$HomeState{
     @Default(10.762622) double latLng,
     @Default(106.660172) double longLng,
     @Default([]) List<LatLng> markers,
+    @Default([]) List<LatLng> listForPolyLine,
     @Default(true) bool isDisplaySearchingBar,
     @Default(false) bool isDisplayDetailIntroduction,
     @Default([]) List<Feature> listSearchingPlace,
