@@ -23,13 +23,21 @@ class _$HomeStateTearOff {
       LoadingStatus status = LoadingStatus.initial,
       double currentSpeed = 0,
       double latLng = 10.762622,
-      double longLng = 106.660172}) {
+      double longLng = 106.660172,
+      List<LatLng> markers = const [],
+      bool isDisplaySearchingBar = true,
+      bool isDisplayDetailIntroduction = false,
+      List<Feature> listSearchingPlace = const []}) {
     return _HomeState(
       errorMsg: errorMsg,
       status: status,
       currentSpeed: currentSpeed,
       latLng: latLng,
       longLng: longLng,
+      markers: markers,
+      isDisplaySearchingBar: isDisplaySearchingBar,
+      isDisplayDetailIntroduction: isDisplayDetailIntroduction,
+      listSearchingPlace: listSearchingPlace,
     );
   }
 }
@@ -44,6 +52,10 @@ mixin _$HomeState {
   double get currentSpeed => throw _privateConstructorUsedError;
   double get latLng => throw _privateConstructorUsedError;
   double get longLng => throw _privateConstructorUsedError;
+  List<LatLng> get markers => throw _privateConstructorUsedError;
+  bool get isDisplaySearchingBar => throw _privateConstructorUsedError;
+  bool get isDisplayDetailIntroduction => throw _privateConstructorUsedError;
+  List<Feature> get listSearchingPlace => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $HomeStateCopyWith<HomeState> get copyWith =>
@@ -59,7 +71,11 @@ abstract class $HomeStateCopyWith<$Res> {
       LoadingStatus status,
       double currentSpeed,
       double latLng,
-      double longLng});
+      double longLng,
+      List<LatLng> markers,
+      bool isDisplaySearchingBar,
+      bool isDisplayDetailIntroduction,
+      List<Feature> listSearchingPlace});
 }
 
 /// @nodoc
@@ -77,6 +93,10 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
     Object? currentSpeed = freezed,
     Object? latLng = freezed,
     Object? longLng = freezed,
+    Object? markers = freezed,
+    Object? isDisplaySearchingBar = freezed,
+    Object? isDisplayDetailIntroduction = freezed,
+    Object? listSearchingPlace = freezed,
   }) {
     return _then(_value.copyWith(
       errorMsg: errorMsg == freezed
@@ -99,6 +119,22 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
           ? _value.longLng
           : longLng // ignore: cast_nullable_to_non_nullable
               as double,
+      markers: markers == freezed
+          ? _value.markers
+          : markers // ignore: cast_nullable_to_non_nullable
+              as List<LatLng>,
+      isDisplaySearchingBar: isDisplaySearchingBar == freezed
+          ? _value.isDisplaySearchingBar
+          : isDisplaySearchingBar // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isDisplayDetailIntroduction: isDisplayDetailIntroduction == freezed
+          ? _value.isDisplayDetailIntroduction
+          : isDisplayDetailIntroduction // ignore: cast_nullable_to_non_nullable
+              as bool,
+      listSearchingPlace: listSearchingPlace == freezed
+          ? _value.listSearchingPlace
+          : listSearchingPlace // ignore: cast_nullable_to_non_nullable
+              as List<Feature>,
     ));
   }
 }
@@ -114,7 +150,11 @@ abstract class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
       LoadingStatus status,
       double currentSpeed,
       double latLng,
-      double longLng});
+      double longLng,
+      List<LatLng> markers,
+      bool isDisplaySearchingBar,
+      bool isDisplayDetailIntroduction,
+      List<Feature> listSearchingPlace});
 }
 
 /// @nodoc
@@ -133,6 +173,10 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
     Object? currentSpeed = freezed,
     Object? latLng = freezed,
     Object? longLng = freezed,
+    Object? markers = freezed,
+    Object? isDisplaySearchingBar = freezed,
+    Object? isDisplayDetailIntroduction = freezed,
+    Object? listSearchingPlace = freezed,
   }) {
     return _then(_HomeState(
       errorMsg: errorMsg == freezed
@@ -155,6 +199,22 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
           ? _value.longLng
           : longLng // ignore: cast_nullable_to_non_nullable
               as double,
+      markers: markers == freezed
+          ? _value.markers
+          : markers // ignore: cast_nullable_to_non_nullable
+              as List<LatLng>,
+      isDisplaySearchingBar: isDisplaySearchingBar == freezed
+          ? _value.isDisplaySearchingBar
+          : isDisplaySearchingBar // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isDisplayDetailIntroduction: isDisplayDetailIntroduction == freezed
+          ? _value.isDisplayDetailIntroduction
+          : isDisplayDetailIntroduction // ignore: cast_nullable_to_non_nullable
+              as bool,
+      listSearchingPlace: listSearchingPlace == freezed
+          ? _value.listSearchingPlace
+          : listSearchingPlace // ignore: cast_nullable_to_non_nullable
+              as List<Feature>,
     ));
   }
 }
@@ -167,7 +227,11 @@ class _$_HomeState implements _HomeState {
       this.status = LoadingStatus.initial,
       this.currentSpeed = 0,
       this.latLng = 10.762622,
-      this.longLng = 106.660172});
+      this.longLng = 106.660172,
+      this.markers = const [],
+      this.isDisplaySearchingBar = true,
+      this.isDisplayDetailIntroduction = false,
+      this.listSearchingPlace = const []});
 
   @JsonKey()
   @override
@@ -184,10 +248,22 @@ class _$_HomeState implements _HomeState {
   @JsonKey()
   @override
   final double longLng;
+  @JsonKey()
+  @override
+  final List<LatLng> markers;
+  @JsonKey()
+  @override
+  final bool isDisplaySearchingBar;
+  @JsonKey()
+  @override
+  final bool isDisplayDetailIntroduction;
+  @JsonKey()
+  @override
+  final List<Feature> listSearchingPlace;
 
   @override
   String toString() {
-    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng)';
+    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng, markers: $markers, isDisplaySearchingBar: $isDisplaySearchingBar, isDisplayDetailIntroduction: $isDisplayDetailIntroduction, listSearchingPlace: $listSearchingPlace)';
   }
 
   @override
@@ -200,7 +276,15 @@ class _$_HomeState implements _HomeState {
             const DeepCollectionEquality()
                 .equals(other.currentSpeed, currentSpeed) &&
             const DeepCollectionEquality().equals(other.latLng, latLng) &&
-            const DeepCollectionEquality().equals(other.longLng, longLng));
+            const DeepCollectionEquality().equals(other.longLng, longLng) &&
+            const DeepCollectionEquality().equals(other.markers, markers) &&
+            const DeepCollectionEquality()
+                .equals(other.isDisplaySearchingBar, isDisplaySearchingBar) &&
+            const DeepCollectionEquality().equals(
+                other.isDisplayDetailIntroduction,
+                isDisplayDetailIntroduction) &&
+            const DeepCollectionEquality()
+                .equals(other.listSearchingPlace, listSearchingPlace));
   }
 
   @override
@@ -210,7 +294,11 @@ class _$_HomeState implements _HomeState {
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(currentSpeed),
       const DeepCollectionEquality().hash(latLng),
-      const DeepCollectionEquality().hash(longLng));
+      const DeepCollectionEquality().hash(longLng),
+      const DeepCollectionEquality().hash(markers),
+      const DeepCollectionEquality().hash(isDisplaySearchingBar),
+      const DeepCollectionEquality().hash(isDisplayDetailIntroduction),
+      const DeepCollectionEquality().hash(listSearchingPlace));
 
   @JsonKey(ignore: true)
   @override
@@ -224,7 +312,11 @@ abstract class _HomeState implements HomeState {
       LoadingStatus status,
       double currentSpeed,
       double latLng,
-      double longLng}) = _$_HomeState;
+      double longLng,
+      List<LatLng> markers,
+      bool isDisplaySearchingBar,
+      bool isDisplayDetailIntroduction,
+      List<Feature> listSearchingPlace}) = _$_HomeState;
 
   @override
   String get errorMsg;
@@ -236,6 +328,14 @@ abstract class _HomeState implements HomeState {
   double get latLng;
   @override
   double get longLng;
+  @override
+  List<LatLng> get markers;
+  @override
+  bool get isDisplaySearchingBar;
+  @override
+  bool get isDisplayDetailIntroduction;
+  @override
+  List<Feature> get listSearchingPlace;
   @override
   @JsonKey(ignore: true)
   _$HomeStateCopyWith<_HomeState> get copyWith =>

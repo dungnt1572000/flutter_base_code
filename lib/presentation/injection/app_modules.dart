@@ -22,7 +22,9 @@ class AppModules {
         notFound404Interceptor: notFound404Interceptor,
       );
     });
-
+    injector.registerLazySingleton<ApiClient>(
+      () => ApiClient(injector.get<Dio>()),
+    );
     injector.registerLazySingleton<NetworkActionManager>(
       () => NetworkActionManager(),
     );
