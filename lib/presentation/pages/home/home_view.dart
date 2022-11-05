@@ -1,10 +1,14 @@
+import 'package:baseproject/presentation/domain/use_case/get_driving_direction_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:baseproject/presentation/pages/home/home_state.dart';
 import 'package:baseproject/presentation/pages/home/home_view_model.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
+import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
+import 'package:baseproject/ultilities/route_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +16,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
 final provider = StateNotifierProvider.autoDispose<HomeViewModel, HomeState>(
-  (ref) => HomeViewModel(injector.get<GetSearchingObjectUseCase>()),
+  (ref) => HomeViewModel(
+    injector.get<GetSearchingObjectUseCase>(),
+    injector.get<GetDrivingDirectionObjectUseCase>(),
+    injector.get<GetWalkingDirectionObjectUseCase>(),
+  ),
 );
 
 class HomePage extends ConsumerStatefulWidget {
@@ -57,8 +65,12 @@ class _HomePageState extends ConsumerState<HomePage> {
       }
 
       _locationData = await location.getLocation();
-      _viewModel.upDateCurrentLocation(
-          _locationData.latitude ?? 51.5, _locationData.longitude ?? -0.09);
+      location.onLocationChanged.listen((LocationData currentLocation) {
+        _viewModel.upDateCurrentLocationAndSpeed(
+            currentLocation.latitude ?? 51.5,
+            currentLocation.longitude ?? -0.09,
+            currentLocation.speedAccuracy ?? 0.0);
+      });
     });
   }
 
@@ -70,6 +82,15 @@ class _HomePageState extends ConsumerState<HomePage> {
           fit: StackFit.loose,
           children: [
             _buildMap(),
+            Positioned(
+              right: 15,
+              child: Column(
+                children: [
+                  _buildFindButton(context),
+                  _buildSaveDriving(context),
+                ],
+              ),
+            ),
             AnimatedCrossFade(
               firstChild: _buildFindWay(context),
               secondChild: ElevatedButton(
@@ -92,7 +113,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   : CrossFadeState.showSecond,
               duration: const Duration(milliseconds: 300),
             ),
-            Positioned(right: 15, child: _buildFindButton(context)),
+            state.listForPolyLine.isNotEmpty
+                ? _builtDetailTrip(context)
+                : const SizedBox(),
           ],
         ),
       ),
@@ -115,20 +138,32 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       children: [
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          urlTemplate:
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png?layers=H',
           userAgentPackageName: 'com.example.baseproject',
         ),
         MarkerLayer(
           markers: state.markers
               .map(
                 (e) => Marker(
-                  height: 32,
+                  height: 50,
                   point: LatLng(e.latitude, e.longitude),
-                  builder: (context) => const Icon(Icons.location_on_rounded),
+                  builder: (context) => const Icon(
+                    Icons.location_on_rounded,
+                    size: 50,
+                  ),
                 ),
               )
               .toList(),
         ),
+        PolylineLayer(
+          polylines: [
+            Polyline(
+                points: state.listForPolyLine,
+                color: Colors.red,
+                borderStrokeWidth: 2.5),
+          ],
+        )
       ],
     );
   }
@@ -195,9 +230,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   side: BorderSide(color: context.colors.primaryMain),
                 ),
               ),
-              child: Text('Close',
-                  style: AppTextStyles.labelMedium
-                      .copyWith(color: context.colors.primaryText)),
+              child: Text(
+                'Close',
+                style: AppTextStyles.labelMedium
+                    .copyWith(color: context.colors.primaryText),
+              ),
             ),
             AppLoadingOverlay(
               status: state.status,
@@ -240,8 +277,8 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildFindButton(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        _viewModel.isDisplaySearchingBar(false);
+      onPressed: () async {
+        await _viewModel.getRouteByMethod(state.routeMethod);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.surface,
@@ -251,6 +288,133 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       child: Text(
         'Find',
+        style: AppTextStyles.labelMedium
+            .copyWith(color: context.colors.primaryText),
+      ),
+    );
+  }
+
+  Widget _builtDetailTrip(BuildContext context) {
+    return DraggableScrollableSheet(
+      minChildSize: 0,
+      initialChildSize: 0.35,
+      expand: true,
+      builder: (context, scrollController) {
+        return SingleChildScrollView(
+          controller: scrollController,
+          child: Column(
+            children: [
+              _buildRouteMethod(context),
+              AppLoadingOverlay(
+                status: state.status,
+                child: Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Current Speed: ${state.currentSpeed}',
+                          style: AppTextStyles.textLarge
+                              .copyWith(color: context.colors.primaryText),
+                        ),
+                        Text(
+                          'Time: ${state.duration}',
+                          style: AppTextStyles.textLarge
+                              .copyWith(color: context.colors.primaryText),
+                        ),
+                        Text(
+                          'Distance: ${state.distance}',
+                          style: AppTextStyles.textLarge
+                              .copyWith(color: context.colors.primaryText),
+                        ),
+                      ],
+                    )),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildRouteMethod(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        GestureDetector(
+          onTap: () async {
+            _viewModel.changeMethod(RouteMethod.driving);
+            final result =
+                await _viewModel.getRouteByMethod(RouteMethod.driving);
+            if (!result) {
+              showErrorSnackBar(
+                  context: context,
+                  errorMessage: 'Cant found route to this case');
+            }
+          },
+          child: Container(
+            width: 120,
+            height: 50,
+            decoration: BoxDecoration(
+              color: state.routeMethod == RouteMethod.driving
+                  ? Colors.blue
+                  : Colors.white,
+              border: Border.all(color: context.colors.border),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.drive_eta,
+              color: context.colors.iconPrimary,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            _viewModel.changeMethod(RouteMethod.walking);
+            final result =
+                await _viewModel.getRouteByMethod(RouteMethod.walking);
+            if (!result) {
+              showErrorSnackBar(
+                  context: context,
+                  errorMessage: 'Cant found route to this case');
+            }
+          },
+          child: Container(
+            width: 120,
+            height: 50,
+            decoration: BoxDecoration(
+              color: state.routeMethod == RouteMethod.walking
+                  ? Colors.blue
+                  : Colors.white,
+              border: Border.all(color: context.colors.border),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              Icons.nordic_walking,
+              color: context.colors.iconPrimary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSaveDriving(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        backgroundColor: context.colors.surface,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: context.colors.primaryMain),
+        ),
+      ),
+      child: Text(
+        'Save Driving',
         style: AppTextStyles.labelMedium
             .copyWith(color: context.colors.primaryText),
       ),

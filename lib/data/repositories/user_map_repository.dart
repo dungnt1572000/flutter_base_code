@@ -17,13 +17,17 @@ class UserMapRepository {
       String annotations,
       String geometries,
       String overviews) {
-        return _apiClient.getDirectionWalking(direction, accessToken, annotations, geometries, overviews);
-      }
-    Future<DirectionObject> getDrivingDirection(String direction,
+    return _apiClient.getDirectionWalking(
+        direction, accessToken, annotations, geometries, overviews);
+  }
+
+  Future<DirectionObject> getDrivingDirection(
+      String direction,
       String accessToken,
       String annotations,
       String geometries,
-      String overviews){
-        return _apiClient.getDirectionDriving(direction, accessToken, annotations, geometries, overviews);
-      }
+      String overviews) {
+    return _apiClient.getDirectionDriving(
+        direction, accessToken, annotations, geometries, overviews);
+  }
 }

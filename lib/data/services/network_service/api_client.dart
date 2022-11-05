@@ -16,7 +16,8 @@ abstract class ApiClient {
       @Query('annotations') String annotations,
       @Query('geometries') String geometries,
       @Query('overview') String overviews);
-  @GET('walking/{direction}')
+
+  @GET('directions/v5/mapbox/walking/{direction}')
   Future<DirectionObject> getDirectionWalking(
       @Path('direction') String direction,
       @Query('access_token') String accessToken,

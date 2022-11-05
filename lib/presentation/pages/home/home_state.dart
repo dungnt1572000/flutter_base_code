@@ -1,5 +1,6 @@
 import 'package:baseproject/data/repositories/entities/searching_object.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
+import 'package:baseproject/ultilities/route_method.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -18,5 +19,8 @@ class HomeState with _$HomeState{
     @Default(true) bool isDisplaySearchingBar,
     @Default(false) bool isDisplayDetailIntroduction,
     @Default([]) List<Feature> listSearchingPlace,
+    @Default(RouteMethod.driving) RouteMethod routeMethod,
+    @Default(0.0) double duration,
+    @Default(0.0) double distance,
   }) = _HomeState;
 }

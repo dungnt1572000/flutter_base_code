@@ -55,7 +55,8 @@ class _ApiClient implements ApiClient {
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<DirectionObject>(
             Options(method: 'GET', headers: _headers, extra: _extra)
-                .compose(_dio.options, 'walking/${direction}',
+                .compose(
+                    _dio.options, 'directions/v5/mapbox/walking/${direction}',
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = DirectionObject.fromJson(_result.data!);

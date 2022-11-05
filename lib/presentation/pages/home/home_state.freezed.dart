@@ -28,7 +28,10 @@ class _$HomeStateTearOff {
       List<LatLng> listForPolyLine = const [],
       bool isDisplaySearchingBar = true,
       bool isDisplayDetailIntroduction = false,
-      List<Feature> listSearchingPlace = const []}) {
+      List<Feature> listSearchingPlace = const [],
+      RouteMethod routeMethod = RouteMethod.driving,
+      double duration = 0.0,
+      double distance = 0.0}) {
     return _HomeState(
       errorMsg: errorMsg,
       status: status,
@@ -40,6 +43,9 @@ class _$HomeStateTearOff {
       isDisplaySearchingBar: isDisplaySearchingBar,
       isDisplayDetailIntroduction: isDisplayDetailIntroduction,
       listSearchingPlace: listSearchingPlace,
+      routeMethod: routeMethod,
+      duration: duration,
+      distance: distance,
     );
   }
 }
@@ -59,6 +65,9 @@ mixin _$HomeState {
   bool get isDisplaySearchingBar => throw _privateConstructorUsedError;
   bool get isDisplayDetailIntroduction => throw _privateConstructorUsedError;
   List<Feature> get listSearchingPlace => throw _privateConstructorUsedError;
+  RouteMethod get routeMethod => throw _privateConstructorUsedError;
+  double get duration => throw _privateConstructorUsedError;
+  double get distance => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $HomeStateCopyWith<HomeState> get copyWith =>
@@ -79,7 +88,10 @@ abstract class $HomeStateCopyWith<$Res> {
       List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
-      List<Feature> listSearchingPlace});
+      List<Feature> listSearchingPlace,
+      RouteMethod routeMethod,
+      double duration,
+      double distance});
 }
 
 /// @nodoc
@@ -102,6 +114,9 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
     Object? isDisplaySearchingBar = freezed,
     Object? isDisplayDetailIntroduction = freezed,
     Object? listSearchingPlace = freezed,
+    Object? routeMethod = freezed,
+    Object? duration = freezed,
+    Object? distance = freezed,
   }) {
     return _then(_value.copyWith(
       errorMsg: errorMsg == freezed
@@ -144,6 +159,18 @@ class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
           ? _value.listSearchingPlace
           : listSearchingPlace // ignore: cast_nullable_to_non_nullable
               as List<Feature>,
+      routeMethod: routeMethod == freezed
+          ? _value.routeMethod
+          : routeMethod // ignore: cast_nullable_to_non_nullable
+              as RouteMethod,
+      duration: duration == freezed
+          ? _value.duration
+          : duration // ignore: cast_nullable_to_non_nullable
+              as double,
+      distance: distance == freezed
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -164,7 +191,10 @@ abstract class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
       List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
-      List<Feature> listSearchingPlace});
+      List<Feature> listSearchingPlace,
+      RouteMethod routeMethod,
+      double duration,
+      double distance});
 }
 
 /// @nodoc
@@ -188,6 +218,9 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
     Object? isDisplaySearchingBar = freezed,
     Object? isDisplayDetailIntroduction = freezed,
     Object? listSearchingPlace = freezed,
+    Object? routeMethod = freezed,
+    Object? duration = freezed,
+    Object? distance = freezed,
   }) {
     return _then(_HomeState(
       errorMsg: errorMsg == freezed
@@ -230,6 +263,18 @@ class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
           ? _value.listSearchingPlace
           : listSearchingPlace // ignore: cast_nullable_to_non_nullable
               as List<Feature>,
+      routeMethod: routeMethod == freezed
+          ? _value.routeMethod
+          : routeMethod // ignore: cast_nullable_to_non_nullable
+              as RouteMethod,
+      duration: duration == freezed
+          ? _value.duration
+          : duration // ignore: cast_nullable_to_non_nullable
+              as double,
+      distance: distance == freezed
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -247,7 +292,10 @@ class _$_HomeState implements _HomeState {
       this.listForPolyLine = const [],
       this.isDisplaySearchingBar = true,
       this.isDisplayDetailIntroduction = false,
-      this.listSearchingPlace = const []});
+      this.listSearchingPlace = const [],
+      this.routeMethod = RouteMethod.driving,
+      this.duration = 0.0,
+      this.distance = 0.0});
 
   @JsonKey()
   @override
@@ -279,10 +327,19 @@ class _$_HomeState implements _HomeState {
   @JsonKey()
   @override
   final List<Feature> listSearchingPlace;
+  @JsonKey()
+  @override
+  final RouteMethod routeMethod;
+  @JsonKey()
+  @override
+  final double duration;
+  @JsonKey()
+  @override
+  final double distance;
 
   @override
   String toString() {
-    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng, markers: $markers, listForPolyLine: $listForPolyLine, isDisplaySearchingBar: $isDisplaySearchingBar, isDisplayDetailIntroduction: $isDisplayDetailIntroduction, listSearchingPlace: $listSearchingPlace)';
+    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng, markers: $markers, listForPolyLine: $listForPolyLine, isDisplaySearchingBar: $isDisplaySearchingBar, isDisplayDetailIntroduction: $isDisplayDetailIntroduction, listSearchingPlace: $listSearchingPlace, routeMethod: $routeMethod, duration: $duration, distance: $distance)';
   }
 
   @override
@@ -305,7 +362,11 @@ class _$_HomeState implements _HomeState {
                 other.isDisplayDetailIntroduction,
                 isDisplayDetailIntroduction) &&
             const DeepCollectionEquality()
-                .equals(other.listSearchingPlace, listSearchingPlace));
+                .equals(other.listSearchingPlace, listSearchingPlace) &&
+            const DeepCollectionEquality()
+                .equals(other.routeMethod, routeMethod) &&
+            const DeepCollectionEquality().equals(other.duration, duration) &&
+            const DeepCollectionEquality().equals(other.distance, distance));
   }
 
   @override
@@ -320,7 +381,10 @@ class _$_HomeState implements _HomeState {
       const DeepCollectionEquality().hash(listForPolyLine),
       const DeepCollectionEquality().hash(isDisplaySearchingBar),
       const DeepCollectionEquality().hash(isDisplayDetailIntroduction),
-      const DeepCollectionEquality().hash(listSearchingPlace));
+      const DeepCollectionEquality().hash(listSearchingPlace),
+      const DeepCollectionEquality().hash(routeMethod),
+      const DeepCollectionEquality().hash(duration),
+      const DeepCollectionEquality().hash(distance));
 
   @JsonKey(ignore: true)
   @override
@@ -339,7 +403,10 @@ abstract class _HomeState implements HomeState {
       List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
-      List<Feature> listSearchingPlace}) = _$_HomeState;
+      List<Feature> listSearchingPlace,
+      RouteMethod routeMethod,
+      double duration,
+      double distance}) = _$_HomeState;
 
   @override
   String get errorMsg;
@@ -361,6 +428,12 @@ abstract class _HomeState implements HomeState {
   bool get isDisplayDetailIntroduction;
   @override
   List<Feature> get listSearchingPlace;
+  @override
+  RouteMethod get routeMethod;
+  @override
+  double get duration;
+  @override
+  double get distance;
   @override
   @JsonKey(ignore: true)
   _$HomeStateCopyWith<_HomeState> get copyWith =>
