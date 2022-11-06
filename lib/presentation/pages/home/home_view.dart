@@ -2,6 +2,8 @@ import 'package:baseproject/presentation/domain/use_case/get_driving_direction_o
 import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
+import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
+import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/pages/home/home_state.dart';
 import 'package:baseproject/presentation/pages/home/home_view_model.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
@@ -406,7 +408,9 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildSaveDriving(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        ref.read(appNavigatorProvider).navigateTo(Approutes.saveDriving);
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.surface,
         shape: RoundedRectangleBorder(

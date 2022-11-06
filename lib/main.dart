@@ -5,19 +5,25 @@ import 'package:baseproject/presentation/navigation/app_navigator_provider.dart'
 import 'package:baseproject/presentation/navigation/app_router.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/resources/app_theme.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+List<CameraDescription> cameras = <CameraDescription>[];
 Future<void> main() async {
-      WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await AppModules.inject();
   await injector.allReady();
-  injector.isReady<SharedPreferences>().then((value) => runApp(
-    const ProviderScope(child: MyApp(),)
-  ));
-  
+  cameras = await availableCameras();
+  injector
+      .isReady<SharedPreferences>()
+      .then((value) => runApp(const ProviderScope(
+            child: MyApp(),
+          )));
 }
+
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
@@ -30,20 +36,23 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    injector.get<NetworkActionManager>().registerNavigateTo404NotFound(
-      () async{
-        await ref.read(appNavigatorProvider).navigateTo(Approutes.notFound404Error);
-      }
-    );
+    injector
+        .get<NetworkActionManager>()
+        .registerNavigateTo404NotFound(() async {
+      await ref
+          .read(appNavigatorProvider)
+          .navigateTo(Approutes.notFound404Error);
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     final isDarkMode = ref.watch(themeProvider);
-    return  MaterialApp(
+    return MaterialApp(
       title: 'Project Name',
       theme: getAppTheme(Brightness.light),
       darkTheme: getAppTheme(Brightness.dark),
-      themeMode: isDarkMode?ThemeMode.dark:ThemeMode.light,
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       initialRoute: Approutes.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
       navigatorKey: ref.read(appNavigatorProvider).navigatorKey,
