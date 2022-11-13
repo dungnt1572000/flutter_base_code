@@ -16,20 +16,53 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
   late CameraController controller;
   String output = '';
   CameraImage? cameraImage;
+  int _imageCount = 0;
+
+  Future<String> loadModel() async {
+    output = await Tflite.loadModel(
+          model: "assets/tfl/model_unquant.tflite",
+          labels: "assets/tfl/labels.txt",
+          isAsset: true,
+          numThreads: 1,
+          useGpuDelegate: false,
+        ) ??
+        'cant relize';
+    return output;
+  }
+
   @override
   void initState() {
     super.initState();
-    controller = CameraController(cameras[0], ResolutionPreset.max);
+    controller = CameraController(cameras[0], ResolutionPreset.high);
+    Future.delayed(Duration.zero, () async {
+      await loadModel();
+    });
     controller.initialize().then((_) {
       if (!mounted) {
         return;
       }
       setState(() {});
-      controller.startImageStream((image) {
-        cameraImage = image;
-        runModel();
+      controller.startImageStream((img) async {
+        _imageCount++;
+        if (_imageCount % 3 == 0) {
+          var recognitions = await Tflite.runModelOnFrame(
+              bytesList: img.planes.map((plane) {
+                return plane.bytes;
+              }).toList(), // required
+              imageHeight: img.height,
+              imageWidth: img.width,
+              imageMean: 127.5, // defaults to 127.5
+              imageStd: 127.5, // defaults to 127.5
+              rotation: 90, // defaults to 90, Android only
+              numResults: 2, // defaults to 5
+              threshold: 0.1, // defaults to 0.1
+              asynch: true // defaults to true
+              );
+          if (recognitions != null) {
+            print(recognitions);
+          }
+        }
       });
-      loadModel();
     }).catchError((Object e) {
       if (e is CameraException) {
         switch (e.code) {
@@ -42,33 +75,6 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
         }
       }
     });
-  }
-
-  Future runModel() async {
-    if (cameraImage != null) {
-      var prediction = await Tflite.runModelOnFrame(
-          bytesList: cameraImage!.planes.map((e) {
-            return e.bytes;
-          }).toList(),
-          imageHeight: cameraImage!.height,
-          imageWidth: cameraImage!.width,
-          imageMean: 127.5, // defaults to 127.5
-          imageStd: 127.5, // defaults to 127.5
-          rotation: 90, // defaults to 90, Android only
-          numResults: 2, // defaults to 5
-          threshold: 0.1, // defaults to 0.1
-          asynch: true);
-      for (var element in prediction!) {
-        setState(() {
-          output = element['label'];
-        });
-      }
-    }
-  }
-
-  Future loadModel() async {
-    await Tflite.loadModel(
-        model: 'assets/tfl/model_50km.tflite', labels: 'assets/tfl/labels.txt');
   }
 
   @override
