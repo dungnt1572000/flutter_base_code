@@ -44,7 +44,7 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
       setState(() {});
       controller.startImageStream((img) async {
         _imageCount++;
-        if (_imageCount % 3 == 0) {
+        if (_imageCount % 10 == 0) {
           var recognitions = await Tflite.runModelOnFrame(
               bytesList: img.planes.map((plane) {
                 return plane.bytes;
@@ -59,7 +59,15 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
               asynch: true // defaults to true
               );
           if (recognitions != null) {
-            print(recognitions);
+            if (recognitions[0]['confidence'] > 0.7) {
+              setState(() {
+                output = recognitions[0]['label'];
+              });
+            } else {
+              setState(() {
+                output = 'Unknown';
+              });
+            }
           }
         }
       });
@@ -86,11 +94,11 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
+          SizedBox(
               height: size.height * 0.8,
               width: size.width,
               child: CameraPreview(controller)),
-          Text('$output'),
+          Text(output),
         ],
       ),
     );
