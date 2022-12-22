@@ -19,10 +19,13 @@ class _$SaveDrivingStateTearOff {
   const _$SaveDrivingStateTearOff();
 
   _SaveDrivingState call(
-      {double currentSpeed = 0.0, String errorMessage = ''}) {
+      {double currentSpeed = 0.0,
+      String errorMessage = '',
+      dynamic isOpenSpeed = false}) {
     return _SaveDrivingState(
       currentSpeed: currentSpeed,
       errorMessage: errorMessage,
+      isOpenSpeed: isOpenSpeed,
     );
   }
 }
@@ -34,6 +37,7 @@ const $SaveDrivingState = _$SaveDrivingStateTearOff();
 mixin _$SaveDrivingState {
   double get currentSpeed => throw _privateConstructorUsedError;
   String get errorMessage => throw _privateConstructorUsedError;
+  dynamic get isOpenSpeed => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SaveDrivingStateCopyWith<SaveDrivingState> get copyWith =>
@@ -45,7 +49,7 @@ abstract class $SaveDrivingStateCopyWith<$Res> {
   factory $SaveDrivingStateCopyWith(
           SaveDrivingState value, $Res Function(SaveDrivingState) then) =
       _$SaveDrivingStateCopyWithImpl<$Res>;
-  $Res call({double currentSpeed, String errorMessage});
+  $Res call({double currentSpeed, String errorMessage, dynamic isOpenSpeed});
 }
 
 /// @nodoc
@@ -61,6 +65,7 @@ class _$SaveDrivingStateCopyWithImpl<$Res>
   $Res call({
     Object? currentSpeed = freezed,
     Object? errorMessage = freezed,
+    Object? isOpenSpeed = freezed,
   }) {
     return _then(_value.copyWith(
       currentSpeed: currentSpeed == freezed
@@ -71,6 +76,10 @@ class _$SaveDrivingStateCopyWithImpl<$Res>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String,
+      isOpenSpeed: isOpenSpeed == freezed
+          ? _value.isOpenSpeed
+          : isOpenSpeed // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
@@ -82,7 +91,7 @@ abstract class _$SaveDrivingStateCopyWith<$Res>
           _SaveDrivingState value, $Res Function(_SaveDrivingState) then) =
       __$SaveDrivingStateCopyWithImpl<$Res>;
   @override
-  $Res call({double currentSpeed, String errorMessage});
+  $Res call({double currentSpeed, String errorMessage, dynamic isOpenSpeed});
 }
 
 /// @nodoc
@@ -100,6 +109,7 @@ class __$SaveDrivingStateCopyWithImpl<$Res>
   $Res call({
     Object? currentSpeed = freezed,
     Object? errorMessage = freezed,
+    Object? isOpenSpeed = freezed,
   }) {
     return _then(_SaveDrivingState(
       currentSpeed: currentSpeed == freezed
@@ -110,6 +120,7 @@ class __$SaveDrivingStateCopyWithImpl<$Res>
           ? _value.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String,
+      isOpenSpeed: isOpenSpeed == freezed ? _value.isOpenSpeed : isOpenSpeed,
     ));
   }
 }
@@ -117,7 +128,10 @@ class __$SaveDrivingStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SaveDrivingState implements _SaveDrivingState {
-  _$_SaveDrivingState({this.currentSpeed = 0.0, this.errorMessage = ''});
+  _$_SaveDrivingState(
+      {this.currentSpeed = 0.0,
+      this.errorMessage = '',
+      this.isOpenSpeed = false});
 
   @JsonKey()
   @override
@@ -125,10 +139,13 @@ class _$_SaveDrivingState implements _SaveDrivingState {
   @JsonKey()
   @override
   final String errorMessage;
+  @JsonKey()
+  @override
+  final dynamic isOpenSpeed;
 
   @override
   String toString() {
-    return 'SaveDrivingState(currentSpeed: $currentSpeed, errorMessage: $errorMessage)';
+    return 'SaveDrivingState(currentSpeed: $currentSpeed, errorMessage: $errorMessage, isOpenSpeed: $isOpenSpeed)';
   }
 
   @override
@@ -139,14 +156,17 @@ class _$_SaveDrivingState implements _SaveDrivingState {
             const DeepCollectionEquality()
                 .equals(other.currentSpeed, currentSpeed) &&
             const DeepCollectionEquality()
-                .equals(other.errorMessage, errorMessage));
+                .equals(other.errorMessage, errorMessage) &&
+            const DeepCollectionEquality()
+                .equals(other.isOpenSpeed, isOpenSpeed));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(currentSpeed),
-      const DeepCollectionEquality().hash(errorMessage));
+      const DeepCollectionEquality().hash(errorMessage),
+      const DeepCollectionEquality().hash(isOpenSpeed));
 
   @JsonKey(ignore: true)
   @override
@@ -155,13 +175,17 @@ class _$_SaveDrivingState implements _SaveDrivingState {
 }
 
 abstract class _SaveDrivingState implements SaveDrivingState {
-  factory _SaveDrivingState({double currentSpeed, String errorMessage}) =
-      _$_SaveDrivingState;
+  factory _SaveDrivingState(
+      {double currentSpeed,
+      String errorMessage,
+      dynamic isOpenSpeed}) = _$_SaveDrivingState;
 
   @override
   double get currentSpeed;
   @override
   String get errorMessage;
+  @override
+  dynamic get isOpenSpeed;
   @override
   @JsonKey(ignore: true)
   _$SaveDrivingStateCopyWith<_SaveDrivingState> get copyWith =>

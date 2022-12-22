@@ -23,8 +23,15 @@ class HomeViewModel extends StateNotifier<HomeState> {
     state = state.copyWith(currentSpeed: currentSpeed);
   }
 
-  void upDateCurrentLocationAndSpeed(double latitude, double longtitude,double speed) {
-    state = state.copyWith(latLng: latitude, longLng: longtitude,currentSpeed: speed);
+  void upDateCurrentLocation(double latitude, double longtitude) {
+    state = state.copyWith(
+      latLng: latitude,
+      longLng: longtitude,
+    );
+  }
+
+  void upDateSpeed(double speed){
+    state= state.copyWith(currentSpeed: speed);
   }
 
   void isDisplaySearchingBar(bool isDisplay) {
@@ -56,9 +63,11 @@ class HomeViewModel extends StateNotifier<HomeState> {
       state = state.copyWith(markers: [...state.markers, latLng]);
     }
   }
-  void changeMethod(RouteMethod routeMethod){
-    state= state.copyWith(routeMethod: routeMethod);
+
+  void changeMethod(RouteMethod routeMethod) {
+    state = state.copyWith(routeMethod: routeMethod);
   }
+
   Future<bool> getRouteByMethod(RouteMethod method) async {
     state = state.copyWith(status: LoadingStatus.inProgress);
     var distance = '';
@@ -112,6 +121,10 @@ class HomeViewModel extends StateNotifier<HomeState> {
         state = state.copyWith(
             errorMsg: error.toString(), status: LoadingStatus.error);
       }
+    } else {
+      state = state.copyWith(
+          errorMsg: 'Please choose at least 1 location',
+          status: LoadingStatus.error);
     }
     return false;
   }

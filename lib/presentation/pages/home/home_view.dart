@@ -10,6 +10,7 @@ import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
 import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
+import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:baseproject/ultilities/route_method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -25,6 +26,8 @@ final provider = StateNotifierProvider.autoDispose<HomeViewModel, HomeState>(
   ),
 );
 
+Location? location = Location();
+
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -33,7 +36,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  Location location = Location();
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
@@ -48,37 +50,72 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    setUpLocation();
+  }
+
+  void setUpLocation(){
     Future.delayed(Duration.zero, () async {
-      _serviceEnabled = await location.serviceEnabled();
+      _serviceEnabled = await location!.serviceEnabled();
       if (!_serviceEnabled) {
-        _serviceEnabled = await location.requestService();
+        _serviceEnabled = await location!.requestService();
         if (!_serviceEnabled) {
           return;
         }
       }
-      _permissionGranted = await location.hasPermission();
+      _permissionGranted = await location!.hasPermission();
       if (_permissionGranted == PermissionStatus.denied) {
-        _permissionGranted = await location.requestPermission();
+        _permissionGranted = await location!.requestPermission();
         if (_permissionGranted != PermissionStatus.granted) {
           return;
         }
       }
+      if (_permissionGranted == PermissionStatus.granted) {
+        _locationData = await location!.getLocation();
 
-      _locationData = await location.getLocation();
-      location.onLocationChanged.listen((LocationData currentLocation) {
-        _viewModel.upDateCurrentLocationAndSpeed(
-            currentLocation.latitude ?? 51.5,
-            currentLocation.longitude ?? -0.09,
-            currentLocation.speedAccuracy ?? 0.0);
-      });
+        location!.onLocationChanged.listen((LocationData currentLocation) {
+          _viewModel.upDateCurrentSpeed(
+            currentLocation.speedAccuracy ?? 0.0,
+          );
+        });
+        _viewModel.upDateCurrentLocation(
+          _locationData.latitude ?? 51.5,
+          _locationData.longitude ?? -0.09,
+        );
+        mapController.move(LatLng(state.latLng, state.longLng), 10);
+      }
     });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+        location = null;
+      super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<HomeState>(provider, ((previous, next) {
+      if (previous?.status != next.status &&
+          next.status == LoadingStatus.error) {
+        showErrorSnackBar(
+          context: context,
+          errorMessage: state.errorMsg,
+        );
+      }
+    }));
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          _locationData = await location!.getLocation();
+          _viewModel.upDateCurrentLocation(
+            _locationData.latitude ?? 51.5,
+            _locationData.longitude ?? -0.09,
+          );
+          mapController.move(LatLng(state.latLng, state.longLng), 10);
+        },
+        child: const Icon(Icons.location_searching),
+      ),
       body: SafeArea(
         child: Stack(
           fit: StackFit.loose,
@@ -115,7 +152,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   : CrossFadeState.showSecond,
               duration: const Duration(milliseconds: 300),
             ),
-            state.listForPolyLine.isNotEmpty
+            state.listForPolyLine.isNotEmpty && !state.isDisplaySearchingBar
                 ? _builtDetailTrip(context)
                 : const SizedBox(),
           ],
@@ -133,7 +170,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           _viewModel.addMarker(point);
         },
         onMapReady: () {
-          mapController.move(LatLng(state.latLng, state.longLng), 15);
+          mapController.move(LatLng(state.latLng, state.longLng), 10);
         },
         center: LatLng(51.5, -0.09),
         zoom: 5,
@@ -144,20 +181,26 @@ class _HomePageState extends ConsumerState<HomePage> {
               'https://tile.openstreetmap.org/{z}/{x}/{y}.png?layers=H',
           userAgentPackageName: 'com.example.baseproject',
         ),
-        MarkerLayer(
-          markers: state.markers
+        MarkerLayer(markers: [
+          Marker(
+              point: LatLng(state.latLng, state.longLng),
+              builder: (context) => const Icon(
+                    Icons.location_searching,
+                    size: 32,
+                  )),
+          ...state.markers
               .map(
                 (e) => Marker(
                   height: 50,
                   point: LatLng(e.latitude, e.longitude),
                   builder: (context) => const Icon(
                     Icons.location_on_rounded,
-                    size: 50,
+                    size: 32,
                   ),
                 ),
               )
               .toList(),
-        ),
+        ]),
         PolylineLayer(
           polylines: [
             Polyline(
@@ -408,8 +451,11 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   Widget _buildSaveDriving(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        ref.read(appNavigatorProvider).navigateTo(Approutes.saveDriving);
+      onPressed: () async {
+        bool result = await ref.read(appNavigatorProvider).navigateTo(Approutes.saveDriving);
+        if(result){
+          setUpLocation();
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.surface,
