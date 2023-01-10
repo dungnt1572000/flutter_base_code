@@ -26,7 +26,7 @@ final provider = StateNotifierProvider.autoDispose<HomeViewModel, HomeState>(
   ),
 );
 
-Location? location = Location();
+Location? location;
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -55,6 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   void setUpLocation(){
+     location = Location();
     Future.delayed(Duration.zero, () async {
       _serviceEnabled = await location!.serviceEnabled();
       if (!_serviceEnabled) {
