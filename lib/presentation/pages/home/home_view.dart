@@ -89,8 +89,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
   @override
   void dispose() {
-    // TODO: implement dispose
-        location = null;
       super.dispose();
   }
 
@@ -455,7 +453,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       onPressed: () async {
         bool result = await ref.read(appNavigatorProvider).navigateTo(Approutes.saveDriving);
         if(result){
-          setUpLocation();
+          print('result ne'+result.toString());
+          location = Location();
         }
       },
       style: ElevatedButton.styleFrom(
