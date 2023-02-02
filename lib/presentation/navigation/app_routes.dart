@@ -6,4 +6,6 @@ class Approutes{
   static const String notFound404Error = '/notFound404Error';
 
   static const String saveDriving = '/saveDriving';
+
+  static const String analyzedTextScreen = 'analyzedTextScreen';
 }

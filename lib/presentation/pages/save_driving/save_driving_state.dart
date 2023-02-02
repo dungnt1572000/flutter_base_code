@@ -6,6 +6,6 @@ class SaveDrivingState with _$SaveDrivingState{
   factory SaveDrivingState({
     @Default(0.0) double currentSpeed,
     @Default('') String errorMessage,
-    @Default(false) isOpenSpeed,
+    @Default(false) bool isOpenSpeed,
   }) = _SaveDrivingState;
 }
