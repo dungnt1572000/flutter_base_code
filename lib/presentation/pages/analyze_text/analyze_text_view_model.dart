@@ -18,7 +18,6 @@ class AnalyzeTextViewModel extends StateNotifier<AnalyzeTextState> {
   }
 
   void setLanguages(String languages){
-    print('language trans: $languages');
     state = state.copyWith(translateLanguages: languages);
   }
 

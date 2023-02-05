@@ -39,7 +39,6 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
   List<String> translatedListText = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     makeTextInImage(widget.xFile.path);
   }
@@ -62,12 +61,11 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
             await textRecognizer.processImage(inputImage);
         _viewModel.setTextBlock(recognizedText.blocks);
         await translatedText(recognizedText.blocks);
-        print(translatedListText);
         _viewModel.setTextforTransltatedText(translatedListText);
         _viewModel.setLoadingStatus(LoadingStatus.success);
         await DefaultCacheManager().removeFile(filePath);
       });
-    } on Exception catch (_, e) {
+    } on Exception catch (_) {
       showErrorSnackBar(context: context, errorMessage: 'Cannot translate this text to ${state.translateLanguages}');
       
     }
@@ -98,23 +96,19 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
             onChanged: (value) async {
               _viewModel.setLanguages(value ?? 'en');
               await translatedText(state.listTextBlock);
-              print('current lange trans: ${state.translateLanguages}');
               _viewModel.setLoadingStatus(LoadingStatus.success);
             },
           ),
         ]),
         body: SafeArea(
             child: state.status == LoadingStatus.inProgress
-                ? Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Center(
-                    child: Column(
-                        children: const [
-                          CircularProgressIndicator(),
-                          Text('Loading......'),
-                        ],
-                      ),
-                  ),
+                ? Center(
+                  child: Column(
+                      children: const [
+                        CircularProgressIndicator(),
+                        Text('Loading......'),
+                      ],
+                    ),
                 )
                 : ListView.separated(
                     itemBuilder: (context, index) {

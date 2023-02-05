@@ -453,7 +453,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       onPressed: () async {
         bool result = await ref.read(appNavigatorProvider).navigateTo(Approutes.saveDriving);
         if(result){
-          print('result ne'+result.toString());
+
           location = Location();
         }
       },

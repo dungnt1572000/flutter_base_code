@@ -35,7 +35,6 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
   late CameraController controller;
   String output = '';
   CameraImage? cameraImage;
-  int _imageCount = 0;
   SaveDrivingState get _state => ref.watch(provider);
   SaveDrivingViewModel get _viewModel => ref.read(provider.notifier);
   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
