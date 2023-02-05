@@ -19,10 +19,15 @@ class _$AnalyzeTextStateTearOff {
   const _$AnalyzeTextStateTearOff();
 
   _AnalyzeTextState call(
-      {String text = '', LoadingStatus status = LoadingStatus.initial}) {
+      {LoadingStatus status = LoadingStatus.inProgress,
+      List<TextBlock> listTextBlock = const [],
+      List<String> listTranslatedText = const [],
+      String translateLanguages = 'en'}) {
     return _AnalyzeTextState(
-      text: text,
       status: status,
+      listTextBlock: listTextBlock,
+      listTranslatedText: listTranslatedText,
+      translateLanguages: translateLanguages,
     );
   }
 }
@@ -32,8 +37,10 @@ const $AnalyzeTextState = _$AnalyzeTextStateTearOff();
 
 /// @nodoc
 mixin _$AnalyzeTextState {
-  String get text => throw _privateConstructorUsedError;
   LoadingStatus get status => throw _privateConstructorUsedError;
+  List<TextBlock> get listTextBlock => throw _privateConstructorUsedError;
+  List<String> get listTranslatedText => throw _privateConstructorUsedError;
+  String get translateLanguages => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AnalyzeTextStateCopyWith<AnalyzeTextState> get copyWith =>
@@ -45,7 +52,11 @@ abstract class $AnalyzeTextStateCopyWith<$Res> {
   factory $AnalyzeTextStateCopyWith(
           AnalyzeTextState value, $Res Function(AnalyzeTextState) then) =
       _$AnalyzeTextStateCopyWithImpl<$Res>;
-  $Res call({String text, LoadingStatus status});
+  $Res call(
+      {LoadingStatus status,
+      List<TextBlock> listTextBlock,
+      List<String> listTranslatedText,
+      String translateLanguages});
 }
 
 /// @nodoc
@@ -59,18 +70,28 @@ class _$AnalyzeTextStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? text = freezed,
     Object? status = freezed,
+    Object? listTextBlock = freezed,
+    Object? listTranslatedText = freezed,
+    Object? translateLanguages = freezed,
   }) {
     return _then(_value.copyWith(
-      text: text == freezed
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as String,
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
+      listTextBlock: listTextBlock == freezed
+          ? _value.listTextBlock
+          : listTextBlock // ignore: cast_nullable_to_non_nullable
+              as List<TextBlock>,
+      listTranslatedText: listTranslatedText == freezed
+          ? _value.listTranslatedText
+          : listTranslatedText // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      translateLanguages: translateLanguages == freezed
+          ? _value.translateLanguages
+          : translateLanguages // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -82,7 +103,11 @@ abstract class _$AnalyzeTextStateCopyWith<$Res>
           _AnalyzeTextState value, $Res Function(_AnalyzeTextState) then) =
       __$AnalyzeTextStateCopyWithImpl<$Res>;
   @override
-  $Res call({String text, LoadingStatus status});
+  $Res call(
+      {LoadingStatus status,
+      List<TextBlock> listTextBlock,
+      List<String> listTranslatedText,
+      String translateLanguages});
 }
 
 /// @nodoc
@@ -98,18 +123,28 @@ class __$AnalyzeTextStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? text = freezed,
     Object? status = freezed,
+    Object? listTextBlock = freezed,
+    Object? listTranslatedText = freezed,
+    Object? translateLanguages = freezed,
   }) {
     return _then(_AnalyzeTextState(
-      text: text == freezed
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
-              as String,
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
+      listTextBlock: listTextBlock == freezed
+          ? _value.listTextBlock
+          : listTextBlock // ignore: cast_nullable_to_non_nullable
+              as List<TextBlock>,
+      listTranslatedText: listTranslatedText == freezed
+          ? _value.listTranslatedText
+          : listTranslatedText // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      translateLanguages: translateLanguages == freezed
+          ? _value.translateLanguages
+          : translateLanguages // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -117,18 +152,28 @@ class __$AnalyzeTextStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AnalyzeTextState implements _AnalyzeTextState {
-  _$_AnalyzeTextState({this.text = '', this.status = LoadingStatus.initial});
+  _$_AnalyzeTextState(
+      {this.status = LoadingStatus.inProgress,
+      this.listTextBlock = const [],
+      this.listTranslatedText = const [],
+      this.translateLanguages = 'en'});
 
-  @JsonKey()
-  @override
-  final String text;
   @JsonKey()
   @override
   final LoadingStatus status;
+  @JsonKey()
+  @override
+  final List<TextBlock> listTextBlock;
+  @JsonKey()
+  @override
+  final List<String> listTranslatedText;
+  @JsonKey()
+  @override
+  final String translateLanguages;
 
   @override
   String toString() {
-    return 'AnalyzeTextState(text: $text, status: $status)';
+    return 'AnalyzeTextState(status: $status, listTextBlock: $listTextBlock, listTranslatedText: $listTranslatedText, translateLanguages: $translateLanguages)';
   }
 
   @override
@@ -136,15 +181,22 @@ class _$_AnalyzeTextState implements _AnalyzeTextState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _AnalyzeTextState &&
-            const DeepCollectionEquality().equals(other.text, text) &&
-            const DeepCollectionEquality().equals(other.status, status));
+            const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality()
+                .equals(other.listTextBlock, listTextBlock) &&
+            const DeepCollectionEquality()
+                .equals(other.listTranslatedText, listTranslatedText) &&
+            const DeepCollectionEquality()
+                .equals(other.translateLanguages, translateLanguages));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(text),
-      const DeepCollectionEquality().hash(status));
+      const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(listTextBlock),
+      const DeepCollectionEquality().hash(listTranslatedText),
+      const DeepCollectionEquality().hash(translateLanguages));
 
   @JsonKey(ignore: true)
   @override
@@ -153,13 +205,20 @@ class _$_AnalyzeTextState implements _AnalyzeTextState {
 }
 
 abstract class _AnalyzeTextState implements AnalyzeTextState {
-  factory _AnalyzeTextState({String text, LoadingStatus status}) =
-      _$_AnalyzeTextState;
+  factory _AnalyzeTextState(
+      {LoadingStatus status,
+      List<TextBlock> listTextBlock,
+      List<String> listTranslatedText,
+      String translateLanguages}) = _$_AnalyzeTextState;
 
   @override
-  String get text;
-  @override
   LoadingStatus get status;
+  @override
+  List<TextBlock> get listTextBlock;
+  @override
+  List<String> get listTranslatedText;
+  @override
+  String get translateLanguages;
   @override
   @JsonKey(ignore: true)
   _$AnalyzeTextStateCopyWith<_AnalyzeTextState> get copyWith =>

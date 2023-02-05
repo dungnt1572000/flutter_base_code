@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:baseproject/main.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
@@ -9,13 +8,13 @@ import 'package:baseproject/presentation/pages/save_driving/object_box_gen/objec
 import 'package:baseproject/presentation/pages/save_driving/save_driving_state.dart';
 import 'package:baseproject/presentation/pages/save_driving/save_driving_view_model.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
-import 'package:baseproject/presentation/resources/app_colors.dart';
+import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 import 'package:tflite/tflite.dart';
 
@@ -60,7 +59,7 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
         return;
       }
       setState(() {});
-  }).catchError((Object e) {
+    }).catchError((Object e) {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
@@ -111,19 +110,46 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: IconButton(
-                  onPressed: () async {
-                    final xFile = await controller.takePicture();
-                    ref.read(appNavigatorProvider).navigateTo(
-                        Approutes.analyzedTextScreen,
-                        arguments: AnalyzeTextViewArgument(xFile));
-                  },
-                  icon: const Icon(
-                    Icons.circle_outlined,
-                    size: 32,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                        final XFile? image = await picker.pickImage(
+                            source: ImageSource.gallery);
+                        if (image != null) {
+                          ref.read(appNavigatorProvider).navigateTo(
+                              Approutes.analyzedTextScreen,
+                              arguments: AnalyzeTextViewArgument(image));
+                        } else {
+                          showErrorSnackBar(
+                              context: context,
+                              errorMessage:
+                                  'Can not pick the image from gallery');
+                        }
+                      },
+                      child: Text(
+                        'Take from gallery',
+                        style: AppTextStyles.labelMedium
+                            .copyWith(color: Colors.red),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        final xFile = await controller.takePicture();
+                        ref.read(appNavigatorProvider).navigateTo(
+                            Approutes.analyzedTextScreen,
+                            arguments: AnalyzeTextViewArgument(xFile));
+                      },
+                      icon: const Icon(
+                        Icons.circle_outlined,
+                        size: 32,
+                      ),
+                    ),
+                  ],
                 ),
-              )
+              ),
             ],
           ),
         ),
