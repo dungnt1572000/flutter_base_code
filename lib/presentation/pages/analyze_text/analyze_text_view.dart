@@ -11,7 +11,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:translator/translator.dart';
 
-List<String> listLanguages = ['vi', 'en', 'ko', 'pt', 'de', 'ru','zh-cn','zh-tw'];
+List<String> listLanguages = [
+  'vi',
+  'en',
+  'ko',
+  'pt',
+  'de',
+  'ru',
+  'zh-cn',
+  'zh-tw'
+];
+
 class AnalyzeTextViewArgument {
   final XFile xFile;
 
@@ -37,19 +47,38 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
   final translator = GoogleTranslator();
   List<String> translatedListText = [];
+
+  late Timer _timer;
+  int _start = 10;
+
   @override
   void initState() {
     super.initState();
     makeTextInImage(widget.xFile.path);
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _start = _start - 1;
+      });
+      if (_start <= 0 &&
+          (translatedListText.length <= state.listTextBlock.length)) {
+            _timer.cancel();
+        showErrorSnackBar(context: context, errorMessage: 'can not translate');
+        Navigator.of(context).pop();   
+      }
+      if(translatedListText.length == state.listTextBlock.length && state.listTextBlock.isNotEmpty){
+        _timer.cancel();
+      }
+      print(_start);
+    });
   }
 
   Future<void> translatedText(List<TextBlock> text) async {
+    translatedListText = [];
     _viewModel.setLoadingStatus(LoadingStatus.inProgress);
-    translatedListText=[];
     for (int i = 0; i < text.length; i++) {
       final txt = await translator.translate(text[i].text,
           from: text[i].recognizedLanguages[0], to: state.translateLanguages);
-          translatedListText.add(txt.text);
+      translatedListText.add(txt.text);
     }
   }
 
@@ -63,11 +92,14 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
         await translatedText(recognizedText.blocks);
         _viewModel.setTextforTransltatedText(translatedListText);
         _viewModel.setLoadingStatus(LoadingStatus.success);
+        print(translatedListText);
         await DefaultCacheManager().removeFile(filePath);
       });
     } on Exception catch (_) {
-      showErrorSnackBar(context: context, errorMessage: 'Cannot translate this text to ${state.translateLanguages}');
-      
+      showErrorSnackBar(
+          context: context,
+          errorMessage:
+              'Cannot translate this text to ${state.translateLanguages}');
     }
   }
 
@@ -75,6 +107,7 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
   void dispose() {
     super.dispose();
     textRecognizer.close();
+    _timer.cancel();
   }
 
   @override
@@ -101,15 +134,16 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
           ),
         ]),
         body: SafeArea(
-            child: state.status == LoadingStatus.inProgress
+            child: state.status == LoadingStatus.inProgress ||
+                    state.listTranslatedText.isEmpty
                 ? Center(
-                  child: Column(
+                    child: Column(
                       children: const [
                         CircularProgressIndicator(),
                         Text('Loading......'),
                       ],
                     ),
-                )
+                  )
                 : ListView.separated(
                     itemBuilder: (context, index) {
                       return Row(
@@ -118,8 +152,9 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
                               flex: 1,
                               child: Text(state.listTextBlock[index].text)),
                           Expanded(
-                              flex: 1,
-                              child: Text(translatedListText[index])),
+                            flex: 1,
+                            child: Text(translatedListText[index]),
+                          ),
                         ],
                       );
                     },
