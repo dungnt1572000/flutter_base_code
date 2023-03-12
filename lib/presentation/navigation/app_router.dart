@@ -4,24 +4,26 @@ import 'package:baseproject/presentation/pages/not_found_404_error/not_found_404
 import 'package:baseproject/presentation/pages/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 
-class AppRouter{
-  static Route<dynamic>? onGenerateRoute(RouteSettings settings){
+class AppRouter {
+  static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Approutes.splash:
-
+      case AppRoutes.splash:
         return MaterialPageRoute(
           settings: settings,
-          builder: (context) => const SplashView(), );
-        case Approutes.home:
-          return MaterialPageRoute(
-            settings: settings,
-            builder: (context) => const HomeView(),);
-            case Approutes.notFound404Error:
-            return MaterialPageRoute(
-              settings: settings,
-              builder: (context) => const NotFound404ErrorView(),);
+          builder: (context) => const SplashView(),
+        );
+      case AppRoutes.home:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => const HomeView(),
+        );
+      case AppRoutes.notFound404Error:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => const NotFound404ErrorView(),
+        );
       default:
-      return null;
+        return null;
     }
   }
 }

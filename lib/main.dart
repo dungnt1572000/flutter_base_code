@@ -32,7 +32,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     super.initState();
     injector.get<NetworkActionManager>().registerNavigateTo404NotFound(
       () async{
-        await ref.read(appNavigatorProvider).navigateTo(Approutes.notFound404Error);
+        await ref.read(appNavigatorProvider).navigateTo(AppRoutes.notFound404Error);
       }
     );
   }
@@ -44,7 +44,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: getAppTheme(Brightness.light),
       darkTheme: getAppTheme(Brightness.dark),
       themeMode: isDarkMode?ThemeMode.dark:ThemeMode.light,
-      initialRoute: Approutes.splash,
+      initialRoute: AppRoutes.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
       navigatorKey: ref.read(appNavigatorProvider).navigatorKey,
     );

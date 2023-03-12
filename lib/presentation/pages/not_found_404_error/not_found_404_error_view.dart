@@ -1,3 +1,4 @@
+import 'package:baseproject/data/providers/theme_provider.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
@@ -33,6 +34,11 @@ class _NotFound404ErrorViewState extends ConsumerState<NotFound404ErrorView> {
               height: 40,
             ),
             _buildBackButton(context),
+            Switch(value: ref.watch(themeProvider), onChanged: (value) {
+              setState(() {
+                ref.read(themeProvider.notifier).update((state) => value);
+              });
+            },)
           ],
         ),
       ),
@@ -58,7 +64,7 @@ class _NotFound404ErrorViewState extends ConsumerState<NotFound404ErrorView> {
       buttonSize: ButtonSize.medium,
       isExpanded: true,
       onButtonTap: () {
-        ref.read(appNavigatorProvider).popUntil(routeName: Approutes.home);
+        ref.read(appNavigatorProvider).popUntil(routeName: AppRoutes.home);
       },
     );
   }
