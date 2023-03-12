@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "853319133868",
+    "firebase_url": "https://doan2-a4abf-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "doan2-a4abf",
+    "storage_bucket": "doan2-a4abf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853319133868:android:478b813fc3b02c4c738d09",
+        "android_client_info": {
+          "package_name": "com.example.baseproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853319133868-c2j7sq78lci9hpt17t9ir7f8vluh6sah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTTJeOLsE2sWTn1ee7DA7R3LJ5NZm-tH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853319133868-c2j7sq78lci9hpt17t9ir7f8vluh6sah.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "853319133868-pq1ncpn9ih0pduho084f4onihgff8mqm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.baseproject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

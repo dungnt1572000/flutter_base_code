@@ -5,6 +5,7 @@ import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_images.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_button.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,8 +18,11 @@ class NotFound404ErrorView extends ConsumerStatefulWidget {
 }
 
 class _NotFound404ErrorViewState extends ConsumerState<NotFound404ErrorView> {
+  final database = FirebaseDatabase.instance.ref();
+
   @override
   Widget build(BuildContext context) {
+    final wtf = database.child('hehehee/');
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -34,11 +38,6 @@ class _NotFound404ErrorViewState extends ConsumerState<NotFound404ErrorView> {
               height: 40,
             ),
             _buildBackButton(context),
-            Switch(value: ref.watch(themeProvider), onChanged: (value) {
-              setState(() {
-                ref.read(themeProvider.notifier).update((state) => value);
-              });
-            },)
           ],
         ),
       ),
@@ -64,7 +63,7 @@ class _NotFound404ErrorViewState extends ConsumerState<NotFound404ErrorView> {
       buttonSize: ButtonSize.medium,
       isExpanded: true,
       onButtonTap: () {
-        ref.read(appNavigatorProvider).popUntil(routeName: AppRoutes.home);
+        ref.read(appNavigatorProvider).navigateTo(AppRoutes.signIn);
       },
     );
   }

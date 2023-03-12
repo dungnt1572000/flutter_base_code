@@ -4,4 +4,8 @@ class AppRoutes{
   static const String home = '/home';
 
   static const String notFound404Error = '/notFound404Error';
+
+  static const String signUp = '/signUp';
+
+  static const String signIn = '/signIn';
 }
