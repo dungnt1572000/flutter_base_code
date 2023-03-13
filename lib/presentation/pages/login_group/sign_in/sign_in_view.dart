@@ -1,3 +1,4 @@
+import 'package:baseproject/presentation/domain/use_case/set_user_id_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
@@ -18,6 +19,7 @@ final _provider =
     StateNotifierProvider.autoDispose<SignInViewModel, SignInState>(
   (ref) => SignInViewModel(
     injector.get<GetUserCredentialUseCase>(),
+    injector.get<SaveUserIDUseCase>(),
   ),
 );
 
@@ -40,7 +42,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
 
     ref.listen(_provider, (SignInState? previous,SignInState next) {
       if(previous!.status!=next.status && next.status== LoadingStatus.error){
-        showErrorSnackBar(context: context, errorMessage: 'Login Failure');
+        showErrorSnackBar(context: context, errorMessage: next.errorMessage);
       }
     });
     return Scaffold(
@@ -96,6 +98,8 @@ class _SignInViewState extends ConsumerState<SignInView> {
                        final result =  await viewModel.signIn(userNameEditingController.text, passwordEditingController.text);
                        if(!result){
                          ref.read(appNavigatorProvider).navigateTo(AppRoutes.notFound404Error);
+                       }else{
+                         ref.read(appNavigatorProvider).navigateTo(AppRoutes.home);
                        }
                       },
                     )

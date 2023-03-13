@@ -19,10 +19,13 @@ class _$SignInStateTearOff {
   const _$SignInStateTearOff();
 
   _SignInState call(
-      {dynamic status = LoadingStatus.initial, UserCredential? user}) {
+      {LoadingStatus status = LoadingStatus.initial,
+      UserCredential? user,
+      String errorMessage = ''}) {
     return _SignInState(
       status: status,
       user: user,
+      errorMessage: errorMessage,
     );
   }
 }
@@ -32,8 +35,9 @@ const $SignInState = _$SignInStateTearOff();
 
 /// @nodoc
 mixin _$SignInState {
-  dynamic get status => throw _privateConstructorUsedError;
+  LoadingStatus get status => throw _privateConstructorUsedError;
   UserCredential? get user => throw _privateConstructorUsedError;
+  String get errorMessage => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SignInStateCopyWith<SignInState> get copyWith =>
@@ -45,7 +49,7 @@ abstract class $SignInStateCopyWith<$Res> {
   factory $SignInStateCopyWith(
           SignInState value, $Res Function(SignInState) then) =
       _$SignInStateCopyWithImpl<$Res>;
-  $Res call({dynamic status, UserCredential? user});
+  $Res call({LoadingStatus status, UserCredential? user, String errorMessage});
 }
 
 /// @nodoc
@@ -60,16 +64,21 @@ class _$SignInStateCopyWithImpl<$Res> implements $SignInStateCopyWith<$Res> {
   $Res call({
     Object? status = freezed,
     Object? user = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_value.copyWith(
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as LoadingStatus,
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as UserCredential?,
+      errorMessage: errorMessage == freezed
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -81,7 +90,7 @@ abstract class _$SignInStateCopyWith<$Res>
           _SignInState value, $Res Function(_SignInState) then) =
       __$SignInStateCopyWithImpl<$Res>;
   @override
-  $Res call({dynamic status, UserCredential? user});
+  $Res call({LoadingStatus status, UserCredential? user, String errorMessage});
 }
 
 /// @nodoc
@@ -98,13 +107,21 @@ class __$SignInStateCopyWithImpl<$Res> extends _$SignInStateCopyWithImpl<$Res>
   $Res call({
     Object? status = freezed,
     Object? user = freezed,
+    Object? errorMessage = freezed,
   }) {
     return _then(_SignInState(
-      status: status == freezed ? _value.status : status,
+      status: status == freezed
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as LoadingStatus,
       user: user == freezed
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as UserCredential?,
+      errorMessage: errorMessage == freezed
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -112,17 +129,21 @@ class __$SignInStateCopyWithImpl<$Res> extends _$SignInStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SignInState implements _SignInState {
-  const _$_SignInState({this.status = LoadingStatus.initial, this.user});
+  const _$_SignInState(
+      {this.status = LoadingStatus.initial, this.user, this.errorMessage = ''});
 
   @JsonKey()
   @override
-  final dynamic status;
+  final LoadingStatus status;
   @override
   final UserCredential? user;
+  @JsonKey()
+  @override
+  final String errorMessage;
 
   @override
   String toString() {
-    return 'SignInState(status: $status, user: $user)';
+    return 'SignInState(status: $status, user: $user, errorMessage: $errorMessage)';
   }
 
   @override
@@ -131,14 +152,17 @@ class _$_SignInState implements _SignInState {
         (other.runtimeType == runtimeType &&
             other is _SignInState &&
             const DeepCollectionEquality().equals(other.status, status) &&
-            const DeepCollectionEquality().equals(other.user, user));
+            const DeepCollectionEquality().equals(other.user, user) &&
+            const DeepCollectionEquality()
+                .equals(other.errorMessage, errorMessage));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(user));
+      const DeepCollectionEquality().hash(user),
+      const DeepCollectionEquality().hash(errorMessage));
 
   @JsonKey(ignore: true)
   @override
@@ -147,13 +171,17 @@ class _$_SignInState implements _SignInState {
 }
 
 abstract class _SignInState implements SignInState {
-  const factory _SignInState({dynamic status, UserCredential? user}) =
-      _$_SignInState;
+  const factory _SignInState(
+      {LoadingStatus status,
+      UserCredential? user,
+      String errorMessage}) = _$_SignInState;
 
   @override
-  dynamic get status;
+  LoadingStatus get status;
   @override
   UserCredential? get user;
+  @override
+  String get errorMessage;
   @override
   @JsonKey(ignore: true)
   _$SignInStateCopyWith<_SignInState> get copyWith =>

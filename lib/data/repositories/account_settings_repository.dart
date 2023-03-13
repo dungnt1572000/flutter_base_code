@@ -26,4 +26,12 @@ class AccountSettingsRepository {
     }
     return result;
   }
+
+  Future<void> saveUserId(String userID) async {
+    await _sharePreferencesManager.saveUserId(userID: userID);
+  }
+
+  String? getUserID() {
+    return _sharePreferencesManager.getUserID();
+  }
 }
