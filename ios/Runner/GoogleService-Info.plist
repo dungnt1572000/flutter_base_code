@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>328706006090-3pbuboqrj1jgueljumvuggdep6fc03eq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.328706006090-3pbuboqrj1jgueljumvuggdep6fc03eq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDGHS6SQKHcCx62DBKp7E9rdVwZ96kzNQU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>328706006090</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.baseproject</string>
+	<key>PROJECT_ID</key>
+	<string>doantotnghiep-d76a0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>doantotnghiep-d76a0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:328706006090:ios:aacd75ef7e2f5cb31d1ab3</string>
+	<key>DATABASE_URL</key>
+	<string>https://doantotnghiep-d76a0-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

@@ -9,15 +9,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 Future<void> main() async {
-      WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await AppModules.inject();
   await injector.allReady();
-  injector.isReady<SharedPreferences>().then((value) => runApp(
-    const ProviderScope(child: MyApp(),)
-  ));
-  
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  injector
+      .isReady<SharedPreferences>()
+      .then((value) => runApp(const ProviderScope(
+            child: MyApp(),
+          )));
 }
+
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
@@ -30,20 +38,23 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    injector.get<NetworkActionManager>().registerNavigateTo404NotFound(
-      () async{
-        await ref.read(appNavigatorProvider).navigateTo(AppRoutes.notFound404Error);
-      }
-    );
+    injector
+        .get<NetworkActionManager>()
+        .registerNavigateTo404NotFound(() async {
+      await ref
+          .read(appNavigatorProvider)
+          .navigateTo(AppRoutes.notFound404Error);
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     final isDarkMode = ref.watch(themeProvider);
-    return  MaterialApp(
+    return MaterialApp(
       title: 'Project Name',
       theme: getAppTheme(Brightness.light),
       darkTheme: getAppTheme(Brightness.dark),
-      themeMode: isDarkMode?ThemeMode.dark:ThemeMode.light,
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       initialRoute: AppRoutes.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
       navigatorKey: ref.read(appNavigatorProvider).navigatorKey,
