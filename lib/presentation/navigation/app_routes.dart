@@ -6,4 +6,6 @@ class AppRoutes{
   static const String notFound404Error = '/notFound404Error';
 
   static const String registerUser = '/registerUser';
+
+  static const String userInformation = '/userInformation';
 }

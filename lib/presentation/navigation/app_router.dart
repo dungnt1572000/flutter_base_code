@@ -3,6 +3,7 @@ import 'package:baseproject/presentation/pages/home/home_view.dart';
 import 'package:baseproject/presentation/pages/not_found_404_error/not_found_404_error_view.dart';
 import 'package:baseproject/presentation/pages/register/register_view.dart';
 import 'package:baseproject/presentation/pages/splash/splash_view.dart';
+import 'package:baseproject/presentation/pages/user_information/user_information_view.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
@@ -27,6 +28,11 @@ class AppRouter {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => const RegisterView(),
+        );
+      case AppRoutes.userInformation:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => const UserInformationView(),
         );
       default:
         return null;
