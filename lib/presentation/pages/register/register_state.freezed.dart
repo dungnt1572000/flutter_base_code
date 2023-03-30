@@ -20,10 +20,14 @@ class _$RegisterStateTearOff {
 
   _RegisterState call(
       {String errorMessage = '',
-      LoadingStatus status = LoadingStatus.initial}) {
+      LoadingStatus status = LoadingStatus.initial,
+      String email = '',
+      String password = ''}) {
     return _RegisterState(
       errorMessage: errorMessage,
       status: status,
+      email: email,
+      password: password,
     );
   }
 }
@@ -35,6 +39,8 @@ const $RegisterState = _$RegisterStateTearOff();
 mixin _$RegisterState {
   String get errorMessage => throw _privateConstructorUsedError;
   LoadingStatus get status => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
+  String get password => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $RegisterStateCopyWith<RegisterState> get copyWith =>
@@ -46,7 +52,11 @@ abstract class $RegisterStateCopyWith<$Res> {
   factory $RegisterStateCopyWith(
           RegisterState value, $Res Function(RegisterState) then) =
       _$RegisterStateCopyWithImpl<$Res>;
-  $Res call({String errorMessage, LoadingStatus status});
+  $Res call(
+      {String errorMessage,
+      LoadingStatus status,
+      String email,
+      String password});
 }
 
 /// @nodoc
@@ -62,6 +72,8 @@ class _$RegisterStateCopyWithImpl<$Res>
   $Res call({
     Object? errorMessage = freezed,
     Object? status = freezed,
+    Object? email = freezed,
+    Object? password = freezed,
   }) {
     return _then(_value.copyWith(
       errorMessage: errorMessage == freezed
@@ -72,6 +84,14 @@ class _$RegisterStateCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
+      email: email == freezed
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      password: password == freezed
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -83,7 +103,11 @@ abstract class _$RegisterStateCopyWith<$Res>
           _RegisterState value, $Res Function(_RegisterState) then) =
       __$RegisterStateCopyWithImpl<$Res>;
   @override
-  $Res call({String errorMessage, LoadingStatus status});
+  $Res call(
+      {String errorMessage,
+      LoadingStatus status,
+      String email,
+      String password});
 }
 
 /// @nodoc
@@ -101,6 +125,8 @@ class __$RegisterStateCopyWithImpl<$Res>
   $Res call({
     Object? errorMessage = freezed,
     Object? status = freezed,
+    Object? email = freezed,
+    Object? password = freezed,
   }) {
     return _then(_RegisterState(
       errorMessage: errorMessage == freezed
@@ -111,6 +137,14 @@ class __$RegisterStateCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
+      email: email == freezed
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      password: password == freezed
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -119,7 +153,10 @@ class __$RegisterStateCopyWithImpl<$Res>
 
 class _$_RegisterState implements _RegisterState {
   _$_RegisterState(
-      {this.errorMessage = '', this.status = LoadingStatus.initial});
+      {this.errorMessage = '',
+      this.status = LoadingStatus.initial,
+      this.email = '',
+      this.password = ''});
 
   @JsonKey()
   @override
@@ -127,10 +164,16 @@ class _$_RegisterState implements _RegisterState {
   @JsonKey()
   @override
   final LoadingStatus status;
+  @JsonKey()
+  @override
+  final String email;
+  @JsonKey()
+  @override
+  final String password;
 
   @override
   String toString() {
-    return 'RegisterState(errorMessage: $errorMessage, status: $status)';
+    return 'RegisterState(errorMessage: $errorMessage, status: $status, email: $email, password: $password)';
   }
 
   @override
@@ -140,14 +183,18 @@ class _$_RegisterState implements _RegisterState {
             other is _RegisterState &&
             const DeepCollectionEquality()
                 .equals(other.errorMessage, errorMessage) &&
-            const DeepCollectionEquality().equals(other.status, status));
+            const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality().equals(other.email, email) &&
+            const DeepCollectionEquality().equals(other.password, password));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(errorMessage),
-      const DeepCollectionEquality().hash(status));
+      const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(email),
+      const DeepCollectionEquality().hash(password));
 
   @JsonKey(ignore: true)
   @override
@@ -156,13 +203,20 @@ class _$_RegisterState implements _RegisterState {
 }
 
 abstract class _RegisterState implements RegisterState {
-  factory _RegisterState({String errorMessage, LoadingStatus status}) =
-      _$_RegisterState;
+  factory _RegisterState(
+      {String errorMessage,
+      LoadingStatus status,
+      String email,
+      String password}) = _$_RegisterState;
 
   @override
   String get errorMessage;
   @override
   LoadingStatus get status;
+  @override
+  String get email;
+  @override
+  String get password;
   @override
   @JsonKey(ignore: true)
   _$RegisterStateCopyWith<_RegisterState> get copyWith =>

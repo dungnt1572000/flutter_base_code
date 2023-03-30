@@ -8,4 +8,11 @@ class AppRoutes{
   static const String registerUser = '/registerUser';
 
   static const String userInformation = '/userInformation';
+
+  static const String login = '/login';
+
+  static const String register = '/register';
+
+  static const String resetPassword = '/resetPassword';
+
 }

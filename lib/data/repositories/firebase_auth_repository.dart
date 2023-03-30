@@ -15,4 +15,18 @@ class FlutterAuthRepository {
       return '';
     }
   }
+
+  Future<bool> createUserWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
