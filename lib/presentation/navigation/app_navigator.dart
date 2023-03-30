@@ -13,17 +13,41 @@ enum AppNavigatorStackAction {
   removeAll,
 }
 
+enum AppFlow {
+  main,
+  home,
+  notification,
+  user,
+}
+
 /// [AppNavigator] is a navigator class which is used for page screen
 /// transition.
 class AppNavigator {
-  final navigatorKey = GlobalKey<NavigatorState>();
+  final mainNavigationKey = GlobalKey<NavigatorState>();
+  final homeNavigationKey = GlobalKey<NavigatorState>();
+  final notificationNavigationKey = GlobalKey<NavigatorState>();
+  final userNavigationKey = GlobalKey<NavigatorState>();
+
+  NavigatorState? getCurrentState(AppFlow flow) {
+    switch (flow) {
+      case AppFlow.main:
+        return mainNavigationKey.currentState;
+      case AppFlow.home:
+        return homeNavigationKey.currentState;
+      case AppFlow.notification:
+        return notificationNavigationKey.currentState;
+      case AppFlow.user:
+        return userNavigationKey.currentState;
+    }
+  }
 
   Future<dynamic> navigateTo(
     String routeName, {
     dynamic arguments,
     bool shouldClearStack = false,
+    AppFlow appFlow = AppFlow.main,
   }) async {
-    final currentState = navigatorKey.currentState;
+    final currentState = getCurrentState(appFlow);
     if (currentState == null) {
       return false;
     }
@@ -49,8 +73,10 @@ class AppNavigator {
 
   /// Get context.
   ///
-  BuildContext? getContext() {
-    final currentState = navigatorKey.currentState;
+  BuildContext? getContext({
+    AppFlow appFlow = AppFlow.main,
+  }) {
+    final currentState = getCurrentState(appFlow);
     return currentState?.context;
   }
 
@@ -58,8 +84,9 @@ class AppNavigator {
   ///
   void goBack({
     dynamic arguments,
+    AppFlow appFlow = AppFlow.main,
   }) {
-    final currentState = navigatorKey.currentState;
+    final currentState = getCurrentState(appFlow);
     if (currentState == null) {
       return;
     }
@@ -68,8 +95,8 @@ class AppNavigator {
 
   /// Get can go back status.
   ///
-  bool canGoBack() {
-    final currentState = navigatorKey.currentState;
+  bool canGoBack({AppFlow appFlow = AppFlow.main}) {
+    final currentState = getCurrentState(appFlow);
     if (currentState == null) {
       return false;
     }
@@ -78,10 +105,8 @@ class AppNavigator {
 
   /// Removes all the screens on the stack until the given route name
   ///
-  void popUntil({
-    required String routeName,
-  }) {
-    final currentState = navigatorKey.currentState;
+  void popUntil({required String routeName, AppFlow appFlow = AppFlow.main}) {
+    final currentState = getCurrentState(appFlow);
     if (currentState == null) {
       return;
     }

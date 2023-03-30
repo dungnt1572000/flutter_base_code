@@ -1,5 +1,7 @@
-class AppRoutes{
+class AppRoutes {
   static const String splash = '/splash';
+
+  static const String main = '/main';
 
   static const String home = '/home';
 
@@ -15,4 +17,5 @@ class AppRoutes{
 
   static const String resetPassword = '/resetPassword';
 
+  static const String notification = '/notification';
 }

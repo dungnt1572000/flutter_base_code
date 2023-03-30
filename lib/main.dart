@@ -57,7 +57,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       initialRoute: AppRoutes.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
-      navigatorKey: ref.read(appNavigatorProvider).navigatorKey,
+      navigatorKey: ref.read(appNavigatorProvider).mainNavigationKey,
     );
   }
 }

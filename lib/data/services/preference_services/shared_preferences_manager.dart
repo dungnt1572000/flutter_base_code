@@ -20,4 +20,12 @@ class SharePreferencesManager{
   Future<bool> removeIsDarkMode() async{
      return _sharePreferences.remove(PreferenceKeys.isDarkMode.name);
   }
+
+  /// uID
+  Future<void> saveUserUId(String uID)async{
+    await _sharePreferences.setString(PreferenceKeys.uID.name, uID);
+  }
+  String? getUserUId(){
+    return _sharePreferences.getString(PreferenceKeys.uID.name);
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/pages/home/home_view.dart';
 import 'package:baseproject/presentation/pages/login/login_view.dart';
+import 'package:baseproject/presentation/pages/main_menu/main_menu_view.dart';
 import 'package:baseproject/presentation/pages/not_found_404_error/not_found_404_error_view.dart';
+import 'package:baseproject/presentation/pages/notification/notification_view.dart';
 import 'package:baseproject/presentation/pages/register/register_view.dart';
 import 'package:baseproject/presentation/pages/reset_password/reset_password.dart';
 import 'package:baseproject/presentation/pages/splash/splash_view.dart';
@@ -46,6 +48,16 @@ class AppRouter {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => ResetPasswordView(argument: argument),
+        );
+      case AppRoutes.main:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => const MainMenuView(),
+        );
+      case AppRoutes.notification:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) => const NotificationView(),
         );
       default:
         return null;

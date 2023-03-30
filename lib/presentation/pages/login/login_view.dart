@@ -91,7 +91,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         if (result) {
                           ref
                               .read(appNavigatorProvider)
-                              .navigateTo(AppRoutes.home);
+                              .navigateTo(AppRoutes.main);
                         }
                       },
                       child: const Text('Login')),
