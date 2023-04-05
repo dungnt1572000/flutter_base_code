@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   const AppColors({
+    required this.backGroundItemColor,
+    required this.backGroundColor,
     required this.primaryMain,
     required this.primaryText,
     required this.primaryTextOnContrast,
@@ -174,9 +176,15 @@ class AppColors {
   /// Other colors
   final Color googleButton;
   final Color yahooButton;
+
+  /// BackGround Color
+  final Color backGroundColor;
+  final Color backGroundItemColor;
 }
 
 const colorsLight = AppColors(
+  backGroundItemColor: Color(0xFFFFFFFF),
+
   /// Primary
   primaryMain: Color(0xFF9428E8),
   primaryText: Color(0xFF5B089C),
@@ -244,9 +252,14 @@ const colorsLight = AppColors(
   /// Other colors
   googleButton: Color(0xFF4285F4),
   yahooButton: Color(0xFFFF0033),
+
+  /// BackGroundColor
+  backGroundColor: Color(0xFFE3E3E3),
 );
 
 const colorsDark = AppColors(
+  backGroundItemColor: Color(0xFF252b30),
+
   /// Primary
   primaryMain: Color(0xFFA33FF2),
   primaryText: Color(0xFFBF84ED),
@@ -314,6 +327,9 @@ const colorsDark = AppColors(
   /// Other colors
   googleButton: Color(0xFF4285F4),
   yahooButton: Color(0xFFFF0033),
+
+  ///Back groundColor
+  backGroundColor: Color(0xFF1E2129),
 );
 
 extension AppColorsExtension on BuildContext {

@@ -36,6 +36,7 @@ class _MainMenuViewState extends ConsumerState<MainMenuView> {
       body: SafeArea(
           child: PageView(
         controller: controller,
+        physics: const NeverScrollableScrollPhysics(),
         children: body(),
       )),
       bottomNavigationBar: BottomNavigationBar(
