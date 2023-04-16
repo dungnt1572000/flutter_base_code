@@ -9,27 +9,27 @@ import 'package:flutter/material.dart';
 class AppRouter {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Approutes.splash:
+      case AppRoutes.splash:
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => const SplashView(),
         );
-      case Approutes.home:
+      case AppRoutes.home:
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => const HomePage(),
         );
-      case Approutes.notFound404Error:
+      case AppRoutes.notFound404Error:
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => const NotFound404ErrorView(),
         );
-        case Approutes.saveDriving:
+        case AppRoutes.saveDriving:
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => const SaveDrivingView(),
         );
-        case Approutes.analyzedTextScreen:
+        case AppRoutes.analyzedTextScreen:
         final argument = settings.arguments as AnalyzeTextViewArgument;
         return MaterialPageRoute(
           settings: settings,

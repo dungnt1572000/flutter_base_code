@@ -1,4 +1,4 @@
-class AppImages{
+class AppImages {
   AppImages._private();
 
   static const String _path = "assets/images";

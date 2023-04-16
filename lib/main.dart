@@ -2,7 +2,6 @@ import 'package:baseproject/data/providers/theme_provider.dart';
 import 'package:baseproject/data/services/network_service/network_action_manager.dart';
 import 'package:baseproject/presentation/injection/app_modules.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
-import 'package:baseproject/presentation/navigation/app_router.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/resources/app_theme.dart';
 import 'package:camera/camera.dart';
@@ -40,13 +39,11 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    injector
-        .get<NetworkActionManager>()
-        .registerNavigateTo404NotFound(() async {
-      await ref
-          .read(appNavigatorProvider)
-          .navigateTo(Approutes.notFound404Error);
-    });
+    injector.get<NetworkActionManager>().registerNavigateTo404NotFound(
+      () async{
+        await ref.read(appNavigatorProvider).navigateTo(AppRoutes.notFound404Error);
+      }
+    );
   }
 
   @override
@@ -56,8 +53,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: 'Project Name',
       theme: getAppTheme(Brightness.light),
       darkTheme: getAppTheme(Brightness.dark),
-      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      initialRoute: Approutes.splash,
+      themeMode: isDarkMode?ThemeMode.dark:ThemeMode.light,
+      initialRoute: AppRoutes.splash,
       onGenerateRoute: AppRouter.onGenerateRoute,
       navigatorKey: ref.read(appNavigatorProvider).navigatorKey,
     );
