@@ -6,8 +6,8 @@ abstract class DioHelper{
    required NotFound404Interceptor notFound404Interceptor,
   }) => _createDio(
     opstions: BaseOptions(
-      connectTimeout: 10000,
-      receiveTimeout: 10000,
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
     ),
     interceptor: [
       notFound404Interceptor,

@@ -5,7 +5,7 @@ extension ErrorMessage on DioError{
   String get getAppErrorContent => getContent();
   String getContent(){
     switch(type){
-      case DioErrorType.response:
+      case DioErrorType.unknown:
         final statusError = response?.statusCode?? 500;
         if(statusError == 400){
           return 'Need Authorized';

@@ -42,10 +42,10 @@ class HomeViewModel extends StateNotifier<HomeState> {
     state = state.copyWith(status: LoadingStatus.inProgress);
     try {
       final searchOb = await getSearchingObjectUseCase
-          .run(SeachingObjectInput(ApiConstant.accessToken, searchPlace));
+          .run(SearchingObjectInput(ApiConstant.accessToken, searchPlace));
       state = state.copyWith(
         status: LoadingStatus.success,
-        listSearchingPlace: searchOb.features,
+        listSearchingPlace: searchOb.features??[],
       );
     } on Exception catch (error) {
       state = state.copyWith(

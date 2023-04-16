@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'analyze_text_state.dart';
 
@@ -12,28 +12,7 @@ part of 'analyze_text_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$AnalyzeTextStateTearOff {
-  const _$AnalyzeTextStateTearOff();
-
-  _AnalyzeTextState call(
-      {LoadingStatus status = LoadingStatus.inProgress,
-      List<TextBlock> listTextBlock = const [],
-      List<String> listTranslatedText = const [],
-      String translateLanguages = 'en'}) {
-    return _AnalyzeTextState(
-      status: status,
-      listTextBlock: listTextBlock,
-      listTranslatedText: listTranslatedText,
-      translateLanguages: translateLanguages,
-    );
-  }
-}
-
-/// @nodoc
-const $AnalyzeTextState = _$AnalyzeTextStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$AnalyzeTextState {
@@ -51,7 +30,8 @@ mixin _$AnalyzeTextState {
 abstract class $AnalyzeTextStateCopyWith<$Res> {
   factory $AnalyzeTextStateCopyWith(
           AnalyzeTextState value, $Res Function(AnalyzeTextState) then) =
-      _$AnalyzeTextStateCopyWithImpl<$Res>;
+      _$AnalyzeTextStateCopyWithImpl<$Res, AnalyzeTextState>;
+  @useResult
   $Res call(
       {LoadingStatus status,
       List<TextBlock> listTextBlock,
@@ -60,49 +40,52 @@ abstract class $AnalyzeTextStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AnalyzeTextStateCopyWithImpl<$Res>
+class _$AnalyzeTextStateCopyWithImpl<$Res, $Val extends AnalyzeTextState>
     implements $AnalyzeTextStateCopyWith<$Res> {
   _$AnalyzeTextStateCopyWithImpl(this._value, this._then);
 
-  final AnalyzeTextState _value;
   // ignore: unused_field
-  final $Res Function(AnalyzeTextState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? status = freezed,
-    Object? listTextBlock = freezed,
-    Object? listTranslatedText = freezed,
-    Object? translateLanguages = freezed,
+    Object? status = null,
+    Object? listTextBlock = null,
+    Object? listTranslatedText = null,
+    Object? translateLanguages = null,
   }) {
     return _then(_value.copyWith(
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
-      listTextBlock: listTextBlock == freezed
+      listTextBlock: null == listTextBlock
           ? _value.listTextBlock
           : listTextBlock // ignore: cast_nullable_to_non_nullable
               as List<TextBlock>,
-      listTranslatedText: listTranslatedText == freezed
+      listTranslatedText: null == listTranslatedText
           ? _value.listTranslatedText
           : listTranslatedText // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      translateLanguages: translateLanguages == freezed
+      translateLanguages: null == translateLanguages
           ? _value.translateLanguages
           : translateLanguages // ignore: cast_nullable_to_non_nullable
               as String,
-    ));
+    ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$AnalyzeTextStateCopyWith<$Res>
+abstract class _$$_AnalyzeTextStateCopyWith<$Res>
     implements $AnalyzeTextStateCopyWith<$Res> {
-  factory _$AnalyzeTextStateCopyWith(
-          _AnalyzeTextState value, $Res Function(_AnalyzeTextState) then) =
-      __$AnalyzeTextStateCopyWithImpl<$Res>;
+  factory _$$_AnalyzeTextStateCopyWith(
+          _$_AnalyzeTextState value, $Res Function(_$_AnalyzeTextState) then) =
+      __$$_AnalyzeTextStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {LoadingStatus status,
       List<TextBlock> listTextBlock,
@@ -111,37 +94,35 @@ abstract class _$AnalyzeTextStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$AnalyzeTextStateCopyWithImpl<$Res>
-    extends _$AnalyzeTextStateCopyWithImpl<$Res>
-    implements _$AnalyzeTextStateCopyWith<$Res> {
-  __$AnalyzeTextStateCopyWithImpl(
-      _AnalyzeTextState _value, $Res Function(_AnalyzeTextState) _then)
-      : super(_value, (v) => _then(v as _AnalyzeTextState));
+class __$$_AnalyzeTextStateCopyWithImpl<$Res>
+    extends _$AnalyzeTextStateCopyWithImpl<$Res, _$_AnalyzeTextState>
+    implements _$$_AnalyzeTextStateCopyWith<$Res> {
+  __$$_AnalyzeTextStateCopyWithImpl(
+      _$_AnalyzeTextState _value, $Res Function(_$_AnalyzeTextState) _then)
+      : super(_value, _then);
 
-  @override
-  _AnalyzeTextState get _value => super._value as _AnalyzeTextState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? status = freezed,
-    Object? listTextBlock = freezed,
-    Object? listTranslatedText = freezed,
-    Object? translateLanguages = freezed,
+    Object? status = null,
+    Object? listTextBlock = null,
+    Object? listTranslatedText = null,
+    Object? translateLanguages = null,
   }) {
-    return _then(_AnalyzeTextState(
-      status: status == freezed
+    return _then(_$_AnalyzeTextState(
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
-      listTextBlock: listTextBlock == freezed
-          ? _value.listTextBlock
+      listTextBlock: null == listTextBlock
+          ? _value._listTextBlock
           : listTextBlock // ignore: cast_nullable_to_non_nullable
               as List<TextBlock>,
-      listTranslatedText: listTranslatedText == freezed
-          ? _value.listTranslatedText
+      listTranslatedText: null == listTranslatedText
+          ? _value._listTranslatedText
           : listTranslatedText // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      translateLanguages: translateLanguages == freezed
+      translateLanguages: null == translateLanguages
           ? _value.translateLanguages
           : translateLanguages // ignore: cast_nullable_to_non_nullable
               as String,
@@ -154,21 +135,36 @@ class __$AnalyzeTextStateCopyWithImpl<$Res>
 class _$_AnalyzeTextState implements _AnalyzeTextState {
   _$_AnalyzeTextState(
       {this.status = LoadingStatus.inProgress,
-      this.listTextBlock = const [],
-      this.listTranslatedText = const [],
-      this.translateLanguages = 'en'});
+      final List<TextBlock> listTextBlock = const [],
+      final List<String> listTranslatedText = const [],
+      this.translateLanguages = 'en'})
+      : _listTextBlock = listTextBlock,
+        _listTranslatedText = listTranslatedText;
 
-  @JsonKey()
   @override
+  @JsonKey()
   final LoadingStatus status;
-  @JsonKey()
+  final List<TextBlock> _listTextBlock;
   @override
-  final List<TextBlock> listTextBlock;
   @JsonKey()
+  List<TextBlock> get listTextBlock {
+    if (_listTextBlock is EqualUnmodifiableListView) return _listTextBlock;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listTextBlock);
+  }
+
+  final List<String> _listTranslatedText;
   @override
-  final List<String> listTranslatedText;
   @JsonKey()
+  List<String> get listTranslatedText {
+    if (_listTranslatedText is EqualUnmodifiableListView)
+      return _listTranslatedText;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listTranslatedText);
+  }
+
   @override
+  @JsonKey()
   final String translateLanguages;
 
   @override
@@ -180,36 +176,37 @@ class _$_AnalyzeTextState implements _AnalyzeTextState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _AnalyzeTextState &&
-            const DeepCollectionEquality().equals(other.status, status) &&
+            other is _$_AnalyzeTextState &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality()
-                .equals(other.listTextBlock, listTextBlock) &&
+                .equals(other._listTextBlock, _listTextBlock) &&
             const DeepCollectionEquality()
-                .equals(other.listTranslatedText, listTranslatedText) &&
-            const DeepCollectionEquality()
-                .equals(other.translateLanguages, translateLanguages));
+                .equals(other._listTranslatedText, _listTranslatedText) &&
+            (identical(other.translateLanguages, translateLanguages) ||
+                other.translateLanguages == translateLanguages));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(listTextBlock),
-      const DeepCollectionEquality().hash(listTranslatedText),
-      const DeepCollectionEquality().hash(translateLanguages));
+      status,
+      const DeepCollectionEquality().hash(_listTextBlock),
+      const DeepCollectionEquality().hash(_listTranslatedText),
+      translateLanguages);
 
   @JsonKey(ignore: true)
   @override
-  _$AnalyzeTextStateCopyWith<_AnalyzeTextState> get copyWith =>
-      __$AnalyzeTextStateCopyWithImpl<_AnalyzeTextState>(this, _$identity);
+  @pragma('vm:prefer-inline')
+  _$$_AnalyzeTextStateCopyWith<_$_AnalyzeTextState> get copyWith =>
+      __$$_AnalyzeTextStateCopyWithImpl<_$_AnalyzeTextState>(this, _$identity);
 }
 
 abstract class _AnalyzeTextState implements AnalyzeTextState {
   factory _AnalyzeTextState(
-      {LoadingStatus status,
-      List<TextBlock> listTextBlock,
-      List<String> listTranslatedText,
-      String translateLanguages}) = _$_AnalyzeTextState;
+      {final LoadingStatus status,
+      final List<TextBlock> listTextBlock,
+      final List<String> listTranslatedText,
+      final String translateLanguages}) = _$_AnalyzeTextState;
 
   @override
   LoadingStatus get status;
@@ -221,6 +218,6 @@ abstract class _AnalyzeTextState implements AnalyzeTextState {
   String get translateLanguages;
   @override
   @JsonKey(ignore: true)
-  _$AnalyzeTextStateCopyWith<_AnalyzeTextState> get copyWith =>
+  _$$_AnalyzeTextStateCopyWith<_$_AnalyzeTextState> get copyWith =>
       throw _privateConstructorUsedError;
 }

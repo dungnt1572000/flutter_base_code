@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'home_state.dart';
 
@@ -12,46 +12,7 @@ part of 'home_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$HomeStateTearOff {
-  const _$HomeStateTearOff();
-
-  _HomeState call(
-      {String errorMsg = '',
-      LoadingStatus status = LoadingStatus.initial,
-      double currentSpeed = 0,
-      double latLng = 10.762622,
-      double longLng = 106.660172,
-      List<LatLng> markers = const [],
-      List<LatLng> listForPolyLine = const [],
-      bool isDisplaySearchingBar = true,
-      bool isDisplayDetailIntroduction = false,
-      List<Feature> listSearchingPlace = const [],
-      RouteMethod routeMethod = RouteMethod.driving,
-      double duration = 0.0,
-      double distance = 0.0}) {
-    return _HomeState(
-      errorMsg: errorMsg,
-      status: status,
-      currentSpeed: currentSpeed,
-      latLng: latLng,
-      longLng: longLng,
-      markers: markers,
-      listForPolyLine: listForPolyLine,
-      isDisplaySearchingBar: isDisplaySearchingBar,
-      isDisplayDetailIntroduction: isDisplayDetailIntroduction,
-      listSearchingPlace: listSearchingPlace,
-      routeMethod: routeMethod,
-      duration: duration,
-      distance: distance,
-    );
-  }
-}
-
-/// @nodoc
-const $HomeState = _$HomeStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$HomeState {
@@ -64,7 +25,7 @@ mixin _$HomeState {
   List<LatLng> get listForPolyLine => throw _privateConstructorUsedError;
   bool get isDisplaySearchingBar => throw _privateConstructorUsedError;
   bool get isDisplayDetailIntroduction => throw _privateConstructorUsedError;
-  List<Feature> get listSearchingPlace => throw _privateConstructorUsedError;
+  List<Features> get listSearchingPlace => throw _privateConstructorUsedError;
   RouteMethod get routeMethod => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
   double get distance => throw _privateConstructorUsedError;
@@ -77,7 +38,8 @@ mixin _$HomeState {
 /// @nodoc
 abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
-      _$HomeStateCopyWithImpl<$Res>;
+      _$HomeStateCopyWithImpl<$Res, HomeState>;
+  @useResult
   $Res call(
       {String errorMsg,
       LoadingStatus status,
@@ -88,99 +50,103 @@ abstract class $HomeStateCopyWith<$Res> {
       List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
-      List<Feature> listSearchingPlace,
+      List<Features> listSearchingPlace,
       RouteMethod routeMethod,
       double duration,
       double distance});
 }
 
 /// @nodoc
-class _$HomeStateCopyWithImpl<$Res> implements $HomeStateCopyWith<$Res> {
+class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
+    implements $HomeStateCopyWith<$Res> {
   _$HomeStateCopyWithImpl(this._value, this._then);
 
-  final HomeState _value;
   // ignore: unused_field
-  final $Res Function(HomeState) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorMsg = freezed,
-    Object? status = freezed,
-    Object? currentSpeed = freezed,
-    Object? latLng = freezed,
-    Object? longLng = freezed,
-    Object? markers = freezed,
-    Object? listForPolyLine = freezed,
-    Object? isDisplaySearchingBar = freezed,
-    Object? isDisplayDetailIntroduction = freezed,
-    Object? listSearchingPlace = freezed,
-    Object? routeMethod = freezed,
-    Object? duration = freezed,
-    Object? distance = freezed,
+    Object? errorMsg = null,
+    Object? status = null,
+    Object? currentSpeed = null,
+    Object? latLng = null,
+    Object? longLng = null,
+    Object? markers = null,
+    Object? listForPolyLine = null,
+    Object? isDisplaySearchingBar = null,
+    Object? isDisplayDetailIntroduction = null,
+    Object? listSearchingPlace = null,
+    Object? routeMethod = null,
+    Object? duration = null,
+    Object? distance = null,
   }) {
     return _then(_value.copyWith(
-      errorMsg: errorMsg == freezed
+      errorMsg: null == errorMsg
           ? _value.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
               as String,
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
-      currentSpeed: currentSpeed == freezed
+      currentSpeed: null == currentSpeed
           ? _value.currentSpeed
           : currentSpeed // ignore: cast_nullable_to_non_nullable
               as double,
-      latLng: latLng == freezed
+      latLng: null == latLng
           ? _value.latLng
           : latLng // ignore: cast_nullable_to_non_nullable
               as double,
-      longLng: longLng == freezed
+      longLng: null == longLng
           ? _value.longLng
           : longLng // ignore: cast_nullable_to_non_nullable
               as double,
-      markers: markers == freezed
+      markers: null == markers
           ? _value.markers
           : markers // ignore: cast_nullable_to_non_nullable
               as List<LatLng>,
-      listForPolyLine: listForPolyLine == freezed
+      listForPolyLine: null == listForPolyLine
           ? _value.listForPolyLine
           : listForPolyLine // ignore: cast_nullable_to_non_nullable
               as List<LatLng>,
-      isDisplaySearchingBar: isDisplaySearchingBar == freezed
+      isDisplaySearchingBar: null == isDisplaySearchingBar
           ? _value.isDisplaySearchingBar
           : isDisplaySearchingBar // ignore: cast_nullable_to_non_nullable
               as bool,
-      isDisplayDetailIntroduction: isDisplayDetailIntroduction == freezed
+      isDisplayDetailIntroduction: null == isDisplayDetailIntroduction
           ? _value.isDisplayDetailIntroduction
           : isDisplayDetailIntroduction // ignore: cast_nullable_to_non_nullable
               as bool,
-      listSearchingPlace: listSearchingPlace == freezed
+      listSearchingPlace: null == listSearchingPlace
           ? _value.listSearchingPlace
           : listSearchingPlace // ignore: cast_nullable_to_non_nullable
-              as List<Feature>,
-      routeMethod: routeMethod == freezed
+              as List<Features>,
+      routeMethod: null == routeMethod
           ? _value.routeMethod
           : routeMethod // ignore: cast_nullable_to_non_nullable
               as RouteMethod,
-      duration: duration == freezed
+      duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
               as double,
-      distance: distance == freezed
+      distance: null == distance
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
               as double,
-    ));
+    ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
-  factory _$HomeStateCopyWith(
-          _HomeState value, $Res Function(_HomeState) then) =
-      __$HomeStateCopyWithImpl<$Res>;
+abstract class _$$_HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
+  factory _$$_HomeStateCopyWith(
+          _$_HomeState value, $Res Function(_$_HomeState) then) =
+      __$$_HomeStateCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String errorMsg,
       LoadingStatus status,
@@ -191,87 +157,87 @@ abstract class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
       List<LatLng> listForPolyLine,
       bool isDisplaySearchingBar,
       bool isDisplayDetailIntroduction,
-      List<Feature> listSearchingPlace,
+      List<Features> listSearchingPlace,
       RouteMethod routeMethod,
       double duration,
       double distance});
 }
 
 /// @nodoc
-class __$HomeStateCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
-    implements _$HomeStateCopyWith<$Res> {
-  __$HomeStateCopyWithImpl(_HomeState _value, $Res Function(_HomeState) _then)
-      : super(_value, (v) => _then(v as _HomeState));
+class __$$_HomeStateCopyWithImpl<$Res>
+    extends _$HomeStateCopyWithImpl<$Res, _$_HomeState>
+    implements _$$_HomeStateCopyWith<$Res> {
+  __$$_HomeStateCopyWithImpl(
+      _$_HomeState _value, $Res Function(_$_HomeState) _then)
+      : super(_value, _then);
 
-  @override
-  _HomeState get _value => super._value as _HomeState;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorMsg = freezed,
-    Object? status = freezed,
-    Object? currentSpeed = freezed,
-    Object? latLng = freezed,
-    Object? longLng = freezed,
-    Object? markers = freezed,
-    Object? listForPolyLine = freezed,
-    Object? isDisplaySearchingBar = freezed,
-    Object? isDisplayDetailIntroduction = freezed,
-    Object? listSearchingPlace = freezed,
-    Object? routeMethod = freezed,
-    Object? duration = freezed,
-    Object? distance = freezed,
+    Object? errorMsg = null,
+    Object? status = null,
+    Object? currentSpeed = null,
+    Object? latLng = null,
+    Object? longLng = null,
+    Object? markers = null,
+    Object? listForPolyLine = null,
+    Object? isDisplaySearchingBar = null,
+    Object? isDisplayDetailIntroduction = null,
+    Object? listSearchingPlace = null,
+    Object? routeMethod = null,
+    Object? duration = null,
+    Object? distance = null,
   }) {
-    return _then(_HomeState(
-      errorMsg: errorMsg == freezed
+    return _then(_$_HomeState(
+      errorMsg: null == errorMsg
           ? _value.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
               as String,
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LoadingStatus,
-      currentSpeed: currentSpeed == freezed
+      currentSpeed: null == currentSpeed
           ? _value.currentSpeed
           : currentSpeed // ignore: cast_nullable_to_non_nullable
               as double,
-      latLng: latLng == freezed
+      latLng: null == latLng
           ? _value.latLng
           : latLng // ignore: cast_nullable_to_non_nullable
               as double,
-      longLng: longLng == freezed
+      longLng: null == longLng
           ? _value.longLng
           : longLng // ignore: cast_nullable_to_non_nullable
               as double,
-      markers: markers == freezed
-          ? _value.markers
+      markers: null == markers
+          ? _value._markers
           : markers // ignore: cast_nullable_to_non_nullable
               as List<LatLng>,
-      listForPolyLine: listForPolyLine == freezed
-          ? _value.listForPolyLine
+      listForPolyLine: null == listForPolyLine
+          ? _value._listForPolyLine
           : listForPolyLine // ignore: cast_nullable_to_non_nullable
               as List<LatLng>,
-      isDisplaySearchingBar: isDisplaySearchingBar == freezed
+      isDisplaySearchingBar: null == isDisplaySearchingBar
           ? _value.isDisplaySearchingBar
           : isDisplaySearchingBar // ignore: cast_nullable_to_non_nullable
               as bool,
-      isDisplayDetailIntroduction: isDisplayDetailIntroduction == freezed
+      isDisplayDetailIntroduction: null == isDisplayDetailIntroduction
           ? _value.isDisplayDetailIntroduction
           : isDisplayDetailIntroduction // ignore: cast_nullable_to_non_nullable
               as bool,
-      listSearchingPlace: listSearchingPlace == freezed
-          ? _value.listSearchingPlace
+      listSearchingPlace: null == listSearchingPlace
+          ? _value._listSearchingPlace
           : listSearchingPlace // ignore: cast_nullable_to_non_nullable
-              as List<Feature>,
-      routeMethod: routeMethod == freezed
+              as List<Features>,
+      routeMethod: null == routeMethod
           ? _value.routeMethod
           : routeMethod // ignore: cast_nullable_to_non_nullable
               as RouteMethod,
-      duration: duration == freezed
+      duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
               as double,
-      distance: distance == freezed
+      distance: null == distance
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
               as double,
@@ -288,53 +254,75 @@ class _$_HomeState implements _HomeState {
       this.currentSpeed = 0,
       this.latLng = 10.762622,
       this.longLng = 106.660172,
-      this.markers = const [],
-      this.listForPolyLine = const [],
+      final List<LatLng> markers = const [],
+      final List<LatLng> listForPolyLine = const [],
       this.isDisplaySearchingBar = true,
       this.isDisplayDetailIntroduction = false,
-      this.listSearchingPlace = const [],
+      final List<Features> listSearchingPlace = const [],
       this.routeMethod = RouteMethod.driving,
       this.duration = 0.0,
-      this.distance = 0.0});
+      this.distance = 0.0})
+      : _markers = markers,
+        _listForPolyLine = listForPolyLine,
+        _listSearchingPlace = listSearchingPlace;
 
-  @JsonKey()
   @override
+  @JsonKey()
   final String errorMsg;
-  @JsonKey()
   @override
+  @JsonKey()
   final LoadingStatus status;
-  @JsonKey()
   @override
+  @JsonKey()
   final double currentSpeed;
-  @JsonKey()
   @override
+  @JsonKey()
   final double latLng;
-  @JsonKey()
   @override
+  @JsonKey()
   final double longLng;
-  @JsonKey()
+  final List<LatLng> _markers;
   @override
-  final List<LatLng> markers;
   @JsonKey()
+  List<LatLng> get markers {
+    if (_markers is EqualUnmodifiableListView) return _markers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_markers);
+  }
+
+  final List<LatLng> _listForPolyLine;
   @override
-  final List<LatLng> listForPolyLine;
   @JsonKey()
+  List<LatLng> get listForPolyLine {
+    if (_listForPolyLine is EqualUnmodifiableListView) return _listForPolyLine;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listForPolyLine);
+  }
+
   @override
+  @JsonKey()
   final bool isDisplaySearchingBar;
-  @JsonKey()
   @override
+  @JsonKey()
   final bool isDisplayDetailIntroduction;
-  @JsonKey()
+  final List<Features> _listSearchingPlace;
   @override
-  final List<Feature> listSearchingPlace;
   @JsonKey()
+  List<Features> get listSearchingPlace {
+    if (_listSearchingPlace is EqualUnmodifiableListView)
+      return _listSearchingPlace;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listSearchingPlace);
+  }
+
   @override
+  @JsonKey()
   final RouteMethod routeMethod;
-  @JsonKey()
   @override
+  @JsonKey()
   final double duration;
-  @JsonKey()
   @override
+  @JsonKey()
   final double distance;
 
   @override
@@ -346,67 +334,72 @@ class _$_HomeState implements _HomeState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _HomeState &&
-            const DeepCollectionEquality().equals(other.errorMsg, errorMsg) &&
-            const DeepCollectionEquality().equals(other.status, status) &&
+            other is _$_HomeState &&
+            (identical(other.errorMsg, errorMsg) ||
+                other.errorMsg == errorMsg) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.currentSpeed, currentSpeed) ||
+                other.currentSpeed == currentSpeed) &&
+            (identical(other.latLng, latLng) || other.latLng == latLng) &&
+            (identical(other.longLng, longLng) || other.longLng == longLng) &&
+            const DeepCollectionEquality().equals(other._markers, _markers) &&
             const DeepCollectionEquality()
-                .equals(other.currentSpeed, currentSpeed) &&
-            const DeepCollectionEquality().equals(other.latLng, latLng) &&
-            const DeepCollectionEquality().equals(other.longLng, longLng) &&
-            const DeepCollectionEquality().equals(other.markers, markers) &&
+                .equals(other._listForPolyLine, _listForPolyLine) &&
+            (identical(other.isDisplaySearchingBar, isDisplaySearchingBar) ||
+                other.isDisplaySearchingBar == isDisplaySearchingBar) &&
+            (identical(other.isDisplayDetailIntroduction,
+                    isDisplayDetailIntroduction) ||
+                other.isDisplayDetailIntroduction ==
+                    isDisplayDetailIntroduction) &&
             const DeepCollectionEquality()
-                .equals(other.listForPolyLine, listForPolyLine) &&
-            const DeepCollectionEquality()
-                .equals(other.isDisplaySearchingBar, isDisplaySearchingBar) &&
-            const DeepCollectionEquality().equals(
-                other.isDisplayDetailIntroduction,
-                isDisplayDetailIntroduction) &&
-            const DeepCollectionEquality()
-                .equals(other.listSearchingPlace, listSearchingPlace) &&
-            const DeepCollectionEquality()
-                .equals(other.routeMethod, routeMethod) &&
-            const DeepCollectionEquality().equals(other.duration, duration) &&
-            const DeepCollectionEquality().equals(other.distance, distance));
+                .equals(other._listSearchingPlace, _listSearchingPlace) &&
+            (identical(other.routeMethod, routeMethod) ||
+                other.routeMethod == routeMethod) &&
+            (identical(other.duration, duration) ||
+                other.duration == duration) &&
+            (identical(other.distance, distance) ||
+                other.distance == distance));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(errorMsg),
-      const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(currentSpeed),
-      const DeepCollectionEquality().hash(latLng),
-      const DeepCollectionEquality().hash(longLng),
-      const DeepCollectionEquality().hash(markers),
-      const DeepCollectionEquality().hash(listForPolyLine),
-      const DeepCollectionEquality().hash(isDisplaySearchingBar),
-      const DeepCollectionEquality().hash(isDisplayDetailIntroduction),
-      const DeepCollectionEquality().hash(listSearchingPlace),
-      const DeepCollectionEquality().hash(routeMethod),
-      const DeepCollectionEquality().hash(duration),
-      const DeepCollectionEquality().hash(distance));
+      errorMsg,
+      status,
+      currentSpeed,
+      latLng,
+      longLng,
+      const DeepCollectionEquality().hash(_markers),
+      const DeepCollectionEquality().hash(_listForPolyLine),
+      isDisplaySearchingBar,
+      isDisplayDetailIntroduction,
+      const DeepCollectionEquality().hash(_listSearchingPlace),
+      routeMethod,
+      duration,
+      distance);
 
   @JsonKey(ignore: true)
   @override
-  _$HomeStateCopyWith<_HomeState> get copyWith =>
-      __$HomeStateCopyWithImpl<_HomeState>(this, _$identity);
+  @pragma('vm:prefer-inline')
+  _$$_HomeStateCopyWith<_$_HomeState> get copyWith =>
+      __$$_HomeStateCopyWithImpl<_$_HomeState>(this, _$identity);
 }
 
 abstract class _HomeState implements HomeState {
   factory _HomeState(
-      {String errorMsg,
-      LoadingStatus status,
-      double currentSpeed,
-      double latLng,
-      double longLng,
-      List<LatLng> markers,
-      List<LatLng> listForPolyLine,
-      bool isDisplaySearchingBar,
-      bool isDisplayDetailIntroduction,
-      List<Feature> listSearchingPlace,
-      RouteMethod routeMethod,
-      double duration,
-      double distance}) = _$_HomeState;
+      {final String errorMsg,
+      final LoadingStatus status,
+      final double currentSpeed,
+      final double latLng,
+      final double longLng,
+      final List<LatLng> markers,
+      final List<LatLng> listForPolyLine,
+      final bool isDisplaySearchingBar,
+      final bool isDisplayDetailIntroduction,
+      final List<Features> listSearchingPlace,
+      final RouteMethod routeMethod,
+      final double duration,
+      final double distance}) = _$_HomeState;
 
   @override
   String get errorMsg;
@@ -427,7 +420,7 @@ abstract class _HomeState implements HomeState {
   @override
   bool get isDisplayDetailIntroduction;
   @override
-  List<Feature> get listSearchingPlace;
+  List<Features> get listSearchingPlace;
   @override
   RouteMethod get routeMethod;
   @override
@@ -436,6 +429,6 @@ abstract class _HomeState implements HomeState {
   double get distance;
   @override
   @JsonKey(ignore: true)
-  _$HomeStateCopyWith<_HomeState> get copyWith =>
+  _$$_HomeStateCopyWith<_$_HomeState> get copyWith =>
       throw _privateConstructorUsedError;
 }

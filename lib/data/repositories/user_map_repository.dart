@@ -1,5 +1,5 @@
 import 'package:baseproject/data/repositories/entities/direction_object.dart';
-import 'package:baseproject/data/repositories/entities/searching_object.dart';
+import 'package:baseproject/data/repositories/entities/search_object.dart';
 import 'package:baseproject/data/services/network_service/api_client.dart';
 
 class UserMapRepository {
@@ -7,8 +7,8 @@ class UserMapRepository {
 
   UserMapRepository(this._apiClient);
 
-  Future<SearchingObject> getSearchingObject(String place, String accessToken) {
-    return _apiClient.fetchToGetSearchingObject(place, accessToken);
+  Future<SearchObject> getSearchingObject(String place, String accessToken) async{
+    return await _apiClient.fetchToGetSearchingObject(place, accessToken);
   }
 
   Future<DirectionObject> getWalkingDirection(
@@ -16,8 +16,8 @@ class UserMapRepository {
       String accessToken,
       String annotations,
       String geometries,
-      String overviews) {
-    return _apiClient.getDirectionWalking(
+      String overviews) async{
+    return await _apiClient.getDirectionWalking(
         direction, accessToken, annotations, geometries, overviews);
   }
 
@@ -26,8 +26,8 @@ class UserMapRepository {
       String accessToken,
       String annotations,
       String geometries,
-      String overviews) {
-    return _apiClient.getDirectionDriving(
+      String overviews) async{
+    return await _apiClient.getDirectionDriving(
         direction, accessToken, annotations, geometries, overviews);
   }
 }

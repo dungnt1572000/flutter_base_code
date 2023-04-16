@@ -68,7 +68,6 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
       if(translatedListText.length == state.listTextBlock.length && state.listTextBlock.isNotEmpty){
         _timer.cancel();
       }
-      print(_start);
     });
   }
 
@@ -92,7 +91,6 @@ class _AnalyzeTextViewState extends ConsumerState<AnalyzeTextView> {
         await translatedText(recognizedText.blocks);
         _viewModel.setTextforTransltatedText(translatedListText);
         _viewModel.setLoadingStatus(LoadingStatus.success);
-        print(translatedListText);
         await DefaultCacheManager().removeFile(filePath);
       });
     } on Exception catch (_) {

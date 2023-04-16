@@ -16,8 +16,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import 'package:tflite/tflite.dart';
-
 final provider =
     StateNotifierProvider.autoDispose<SaveDrivingViewModel, SaveDrivingState>(
   (ref) => SaveDrivingViewModel(),
@@ -119,9 +117,10 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
                             source: ImageSource.gallery);
                         if (image != null) {
                           ref.read(appNavigatorProvider).navigateTo(
-                              Approutes.analyzedTextScreen,
+                              AppRoutes.analyzedTextScreen,
                               arguments: AnalyzeTextViewArgument(image));
                         } else {
+                          if(!mounted) return;
                           showErrorSnackBar(
                               context: context,
                               errorMessage:
@@ -138,7 +137,7 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
                       onPressed: () async {
                         final xFile = await controller.takePicture();
                         ref.read(appNavigatorProvider).navigateTo(
-                            Approutes.analyzedTextScreen,
+                            AppRoutes.analyzedTextScreen,
                             arguments: AnalyzeTextViewArgument(xFile));
                       },
                       icon: const Icon(
@@ -169,7 +168,6 @@ class _SaveDrivingViewState extends ConsumerState<SaveDrivingView> {
   void dispose() {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     controller.dispose();
-    Tflite.close();
     location = null;
     super.dispose();
   }

@@ -1,4 +1,4 @@
-import 'package:baseproject/data/repositories/entities/searching_object.dart';
+import 'package:baseproject/data/repositories/entities/search_object.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:baseproject/ultilities/route_method.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -18,7 +18,7 @@ class HomeState with _$HomeState{
     @Default([]) List<LatLng> listForPolyLine,
     @Default(true) bool isDisplaySearchingBar,
     @Default(false) bool isDisplayDetailIntroduction,
-    @Default([]) List<Feature> listSearchingPlace,
+    @Default([]) List<Features> listSearchingPlace,
     @Default(RouteMethod.driving) RouteMethod routeMethod,
     @Default(0.0) double duration,
     @Default(0.0) double distance,

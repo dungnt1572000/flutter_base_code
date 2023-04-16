@@ -1,5 +1,5 @@
 import 'package:baseproject/data/repositories/entities/direction_object.dart';
-import 'package:baseproject/data/repositories/entities/searching_object.dart';
+import 'package:baseproject/data/repositories/entities/search_object.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -26,6 +26,6 @@ abstract class ApiClient {
       @Query('overview') String overviews);
 
   @GET('geocoding/v5/mapbox.places/{place}.json')
-  Future<SearchingObject> fetchToGetSearchingObject(
+  Future<SearchObject> fetchToGetSearchingObject(
       @Path('place') String place, @Query('access_token') String accesstoken);
 }

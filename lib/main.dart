@@ -2,6 +2,7 @@ import 'package:baseproject/data/providers/theme_provider.dart';
 import 'package:baseproject/data/services/network_service/network_action_manager.dart';
 import 'package:baseproject/presentation/injection/app_modules.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
+import 'package:baseproject/presentation/navigation/app_router.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/resources/app_theme.dart';
 import 'package:camera/camera.dart';

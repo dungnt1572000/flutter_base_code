@@ -111,7 +111,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             _locationData.latitude ?? 51.5,
             _locationData.longitude ?? -0.09,
           );
-          mapController.move(LatLng(state.latLng, state.longLng), 10);
+          mapController.move(LatLng(state.latLng, state.longLng), 15);
         },
         child: const Icon(Icons.location_searching),
       ),
@@ -165,11 +165,11 @@ class _HomePageState extends ConsumerState<HomePage> {
       mapController: mapController,
       options: MapOptions(
         onTap: (tapPosition, point) {
-          mapController.move(point, 15.5);
+          mapController.move(point, 18);
           _viewModel.addMarker(point);
         },
         onMapReady: () {
-          mapController.move(LatLng(state.latLng, state.longLng), 10);
+          mapController.move(LatLng(state.latLng, state.longLng), 18);
         },
         center: LatLng(51.5, -0.09),
         zoom: 5,
@@ -396,6 +396,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             final result =
                 await _viewModel.getRouteByMethod(RouteMethod.driving);
             if (!result) {
+              if (!mounted) return;
               showErrorSnackBar(
                   context: context,
                   errorMessage: 'Cant found route to this case');
@@ -423,6 +424,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             final result =
                 await _viewModel.getRouteByMethod(RouteMethod.walking);
             if (!result) {
+              if (!mounted) return;
               showErrorSnackBar(
                   context: context,
                   errorMessage: 'Cant found route to this case');
@@ -451,7 +453,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildSaveDriving(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        bool result = await ref.read(appNavigatorProvider).navigateTo(Approutes.saveDriving);
+        bool result = await ref.read(appNavigatorProvider).navigateTo(AppRoutes.saveDriving);
         if(result){
 
           location = Location();
