@@ -19,6 +19,7 @@ class HomeViewModel extends StateNotifier<HomeState> {
   GetSearchingObjectUseCase getSearchingObjectUseCase;
   GetWalkingDirectionObjectUseCase getWalkingDirectionObjectUseCase;
   GetDrivingDirectionObjectUseCase getDrivingDirectionObjectUseCase;
+
   void upDateCurrentSpeed(double currentSpeed) {
     state = state.copyWith(currentSpeed: currentSpeed);
   }
@@ -30,12 +31,16 @@ class HomeViewModel extends StateNotifier<HomeState> {
     );
   }
 
-  void upDateSpeed(double speed){
-    state= state.copyWith(currentSpeed: speed);
+  void upDateSpeed(double speed) {
+    state = state.copyWith(currentSpeed: speed);
   }
 
   void isDisplaySearchingBar(bool isDisplay) {
     state = state.copyWith(isDisplaySearchingBar: isDisplay);
+  }
+
+  void displayUtilities(bool display){
+    state = state.copyWith(displayUtilities: display);
   }
 
   Future getSearchingList(String searchPlace) async {
@@ -45,7 +50,7 @@ class HomeViewModel extends StateNotifier<HomeState> {
           .run(SearchingObjectInput(ApiConstant.accessToken, searchPlace));
       state = state.copyWith(
         status: LoadingStatus.success,
-        listSearchingPlace: searchOb.features??[],
+        listSearchingPlace: searchOb.features ?? [],
       );
     } on Exception catch (error) {
       state = state.copyWith(
@@ -89,11 +94,11 @@ class HomeViewModel extends StateNotifier<HomeState> {
           );
           state = state.copyWith(
             status: LoadingStatus.success,
-            distance: directionObj.routes[0].distance,
-            duration: directionObj.routes[0].duration,
-            listForPolyLine: directionObj.routes[0].geometry.coordinates
+            distance: directionObj.routes?[0].distance??0.0,
+            duration: directionObj.routes?[0].duration??0.0,
+            listForPolyLine: directionObj.routes?[0].geometry?.coordinates!
                 .map((e) => LatLng(e[1], e[0]))
-                .toList(),
+                .toList() ??[],
           );
         }
         if (method == RouteMethod.driving) {
@@ -106,14 +111,14 @@ class HomeViewModel extends StateNotifier<HomeState> {
               'full',
             ),
           );
-          final listLatLng = directionObj.routes[0].geometry.coordinates
+          final listLatLng = directionObj.routes![0].geometry?.coordinates!
               .map((e) => LatLng(e[1], e[0]))
               .toList();
           state = state.copyWith(
             status: LoadingStatus.success,
-            distance: directionObj.routes[0].distance,
-            duration: directionObj.routes[0].duration,
-            listForPolyLine: listLatLng,
+            distance: directionObj.routes?[0].distance ?? 0.0,
+            duration: directionObj.routes?[0].duration ?? 0.0,
+            listForPolyLine: listLatLng ?? [],
           );
         }
         return true;

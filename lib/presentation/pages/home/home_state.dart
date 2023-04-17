@@ -22,5 +22,6 @@ class HomeState with _$HomeState{
     @Default(RouteMethod.driving) RouteMethod routeMethod,
     @Default(0.0) double duration,
     @Default(0.0) double distance,
+    @Default(false) bool displayUtilities,
   }) = _HomeState;
 }

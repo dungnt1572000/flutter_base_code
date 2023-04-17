@@ -29,6 +29,7 @@ mixin _$HomeState {
   RouteMethod get routeMethod => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
   double get distance => throw _privateConstructorUsedError;
+  bool get displayUtilities => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $HomeStateCopyWith<HomeState> get copyWith =>
@@ -53,7 +54,8 @@ abstract class $HomeStateCopyWith<$Res> {
       List<Features> listSearchingPlace,
       RouteMethod routeMethod,
       double duration,
-      double distance});
+      double distance,
+      bool displayUtilities});
 }
 
 /// @nodoc
@@ -82,6 +84,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
     Object? routeMethod = null,
     Object? duration = null,
     Object? distance = null,
+    Object? displayUtilities = null,
   }) {
     return _then(_value.copyWith(
       errorMsg: null == errorMsg
@@ -136,6 +139,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
               as double,
+      displayUtilities: null == displayUtilities
+          ? _value.displayUtilities
+          : displayUtilities // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -160,7 +167,8 @@ abstract class _$$_HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Res> {
       List<Features> listSearchingPlace,
       RouteMethod routeMethod,
       double duration,
-      double distance});
+      double distance,
+      bool displayUtilities});
 }
 
 /// @nodoc
@@ -187,6 +195,7 @@ class __$$_HomeStateCopyWithImpl<$Res>
     Object? routeMethod = null,
     Object? duration = null,
     Object? distance = null,
+    Object? displayUtilities = null,
   }) {
     return _then(_$_HomeState(
       errorMsg: null == errorMsg
@@ -241,6 +250,10 @@ class __$$_HomeStateCopyWithImpl<$Res>
           ? _value.distance
           : distance // ignore: cast_nullable_to_non_nullable
               as double,
+      displayUtilities: null == displayUtilities
+          ? _value.displayUtilities
+          : displayUtilities // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -261,7 +274,8 @@ class _$_HomeState implements _HomeState {
       final List<Features> listSearchingPlace = const [],
       this.routeMethod = RouteMethod.driving,
       this.duration = 0.0,
-      this.distance = 0.0})
+      this.distance = 0.0,
+      this.displayUtilities = false})
       : _markers = markers,
         _listForPolyLine = listForPolyLine,
         _listSearchingPlace = listSearchingPlace;
@@ -324,10 +338,13 @@ class _$_HomeState implements _HomeState {
   @override
   @JsonKey()
   final double distance;
+  @override
+  @JsonKey()
+  final bool displayUtilities;
 
   @override
   String toString() {
-    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng, markers: $markers, listForPolyLine: $listForPolyLine, isDisplaySearchingBar: $isDisplaySearchingBar, isDisplayDetailIntroduction: $isDisplayDetailIntroduction, listSearchingPlace: $listSearchingPlace, routeMethod: $routeMethod, duration: $duration, distance: $distance)';
+    return 'HomeState(errorMsg: $errorMsg, status: $status, currentSpeed: $currentSpeed, latLng: $latLng, longLng: $longLng, markers: $markers, listForPolyLine: $listForPolyLine, isDisplaySearchingBar: $isDisplaySearchingBar, isDisplayDetailIntroduction: $isDisplayDetailIntroduction, listSearchingPlace: $listSearchingPlace, routeMethod: $routeMethod, duration: $duration, distance: $distance, displayUtilities: $displayUtilities)';
   }
 
   @override
@@ -358,7 +375,9 @@ class _$_HomeState implements _HomeState {
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
             (identical(other.distance, distance) ||
-                other.distance == distance));
+                other.distance == distance) &&
+            (identical(other.displayUtilities, displayUtilities) ||
+                other.displayUtilities == displayUtilities));
   }
 
   @override
@@ -376,7 +395,8 @@ class _$_HomeState implements _HomeState {
       const DeepCollectionEquality().hash(_listSearchingPlace),
       routeMethod,
       duration,
-      distance);
+      distance,
+      displayUtilities);
 
   @JsonKey(ignore: true)
   @override
@@ -399,7 +419,8 @@ abstract class _HomeState implements HomeState {
       final List<Features> listSearchingPlace,
       final RouteMethod routeMethod,
       final double duration,
-      final double distance}) = _$_HomeState;
+      final double distance,
+      final bool displayUtilities}) = _$_HomeState;
 
   @override
   String get errorMsg;
@@ -427,6 +448,8 @@ abstract class _HomeState implements HomeState {
   double get duration;
   @override
   double get distance;
+  @override
+  bool get displayUtilities;
   @override
   @JsonKey(ignore: true)
   _$$_HomeStateCopyWith<_$_HomeState> get copyWith =>

@@ -9,6 +9,7 @@ import 'package:baseproject/presentation/pages/home/home_view_model.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
+import 'package:baseproject/presentation/widget/icon_button.dart';
 import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:baseproject/ultilities/route_method.dart';
@@ -40,7 +41,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
   MapController mapController = MapController();
+
   HomeViewModel get _viewModel => ref.read(provider.notifier);
+
   HomeState get state => ref.watch(provider);
   final TextEditingController _startLocation = TextEditingController();
   final TextEditingController _lastLocation = TextEditingController();
@@ -54,8 +57,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     setUpLocation();
   }
 
-  void setUpLocation(){
-     location = Location();
+  void setUpLocation() {
+    location = Location();
     Future.delayed(Duration.zero, () async {
       _serviceEnabled = await location!.serviceEnabled();
       if (!_serviceEnabled) {
@@ -87,9 +90,10 @@ class _HomePageState extends ConsumerState<HomePage> {
       }
     });
   }
+
   @override
   void dispose() {
-      super.dispose();
+    super.dispose();
   }
 
   @override
@@ -122,29 +126,33 @@ class _HomePageState extends ConsumerState<HomePage> {
             _buildMap(),
             Positioned(
               right: 15,
-              child: Column(
-                children: [
-                  _buildFindButton(context),
-                  _buildSaveDriving(context),
-                ],
+              child: AnimatedCrossFade(
+                firstChild: AppIconButton(
+                  icon: Icons.more_horiz,
+                  onTap: () => _viewModel.displayUtilities(true),
+                ),
+                secondChild: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildFindButton(context),
+                    _buildSaveDriving(context),
+                    _buildOBDScreen(context),
+                    AppIconButton(
+                        icon: Icons.close,
+                        onTap: () => _viewModel.displayUtilities(false)),
+                  ],
+                ),
+                crossFadeState: state.displayUtilities
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 300),
               ),
             ),
             AnimatedCrossFade(
               firstChild: _buildFindWay(context),
-              secondChild: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: context.colors.action,
-                  shape: CircleBorder(
-                    side: BorderSide(color: context.colors.primaryBackground),
-                  ),
-                ),
-                onPressed: () {
-                  _viewModel.isDisplaySearchingBar(true);
-                },
-                child: Icon(
-                  Icons.keyboard_arrow_down,
-                  color: context.colors.iconPrimary,
-                ),
+              secondChild: AppIconButton(
+                icon: Icons.keyboard_arrow_down,
+                onTap: () => _viewModel.isDisplaySearchingBar(true),
               ),
               crossFadeState: state.isDisplaySearchingBar
                   ? CrossFadeState.showFirst
@@ -453,9 +461,10 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildSaveDriving(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        bool result = await ref.read(appNavigatorProvider).navigateTo(AppRoutes.saveDriving);
-        if(result){
-
+        bool result = await ref
+            .read(appNavigatorProvider)
+            .navigateTo(AppRoutes.saveDriving);
+        if (result) {
           location = Location();
         }
       },
@@ -467,6 +476,25 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       child: Text(
         'Save Driving',
+        style: AppTextStyles.labelMedium
+            .copyWith(color: context.colors.primaryText),
+      ),
+    );
+  }
+
+  Widget _buildOBDScreen(BuildContext context){
+    return ElevatedButton(
+      onPressed: () async {
+
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: context.colors.surface,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: context.colors.primaryMain),
+        ),
+      ),
+      child: Text(
+        'OBD',
         style: AppTextStyles.labelMedium
             .copyWith(color: context.colors.primaryText),
       ),

@@ -1,18 +1,20 @@
-import 'package:baseproject/data/repositories/entities/direction_object.dart';
 import 'package:baseproject/data/repositories/user_map_repository.dart';
 import 'package:baseproject/presentation/domain/use_case/use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 
+import '../../../data/repositories/entities/direction_obj.dart';
+
 class GetWalkingDirectionObjectUseCase
-    implements FutureUseCase<DirectionObjectInput, DirectionObject> {
+    implements FutureUseCase<DirectionObjectInput, DirectionObj> {
   @override
-  Future<DirectionObject> run(DirectionObjectInput input) async {
+  Future<DirectionObj> run(DirectionObjectInput input) async {
     return await injector.get<UserMapRepository>().getWalkingDirection(
-        input.direction,
-        input.accessToken,
-        input.annotations,
-        input.geometries,
-        input.overviews);
+          input.direction,
+          input.accessToken,
+          input.annotations,
+          input.geometries,
+          input.overviews,
+        );
   }
 }
 

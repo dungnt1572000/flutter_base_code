@@ -1,6 +1,7 @@
-import 'package:baseproject/data/repositories/entities/direction_object.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'direction_obj.freezed.dart';
+part 'direction_obj.g.dart';
+
 @freezed
 class DirectionObj with _$DirectionObj {
   factory DirectionObj({
@@ -17,6 +18,7 @@ class DirectionObj with _$DirectionObj {
 @freezed
 class Routes with _$Routes {
   factory Routes({
+    @JsonKey(name: 'country_crossed') bool? countryCrossed,
     @JsonKey(name: 'weight_name') String? weightName,
     double? weight,
     double? duration,
@@ -47,7 +49,7 @@ class Legs with _$Legs {
 @freezed
 class Annotation with _$Annotation {
   factory Annotation({
-    @JsonKey(name: 'maxspeed') List<Maxspeed>? maxspeed,
+    @JsonKey(name: 'maxspeed') List<MaxSpeed>? maxspeed,
   }) = _Annotation;
 
   factory Annotation.fromJson(Map<String, dynamic> json) =>

@@ -1,7 +1,8 @@
-import 'package:baseproject/data/repositories/entities/direction_object.dart';
 import 'package:baseproject/data/repositories/entities/search_object.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+
+import '../../repositories/entities/direction_obj.dart';
 
 part 'api_client.g.dart';
 
@@ -10,7 +11,7 @@ abstract class ApiClient {
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
 
   @GET('directions/v5/mapbox/driving/{direction}')
-  Future<DirectionObject> getDirectionDriving(
+  Future<DirectionObj> getDirectionDriving(
       @Path('direction') String direction,
       @Query('access_token') String accessToken,
       @Query('annotations') String annotations,
@@ -18,7 +19,7 @@ abstract class ApiClient {
       @Query('overview') String overviews);
 
   @GET('directions/v5/mapbox/walking/{direction}')
-  Future<DirectionObject> getDirectionWalking(
+  Future<DirectionObj> getDirectionWalking(
       @Path('direction') String direction,
       @Query('access_token') String accessToken,
       @Query('annotations') String annotations,
@@ -27,5 +28,5 @@ abstract class ApiClient {
 
   @GET('geocoding/v5/mapbox.places/{place}.json')
   Future<SearchObject> fetchToGetSearchingObject(
-      @Path('place') String place, @Query('access_token') String accesstoken);
+      @Path('place') String place, @Query('access_token') String accessToken);
 }

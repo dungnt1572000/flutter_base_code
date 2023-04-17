@@ -1,6 +1,7 @@
-import 'package:baseproject/data/repositories/entities/direction_object.dart';
 import 'package:baseproject/data/repositories/entities/search_object.dart';
 import 'package:baseproject/data/services/network_service/api_client.dart';
+
+import 'entities/direction_obj.dart';
 
 class UserMapRepository {
   final ApiClient _apiClient;
@@ -11,7 +12,7 @@ class UserMapRepository {
     return await _apiClient.fetchToGetSearchingObject(place, accessToken);
   }
 
-  Future<DirectionObject> getWalkingDirection(
+  Future<DirectionObj> getWalkingDirection(
       String direction,
       String accessToken,
       String annotations,
@@ -21,7 +22,7 @@ class UserMapRepository {
         direction, accessToken, annotations, geometries, overviews);
   }
 
-  Future<DirectionObject> getDrivingDirection(
+  Future<DirectionObj> getDrivingDirection(
       String direction,
       String accessToken,
       String annotations,

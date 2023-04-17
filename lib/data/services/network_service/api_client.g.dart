@@ -21,7 +21,7 @@ class _ApiClient implements ApiClient {
   String? baseUrl;
 
   @override
-  Future<DirectionObject> getDirectionDriving(
+  Future<DirectionObj> getDirectionDriving(
     direction,
     accessToken,
     annotations,
@@ -38,7 +38,7 @@ class _ApiClient implements ApiClient {
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<DirectionObject>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<DirectionObj>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -50,12 +50,12 @@ class _ApiClient implements ApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = DirectionObject.fromJson(_result.data!);
+    final value = DirectionObj.fromJson(_result.data!);
     return value;
   }
 
   @override
-  Future<DirectionObject> getDirectionWalking(
+  Future<DirectionObj> getDirectionWalking(
     direction,
     accessToken,
     annotations,
@@ -72,7 +72,7 @@ class _ApiClient implements ApiClient {
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<DirectionObject>(Options(
+        .fetch<Map<String, dynamic>>(_setStreamType<DirectionObj>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -84,17 +84,17 @@ class _ApiClient implements ApiClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = DirectionObject.fromJson(_result.data!);
+    final value = DirectionObj.fromJson(_result.data!);
     return value;
   }
 
   @override
   Future<SearchObject> fetchToGetSearchingObject(
     place,
-    accesstoken,
+    accessToken,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'access_token': accesstoken};
+    final queryParameters = <String, dynamic>{r'access_token': accessToken};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
