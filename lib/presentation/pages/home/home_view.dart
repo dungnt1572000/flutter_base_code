@@ -485,7 +485,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget _buildOBDScreen(BuildContext context){
     return ElevatedButton(
       onPressed: () async {
-
+        ref.read(appNavigatorProvider).navigateTo(AppRoutes.bluetoothScreen);
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.surface,

@@ -7,5 +7,7 @@ class AppRoutes{
 
   static const String saveDriving = '/saveDriving';
 
-  static const String analyzedTextScreen = 'analyzedTextScreen';
+  static const String analyzedTextScreen = '/analyzedTextScreen';
+
+  static const String bluetoothScreen = '/bluetoothScreen';
 }
