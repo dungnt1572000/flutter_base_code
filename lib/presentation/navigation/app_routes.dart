@@ -1,4 +1,4 @@
-class AppRoutes{
+class AppRoutes {
   static const String splash = '/splash';
 
   static const String home = '/home';
@@ -10,4 +10,6 @@ class AppRoutes{
   static const String analyzedTextScreen = '/analyzedTextScreen';
 
   static const String bluetoothScreen = '/bluetoothScreen';
+
+  static const String obdDetail = '/obdDetail';
 }

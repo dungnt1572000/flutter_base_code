@@ -1,6 +1,7 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
+import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/bluetooth_device_searching_view_model.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_bar.dart';
@@ -57,7 +58,9 @@ class _BluetoothDeviceSearchViewState
 
   void startScan() {
     flutterBluetoothSerial.startDiscovery().listen((device) {
-      if (device.device.name != null && !_devicesList.any((element) => element.device.name==device.device.name)) {
+      if (device.device.name != null &&
+          !_devicesList
+              .any((element) => element.device.name == device.device.name)) {
         _devicesList.add(device);
       }
     });
@@ -74,18 +77,23 @@ class _BluetoothDeviceSearchViewState
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.refresh),
         onPressed: () {
-          checkBluetooth().then((_) {
-            startScan();
-          });
-          Future.delayed(const Duration(seconds: 5)).then((_) async {
-            try {
-               FlutterBluetoothSerial.instance.getBondedDevices().then((value) => _devices.addAll(value));
-            } catch (ex) {
-              print("Không thể lấy danh sách thiết bị: $ex");
-            }
-            viewModel.initData(_devicesList);
-            stopScan();
-          });
+          ref
+              .read(appNavigatorProvider)
+              .navigateTo(AppRoutes.obdDetail);
+          // checkBluetooth().then((_) {
+          //   startScan();
+          // });
+          // Future.delayed(const Duration(seconds: 5)).then((_) async {
+          //   try {
+          //     FlutterBluetoothSerial.instance
+          //         .getBondedDevices()
+          //         .then((value) => _devices.addAll(value));
+          //   } catch (ex) {
+          //     print("Không thể lấy danh sách thiết bị: $ex");
+          //   }
+          //   viewModel.initData(_devicesList);
+          //   stopScan();
+          // });
         },
       ),
       appBar: const BaseAppBar(
@@ -106,22 +114,15 @@ class _BluetoothDeviceSearchViewState
               child: ListView.builder(
                 itemCount: state.listDevice.length,
                 itemBuilder: (context, index) => TextButton(
-                    onPressed: () async{
-                      BluetoothDevice device = BluetoothDevice(address: state.listDevice.toList()[index].device.address);
-                      BluetoothConnection connection = await BluetoothConnection.toAddress(state.listDevice.toList()[index].device.address);
-                      if(connection.isConnected){
-                        print('Connected to the device: ${device.name} (${device.address})');
-                        String data = 'Hello, world!';
-                        Uint8List uint8List = Uint8List.fromList((data + "\r\n").codeUnits);
-                        connection.output.add(uint8List);
-                        await connection.output.allSent;
-                        await connection.close();
-                      }
+                    onPressed: () async {
+                      ref
+                          .read(appNavigatorProvider)
+                          .navigateTo(AppRoutes.obdDetail);
                     },
-                    child:
-                        Text(state.listDevice.toList()[index].device.name ?? 'Unknown')),
+                    child: Text(state.listDevice.toList()[index].device.name ??
+                        'Unknown')),
               ),
-            )
+            ),
           ],
         ),
       )),
