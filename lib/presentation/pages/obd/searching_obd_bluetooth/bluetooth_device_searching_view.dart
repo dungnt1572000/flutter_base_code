@@ -1,11 +1,12 @@
-import 'dart:typed_data';
+import 'dart:async';
 
-import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
-import 'package:baseproject/presentation/navigation/app_routes.dart';
+import 'package:baseproject/method_chanel/get_battery_plugin.dart';
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/bluetooth_device_searching_view_model.dart';
+import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/model/devices_bluetooth.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,11 +30,33 @@ class _BluetoothDeviceSearchViewState
 
   final List<BluetoothDiscoveryResult> _devicesList = [];
 
-  final List<BluetoothDevice> _devices = [];
+  final List<DevicesBluetooth> _devicesBluetoothList = [];
+
+  late final List<BluetoothDevice> _devices = [];
 
   BluetoothDeviceSearchState get state => ref.watch(_provider);
 
   BluetoothDeviceSearchViewModel get viewModel => ref.read(_provider.notifier);
+
+  late BluetoothConnection connection;
+
+  GetBatteryPlugin getBatteryPlugin = GetBatteryPlugin().instance;
+
+  String pin = 'unknown';
+
+// late StreamSubscription<String> streamSubscription;
+  StreamController controller = StreamController();
+
+  Future _getBatteryLevel() async {
+    try {
+      final int result = await getBatteryPlugin.getPin({"increment":"12"});
+      setState(() {
+        pin = '$result %';
+      });
+    } on PlatformException catch (e) {
+      pin = "Failed to get battery level: '${e.message}'.";
+    }
+  }
 
   @override
   void initState() {
@@ -43,9 +66,13 @@ class _BluetoothDeviceSearchViewState
       startScan();
     });
     Future.delayed(const Duration(seconds: 5)).then((_) {
-      viewModel.initData(_devicesList);
       stopScan();
     });
+    getBatteryPlugin.streamSub.then((value) => value.listen((event) {
+          setState(() {
+            pin = event.toString();
+          });
+        }));
   }
 
   // Check if Bluetooth is available
@@ -61,7 +88,20 @@ class _BluetoothDeviceSearchViewState
       if (device.device.name != null &&
           !_devicesList
               .any((element) => element.device.name == device.device.name)) {
-        _devicesList.add(device);
+        print(
+            'deviceName: ${device.device.name},  address:${device.device.address}');
+        _devicesBluetoothList.add(DevicesBluetooth(
+            device.device.name ?? 'Unknown', device.device.address));
+      }
+    });
+    Future.delayed(Duration.zero, () async {
+      final result = await flutterBluetoothSerial.getBondedDevices();
+      print('Soluong: ${result.length}');
+      if (result.isNotEmpty) {
+        for (int i = 0; i < result.length; i++) {
+          _devicesBluetoothList.add(
+              DevicesBluetooth(result[i].name ?? 'Unknown', result[i].address));
+        }
       }
     });
   }
@@ -69,31 +109,15 @@ class _BluetoothDeviceSearchViewState
   // Stop scanning for Bluetooth devices
   void stopScan() {
     flutterBluetoothSerial.cancelDiscovery();
+    viewModel.initData(_devicesBluetoothList);
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.refresh),
         onPressed: () {
-          ref
-              .read(appNavigatorProvider)
-              .navigateTo(AppRoutes.obdDetail);
-          // checkBluetooth().then((_) {
-          //   startScan();
-          // });
-          // Future.delayed(const Duration(seconds: 5)).then((_) async {
-          //   try {
-          //     FlutterBluetoothSerial.instance
-          //         .getBondedDevices()
-          //         .then((value) => _devices.addAll(value));
-          //   } catch (ex) {
-          //     print("Không thể lấy danh sách thiết bị: $ex");
-          //   }
-          //   viewModel.initData(_devicesList);
-          //   stopScan();
-          // });
+          _getBatteryLevel();
         },
       ),
       appBar: const BaseAppBar(
@@ -107,22 +131,10 @@ class _BluetoothDeviceSearchViewState
         child: Column(
           children: [
             const Text('Click to OBD device Name'),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: state.listDevice.length,
-                itemBuilder: (context, index) => TextButton(
-                    onPressed: () async {
-                      ref
-                          .read(appNavigatorProvider)
-                          .navigateTo(AppRoutes.obdDetail);
-                    },
-                    child: Text(state.listDevice.toList()[index].device.name ??
-                        'Unknown')),
-              ),
-            ),
+            Text('%pin =: ${pin}')
           ],
         ),
       )),

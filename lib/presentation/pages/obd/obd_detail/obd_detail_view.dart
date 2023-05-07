@@ -18,22 +18,24 @@ class ObdDetailView extends ConsumerStatefulWidget {
 }
 
 class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
-  StreamController<double> _sliderValueController = StreamController<double>();
+  final StreamController<double> _sliderValueController = StreamController<double>();
 
   ObdDetailState get state => ref.watch(_provider);
 
   ObdDetailViewModel get viewModel => ref.read(_provider.notifier);
 
-  AudioPlayer audioPlayer = AudioPlayer();
+  final audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
-    Future.delayed(Duration(seconds: 3)).then((value) => audioPlayer.stop());
+
     _sliderValueController.stream.listen((sliderValue) {
-      if(sliderValue>0.5){
+      if(sliderValue>0.5 && audioPlayer.state != PlayerState.playing){
+        audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
+        Future.delayed(const Duration(seconds: 3)).then((value) => audioPlayer.release());
+      }else{
 
       }
     });
