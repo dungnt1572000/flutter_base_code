@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BluetoothDeviceSearchState {
-  Set<DevicesBluetooth> get listDevice => throw _privateConstructorUsedError;
+  Set<CustomDevicesBluetooth> get listDevice => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BluetoothDeviceSearchStateCopyWith<BluetoothDeviceSearchState>
@@ -30,7 +30,7 @@ abstract class $BluetoothDeviceSearchStateCopyWith<$Res> {
       _$BluetoothDeviceSearchStateCopyWithImpl<$Res,
           BluetoothDeviceSearchState>;
   @useResult
-  $Res call({Set<DevicesBluetooth> listDevice});
+  $Res call({Set<CustomDevicesBluetooth> listDevice});
 }
 
 /// @nodoc
@@ -53,7 +53,7 @@ class _$BluetoothDeviceSearchStateCopyWithImpl<$Res,
       listDevice: null == listDevice
           ? _value.listDevice
           : listDevice // ignore: cast_nullable_to_non_nullable
-              as Set<DevicesBluetooth>,
+              as Set<CustomDevicesBluetooth>,
     ) as $Val);
   }
 }
@@ -66,7 +66,7 @@ abstract class _$$_BluetoothDeviceSearchCopyWith<$Res>
       __$$_BluetoothDeviceSearchCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Set<DevicesBluetooth> listDevice});
+  $Res call({Set<CustomDevicesBluetooth> listDevice});
 }
 
 /// @nodoc
@@ -87,7 +87,7 @@ class __$$_BluetoothDeviceSearchCopyWithImpl<$Res>
       listDevice: null == listDevice
           ? _value._listDevice
           : listDevice // ignore: cast_nullable_to_non_nullable
-              as Set<DevicesBluetooth>,
+              as Set<CustomDevicesBluetooth>,
     ));
   }
 }
@@ -95,13 +95,13 @@ class __$$_BluetoothDeviceSearchCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
-  _$_BluetoothDeviceSearch({final Set<DevicesBluetooth> listDevice = const {}})
+  _$_BluetoothDeviceSearch({final Set<CustomDevicesBluetooth> listDevice = const {}})
       : _listDevice = listDevice;
 
-  final Set<DevicesBluetooth> _listDevice;
+  final Set<CustomDevicesBluetooth> _listDevice;
   @override
   @JsonKey()
-  Set<DevicesBluetooth> get listDevice {
+  Set<CustomDevicesBluetooth> get listDevice {
     if (_listDevice is EqualUnmodifiableSetView) return _listDevice;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableSetView(_listDevice);
@@ -134,11 +134,11 @@ class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
 }
 
 abstract class _BluetoothDeviceSearch implements BluetoothDeviceSearchState {
-  factory _BluetoothDeviceSearch({final Set<DevicesBluetooth> listDevice}) =
+  factory _BluetoothDeviceSearch({final Set<CustomDevicesBluetooth> listDevice}) =
       _$_BluetoothDeviceSearch;
 
   @override
-  Set<DevicesBluetooth> get listDevice;
+  Set<CustomDevicesBluetooth> get listDevice;
   @override
   @JsonKey(ignore: true)
   _$$_BluetoothDeviceSearchCopyWith<_$_BluetoothDeviceSearch> get copyWith =>

@@ -7,6 +7,6 @@ part 'bluetooth_device_searching_state.freezed.dart';
 @freezed
 class BluetoothDeviceSearchState with _$BluetoothDeviceSearchState{
   factory BluetoothDeviceSearchState({
-    @Default({}) Set<DevicesBluetooth> listDevice,
+    @Default({}) Set<CustomDevicesBluetooth> listDevice,
 }) = _BluetoothDeviceSearch;
 }

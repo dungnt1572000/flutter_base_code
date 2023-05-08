@@ -7,7 +7,7 @@ class BluetoothDeviceSearchViewModel
     extends StateNotifier<BluetoothDeviceSearchState> {
   BluetoothDeviceSearchViewModel() : super(BluetoothDeviceSearchState());
 
-  void initData(List<DevicesBluetooth> result) {
+  void initData(List<CustomDevicesBluetooth> result) {
     state = state.copyWith(
       listDevice: result.toSet(),
     );
