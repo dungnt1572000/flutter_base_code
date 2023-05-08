@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
@@ -122,8 +124,27 @@ class _BluetoothDeviceSearchViewState
               ),
               ...state.listDevice
                   .map((e) => TextButton(
-                      onPressed: () {
-                        ref.read(appNavigatorProvider).navigateTo(AppRoutes.obdDetail);
+                      onPressed: () async{
+                        // Some simplest connection :F
+                        try {
+                          BluetoothConnection connection = await BluetoothConnection.toAddress(e.address);
+                          print('Connected to the device');
+
+                          connection.input?.listen((Uint8List data) {
+                            print('Data incoming: ${ascii.decode(data)}');
+                            connection.output.add(data); // Sending data
+
+                            if (ascii.decode(data).contains('!')) {
+                              connection.finish(); // Closing connection
+                              print('Disconnecting by local host');
+                            }
+                          }).onDone(() {
+                            print('Disconnected by remote request');
+                          });
+                        }
+                        catch (exception) {
+                          print('Cannot connect, exception occured');
+                        }
                       }, child: Text('${e.name} ${e.address}')))
                   .toList()
             ],
