@@ -3,8 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ObdDetailViewModel extends StateNotifier<ObdDetailState>{
   ObdDetailViewModel(): super(ObdDetailState());
+  void updateSpeed(double speed){
+    state = state.copyWith(
+      speed: speed
+    );
+  }
+  void updateRmp(double rmp){
 
-  void updateValue(double value){
-    state= state.copyWith(value: value);
+  }
+  void updateNhietdodongco(double nhietdodongco){
+
+  }
+  void updatemucnhienlieu(double mucnhienlieu){
+
   }
 }

@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$BluetoothDeviceSearchState {
-  Set<CustomDevicesBluetooth> get listDevice => throw _privateConstructorUsedError;
+  Set<CustomDevicesBluetooth> get listDevice =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BluetoothDeviceSearchStateCopyWith<BluetoothDeviceSearchState>
@@ -95,7 +96,8 @@ class __$$_BluetoothDeviceSearchCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
-  _$_BluetoothDeviceSearch({final Set<CustomDevicesBluetooth> listDevice = const {}})
+  _$_BluetoothDeviceSearch(
+      {final Set<CustomDevicesBluetooth> listDevice = const {}})
       : _listDevice = listDevice;
 
   final Set<CustomDevicesBluetooth> _listDevice;
@@ -134,7 +136,8 @@ class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
 }
 
 abstract class _BluetoothDeviceSearch implements BluetoothDeviceSearchState {
-  factory _BluetoothDeviceSearch({final Set<CustomDevicesBluetooth> listDevice}) =
+  factory _BluetoothDeviceSearch(
+          {final Set<CustomDevicesBluetooth> listDevice}) =
       _$_BluetoothDeviceSearch;
 
   @override

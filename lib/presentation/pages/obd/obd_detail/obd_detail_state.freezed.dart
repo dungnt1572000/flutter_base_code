@@ -16,7 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ObdDetailState {
-  double get value => throw _privateConstructorUsedError;
+  double get speed => throw _privateConstructorUsedError;
+  double get rpm => throw _privateConstructorUsedError;
+  double get nhietdodongco => throw _privateConstructorUsedError;
+  double get mucnhienlieu => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ObdDetailStateCopyWith<ObdDetailState> get copyWith =>
@@ -29,7 +32,8 @@ abstract class $ObdDetailStateCopyWith<$Res> {
           ObdDetailState value, $Res Function(ObdDetailState) then) =
       _$ObdDetailStateCopyWithImpl<$Res, ObdDetailState>;
   @useResult
-  $Res call({double value});
+  $Res call(
+      {double speed, double rpm, double nhietdodongco, double mucnhienlieu});
 }
 
 /// @nodoc
@@ -45,12 +49,27 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? value = null,
+    Object? speed = null,
+    Object? rpm = null,
+    Object? nhietdodongco = null,
+    Object? mucnhienlieu = null,
   }) {
     return _then(_value.copyWith(
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
+      speed: null == speed
+          ? _value.speed
+          : speed // ignore: cast_nullable_to_non_nullable
+              as double,
+      rpm: null == rpm
+          ? _value.rpm
+          : rpm // ignore: cast_nullable_to_non_nullable
+              as double,
+      nhietdodongco: null == nhietdodongco
+          ? _value.nhietdodongco
+          : nhietdodongco // ignore: cast_nullable_to_non_nullable
+              as double,
+      mucnhienlieu: null == mucnhienlieu
+          ? _value.mucnhienlieu
+          : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
     ) as $Val);
   }
@@ -64,7 +83,8 @@ abstract class _$$_ObdDetailStateCopyWith<$Res>
       __$$_ObdDetailStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double value});
+  $Res call(
+      {double speed, double rpm, double nhietdodongco, double mucnhienlieu});
 }
 
 /// @nodoc
@@ -78,12 +98,27 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? value = null,
+    Object? speed = null,
+    Object? rpm = null,
+    Object? nhietdodongco = null,
+    Object? mucnhienlieu = null,
   }) {
     return _then(_$_ObdDetailState(
-      value: null == value
-          ? _value.value
-          : value // ignore: cast_nullable_to_non_nullable
+      speed: null == speed
+          ? _value.speed
+          : speed // ignore: cast_nullable_to_non_nullable
+              as double,
+      rpm: null == rpm
+          ? _value.rpm
+          : rpm // ignore: cast_nullable_to_non_nullable
+              as double,
+      nhietdodongco: null == nhietdodongco
+          ? _value.nhietdodongco
+          : nhietdodongco // ignore: cast_nullable_to_non_nullable
+              as double,
+      mucnhienlieu: null == mucnhienlieu
+          ? _value.mucnhienlieu
+          : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
     ));
   }
@@ -92,15 +127,28 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ObdDetailState implements _ObdDetailState {
-  _$_ObdDetailState({this.value = 0});
+  _$_ObdDetailState(
+      {this.speed = 0,
+      this.rpm = 0,
+      this.nhietdodongco = 0,
+      this.mucnhienlieu = 0});
 
   @override
   @JsonKey()
-  final double value;
+  final double speed;
+  @override
+  @JsonKey()
+  final double rpm;
+  @override
+  @JsonKey()
+  final double nhietdodongco;
+  @override
+  @JsonKey()
+  final double mucnhienlieu;
 
   @override
   String toString() {
-    return 'ObdDetailState(value: $value)';
+    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu)';
   }
 
   @override
@@ -108,11 +156,17 @@ class _$_ObdDetailState implements _ObdDetailState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ObdDetailState &&
-            (identical(other.value, value) || other.value == value));
+            (identical(other.speed, speed) || other.speed == speed) &&
+            (identical(other.rpm, rpm) || other.rpm == rpm) &&
+            (identical(other.nhietdodongco, nhietdodongco) ||
+                other.nhietdodongco == nhietdodongco) &&
+            (identical(other.mucnhienlieu, mucnhienlieu) ||
+                other.mucnhienlieu == mucnhienlieu));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, value);
+  int get hashCode =>
+      Object.hash(runtimeType, speed, rpm, nhietdodongco, mucnhienlieu);
 
   @JsonKey(ignore: true)
   @override
@@ -122,10 +176,20 @@ class _$_ObdDetailState implements _ObdDetailState {
 }
 
 abstract class _ObdDetailState implements ObdDetailState {
-  factory _ObdDetailState({final double value}) = _$_ObdDetailState;
+  factory _ObdDetailState(
+      {final double speed,
+      final double rpm,
+      final double nhietdodongco,
+      final double mucnhienlieu}) = _$_ObdDetailState;
 
   @override
-  double get value;
+  double get speed;
+  @override
+  double get rpm;
+  @override
+  double get nhietdodongco;
+  @override
+  double get mucnhienlieu;
   @override
   @JsonKey(ignore: true)
   _$$_ObdDetailStateCopyWith<_$_ObdDetailState> get copyWith =>

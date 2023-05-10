@@ -26,16 +26,16 @@ class AppRouter {
           settings: settings,
           builder: (context) => const NotFound404ErrorView(),
         );
-        case AppRoutes.saveDriving:
+      case AppRoutes.saveDriving:
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => const SaveDrivingView(),
         );
-        case AppRoutes.analyzedTextScreen:
+      case AppRoutes.analyzedTextScreen:
         final argument = settings.arguments as AnalyzeTextViewArgument;
         return MaterialPageRoute(
           settings: settings,
-          builder: (context) =>  AnalyzeTextView(xFile: argument.xFile),
+          builder: (context) => AnalyzeTextView(xFile: argument.xFile),
         );
       case AppRoutes.bluetoothScreen:
         return MaterialPageRoute(
@@ -43,9 +43,12 @@ class AppRouter {
           builder: (context) => const BluetoothDeviceSearchView(),
         );
       case AppRoutes.obdDetail:
+        final argument = settings.arguments as ObdDetailArgument;
         return MaterialPageRoute(
           settings: settings,
-          builder: (context) => const ObdDetailView(),
+          builder: (context) => ObdDetailView(
+            obdDetailArgument: argument,
+          ),
         );
       default:
         return null;

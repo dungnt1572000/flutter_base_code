@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
+import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view.dart';
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/bluetooth_device_searching_view_model.dart';
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/model/devices_bluetooth.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
@@ -60,21 +58,15 @@ class _BluetoothDeviceSearchViewState
 
   void startScan() {
     flutterBluetoothSerial.startDiscovery().listen((device) {
-      if (device.device.name != null
-      &&
+      if (device.device.name != null &&
           !_devicesBluetoothList
-              .any((element) => element.name == device.device.name)
-      )
-      {
-        print(
-            'deviceName: ${device.device.name},  address:${device.device.address}');
+              .any((element) => element.name == device.device.name)) {
         _devicesBluetoothList.add(CustomDevicesBluetooth(
             device.device.name ?? 'Unknown', device.device.address));
       }
     });
     Future.delayed(Duration.zero, () async {
       final result = await flutterBluetoothSerial.getBondedDevices();
-      print('Soluong: ${result.length}');
       if (result.isNotEmpty) {
         for (int i = 0; i < result.length; i++) {
           if (!_devicesBluetoothList
@@ -114,9 +106,9 @@ class _BluetoothDeviceSearchViewState
       )),
       body: SafeArea(
           child: SingleChildScrollView(
-            child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             children: [
               const Text('Click to OBD device Name'),
               const SizedBox(
@@ -124,33 +116,17 @@ class _BluetoothDeviceSearchViewState
               ),
               ...state.listDevice
                   .map((e) => TextButton(
-                      onPressed: () async{
-                        // Some simplest connection :F
-                        try {
-                          BluetoothConnection connection = await BluetoothConnection.toAddress(e.address);
-                          print('Connected to the device');
-
-                          connection.input?.listen((Uint8List data) {
-                            print('Data incoming: ${ascii.decode(data)}');
-                            connection.output.add(data); // Sending data
-
-                            if (ascii.decode(data).contains('!')) {
-                              connection.finish(); // Closing connection
-                              print('Disconnecting by local host');
-                            }
-                          }).onDone(() {
-                            print('Disconnected by remote request');
-                          });
-                        }
-                        catch (exception) {
-                          print('Cannot connect, exception occured');
-                        }
-                      }, child: Text('${e.name} ${e.address}')))
+                      onPressed: () async {
+                        ref.read(appNavigatorProvider).navigateTo(
+                            AppRoutes.obdDetail,
+                            arguments: ObdDetailArgument(e.address));
+                      },
+                      child: Text('${e.name} ${e.address}')))
                   .toList()
             ],
+          ),
         ),
-      ),
-          )),
+      )),
     );
   }
 }
