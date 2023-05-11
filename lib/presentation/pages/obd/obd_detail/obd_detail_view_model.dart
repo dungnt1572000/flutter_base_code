@@ -9,12 +9,14 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState>{
     );
   }
   void updateRmp(double rmp){
-
+state = state.copyWith(
+  rpm: rmp
+);
   }
   void updateNhietdodongco(double nhietdodongco){
 
   }
   void updatemucnhienlieu(double mucnhienlieu){
-
+    state = state.copyWith(mucnhienlieu: mucnhienlieu);
   }
 }

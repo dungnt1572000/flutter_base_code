@@ -67,10 +67,18 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
           print(string);
           List<String> speedL = string.split(' ');
           if(string.length>3){
-            print('${(int.parse(speedL[2],radix: 16)*256)} && ${speedL[2]}');
-            print('${int.parse(speedL[3],radix: 16)} && ${speedL[3]}');
-              print('Tocdo: ${((int.parse(speedL[2],radix: 16)*256)+int.parse(speedL[3],radix: 16))/100}');
-            viewModel.updateSpeed(((int.parse(speedL[2],radix: 16)*256)+int.parse(speedL[3],radix: 16))/100);
+           if(speedL[1]=='0C') {
+             viewModel.updateSpeed(((int.parse(speedL[2], radix: 16) * 256) +
+                 int.parse(speedL[3], radix: 16)) / 100);
+           }
+           if(speedL[1]=='0D') {
+             viewModel.updateSpeed(((int.parse(speedL[2], radix: 16) * 256) +
+                 int.parse(speedL[3], radix: 16)) / 100);
+           }
+           if(speedL[1]=='05'){
+             viewModel.updatemucnhienlieu(int.parse(speedL[2],radix: 16)*1.0);
+           }
+
           }
         });
       } catch (e) {
