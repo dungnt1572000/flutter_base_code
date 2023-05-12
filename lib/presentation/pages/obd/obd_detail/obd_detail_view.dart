@@ -7,7 +7,9 @@ import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.d
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view_model.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
+import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,41 +50,56 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
   void initState() {
     super.initState();
 
-    // timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    //
-    // });
-
     Future.delayed(Duration.zero, () async {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+      ]);
       try {
         connection = await BluetoothConnection.toAddress(
             widget.obdDetailArgument.address);
-        if (connection!.isConnected ) {
+        if (connection!.isConnected) {
           print('Thiet bi da connect roi');
-          String message = "010d";
-          connection?.output.add(Uint8List.fromList(utf8.encode("$message\r\n")));
-          await connection?.output.allSent;
+          timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+
+              connection?.output
+                  .add(Uint8List.fromList(utf8.encode("010d\r\n")));
+
+
+              connection?.output
+                  .add(Uint8List.fromList(utf8.encode("010c\r\n")));
+
+
+              connection?.output
+                  .add(Uint8List.fromList(utf8.encode("0105\r\n")));
+
+
+              // connection?.output
+              //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
+
+
+            await connection?.output.allSent;
+          });
         }
         connection?.input?.listen((event) {
           String string = String.fromCharCodes(event);
           print(string);
           List<String> speedL = string.split(' ');
-          if(string.length>3){
-           if(speedL[1]=='0C') {
-             viewModel.updateSpeed(((int.parse(speedL[2], radix: 16) * 256) +
-                 int.parse(speedL[3], radix: 16)) / 100);
-           }
-           if(speedL[1]=='0D') {
-             viewModel.updateSpeed(((int.parse(speedL[2], radix: 16) * 256) +
-                 int.parse(speedL[3], radix: 16)) / 100);
-           }
-           if(speedL[1]=='05'){
-             viewModel.updatemucnhienlieu(int.parse(speedL[2],radix: 16)*1.0);
-           }
-
+          if (string.length > 3) {
+            if (speedL[1] == '0D') {
+              viewModel.updateSpeed(int.parse(speedL[2], radix: 16) * 1.0);
+            } else if (speedL[1] == '0C') {
+              viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
+                      int.parse(speedL[3], radix: 16)) /
+                  100);
+            } else if (speedL[1] == '05') {
+              viewModel
+                  .updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
+            }
           }
         });
       } catch (e) {
-        print(e.toString());
+        showErrorSnackBar(context: context, errorMessage: 'Something become wrong please restart app ');
       }
     });
 
@@ -99,37 +116,14 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
   void dispose() {
     _sliderValueController.close();
     connection?.dispose();
+    timer?.cancel();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () async{
-              if (connection!.isConnected ) {
-                print('Thiet bi da connect roi');
-                String message = "010c";
-                Uint8List bytes = Uint8List.fromList(message.codeUnits);
-                connection?.output.add(Uint8List.fromList(utf8.encode("$message\r\n")));
-                await connection?.output.allSent;
-              }
-            },
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          FloatingActionButton(
-              child: Text('disconnect'),
-              onPressed: (){
-            connection?.finish();
-            connection?.dispose();
-          })
-        ],
-      ),
       body: SafeArea(
         child: Container(
           color: Colors.amber,
@@ -138,12 +132,13 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildItem('Van toc', state.speed.toString()),
-                      _buildItem('Vong xoay', '3.23'),
+                      _buildItem('SPEED', state.speed.toString()),
+                      _buildItem('RPM', state.rpm.toString()),
                     ],
                   ),
                   const SizedBox(
@@ -152,8 +147,10 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildItem('ap suat lop', '3.23'),
-                      _buildItem('nhiet do dong co', '3.23'),
+                      _buildItem(
+                          'muc nhien lieu', state.mucnhienlieu.toString()),
+                      _buildItem(
+                          'nhiet do dong co', state.nhietdodongco.toString()),
                     ],
                   ),
                 ],
@@ -170,7 +167,7 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
       children: [
         Text(
           title,
-          style: AppTextStyles.textSmallBold
+          style: AppTextStyles.headingMediumLight
               .copyWith(color: context.colors.primaryText),
         ),
         const SizedBox(
@@ -178,7 +175,7 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
         ),
         Text(
           data,
-          style: AppTextStyles.textMediumBold
+          style: AppTextStyles.headingMediumLight
               .copyWith(color: context.colors.backdropPrimary),
         )
       ],
