@@ -47,7 +47,7 @@ dependencies:
   freezed: ^2.3.2
   freezed_annotation: ^2.2.0
   get_it: ^7.2.0
-  flutter_map: ^3.0.0
+  flutter_map: ^4.0.0
   location: ^4.4.0
   latlong2: ^0.8.1
   camera: ^0.10.0+4

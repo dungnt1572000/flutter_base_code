@@ -6,6 +6,8 @@ import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/bluet
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/model/devices_bluetooth.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_bar.dart';
+import 'package:baseproject/presentation/widget/app_indicator/app_lading_indicator.dart';
+import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,6 +59,7 @@ class _BluetoothDeviceSearchViewState
   }
 
   void startScan() {
+    viewModel.loading();
     flutterBluetoothSerial.startDiscovery().listen((device) {
       if (device.device.name != null &&
           !_devicesBluetoothList
@@ -83,6 +86,7 @@ class _BluetoothDeviceSearchViewState
   void stopScan() {
     flutterBluetoothSerial.cancelDiscovery();
     viewModel.initData(_devicesBluetoothList);
+    viewModel.ending();
   }
 
   @override
@@ -104,29 +108,34 @@ class _BluetoothDeviceSearchViewState
         'Bluetooth Searching',
         style: AppTextStyles.headingMedium,
       )),
-      body: SafeArea(
+      body: AppLoadingOverlay(
+        status: state.status,
+        child: SafeArea(
           child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const Text('Click to OBD device Name'),
-              const SizedBox(
-                height: 12,
-              ),
-              ...state.listDevice
-                  .map((e) => TextButton(
-                      onPressed: () async {
-                        ref.read(appNavigatorProvider).navigateTo(
-                            AppRoutes.obdDetail,
-                            arguments: ObdDetailArgument(e.address));
-                      },
-                      child: Text('${e.name} ${e.address}')))
-                  .toList()
-            ],
-          ),
+              child: Center(
+                child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+                children: [
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  ...state.listDevice
+                      .map((e) => TextButton(
+                          onPressed: () async {
+                            ref.read(appNavigatorProvider).navigateTo(
+                                AppRoutes.obdDetail,
+                                arguments: ObdDetailArgument(e.address));
+                          },
+                          child: Text('${e.name} ${e.address}')))
+                      .toList()
+                ],
+            ),
         ),
-      )),
+              ),
+            ),
+        ),
+      ),
     );
   }
 }

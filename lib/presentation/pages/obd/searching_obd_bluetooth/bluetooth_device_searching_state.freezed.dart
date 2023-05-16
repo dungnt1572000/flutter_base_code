@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$BluetoothDeviceSearchState {
   Set<CustomDevicesBluetooth> get listDevice =>
       throw _privateConstructorUsedError;
+  LoadingStatus get status => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BluetoothDeviceSearchStateCopyWith<BluetoothDeviceSearchState>
@@ -31,7 +32,7 @@ abstract class $BluetoothDeviceSearchStateCopyWith<$Res> {
       _$BluetoothDeviceSearchStateCopyWithImpl<$Res,
           BluetoothDeviceSearchState>;
   @useResult
-  $Res call({Set<CustomDevicesBluetooth> listDevice});
+  $Res call({Set<CustomDevicesBluetooth> listDevice, LoadingStatus status});
 }
 
 /// @nodoc
@@ -49,12 +50,17 @@ class _$BluetoothDeviceSearchStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? listDevice = null,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
       listDevice: null == listDevice
           ? _value.listDevice
           : listDevice // ignore: cast_nullable_to_non_nullable
               as Set<CustomDevicesBluetooth>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as LoadingStatus,
     ) as $Val);
   }
 }
@@ -67,7 +73,7 @@ abstract class _$$_BluetoothDeviceSearchCopyWith<$Res>
       __$$_BluetoothDeviceSearchCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Set<CustomDevicesBluetooth> listDevice});
+  $Res call({Set<CustomDevicesBluetooth> listDevice, LoadingStatus status});
 }
 
 /// @nodoc
@@ -83,12 +89,17 @@ class __$$_BluetoothDeviceSearchCopyWithImpl<$Res>
   @override
   $Res call({
     Object? listDevice = null,
+    Object? status = null,
   }) {
     return _then(_$_BluetoothDeviceSearch(
       listDevice: null == listDevice
           ? _value._listDevice
           : listDevice // ignore: cast_nullable_to_non_nullable
               as Set<CustomDevicesBluetooth>,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as LoadingStatus,
     ));
   }
 }
@@ -97,7 +108,8 @@ class __$$_BluetoothDeviceSearchCopyWithImpl<$Res>
 
 class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
   _$_BluetoothDeviceSearch(
-      {final Set<CustomDevicesBluetooth> listDevice = const {}})
+      {final Set<CustomDevicesBluetooth> listDevice = const {},
+      this.status = LoadingStatus.initial})
       : _listDevice = listDevice;
 
   final Set<CustomDevicesBluetooth> _listDevice;
@@ -110,8 +122,12 @@ class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
   }
 
   @override
+  @JsonKey()
+  final LoadingStatus status;
+
+  @override
   String toString() {
-    return 'BluetoothDeviceSearchState(listDevice: $listDevice)';
+    return 'BluetoothDeviceSearchState(listDevice: $listDevice, status: $status)';
   }
 
   @override
@@ -120,12 +136,13 @@ class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
         (other.runtimeType == runtimeType &&
             other is _$_BluetoothDeviceSearch &&
             const DeepCollectionEquality()
-                .equals(other._listDevice, _listDevice));
+                .equals(other._listDevice, _listDevice) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_listDevice));
+      runtimeType, const DeepCollectionEquality().hash(_listDevice), status);
 
   @JsonKey(ignore: true)
   @override
@@ -137,11 +154,13 @@ class _$_BluetoothDeviceSearch implements _BluetoothDeviceSearch {
 
 abstract class _BluetoothDeviceSearch implements BluetoothDeviceSearchState {
   factory _BluetoothDeviceSearch(
-          {final Set<CustomDevicesBluetooth> listDevice}) =
-      _$_BluetoothDeviceSearch;
+      {final Set<CustomDevicesBluetooth> listDevice,
+      final LoadingStatus status}) = _$_BluetoothDeviceSearch;
 
   @override
   Set<CustomDevicesBluetooth> get listDevice;
+  @override
+  LoadingStatus get status;
   @override
   @JsonKey(ignore: true)
   _$$_BluetoothDeviceSearchCopyWith<_$_BluetoothDeviceSearch> get copyWith =>

@@ -132,7 +132,7 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -153,6 +153,14 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
                           'nhiet do dong co', state.nhietdodongco.toString()),
                     ],
                   ),
+                  SizedBox(height: 48,),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue.withOpacity(0.5)
+                    ),
+                    child: Text('Safety',style: AppText,),
+                  )
                 ],
               ),
             ),
