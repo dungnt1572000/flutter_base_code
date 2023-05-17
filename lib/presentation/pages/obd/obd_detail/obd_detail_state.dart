@@ -8,6 +8,7 @@ class ObdDetailState with _$ObdDetailState{
     @Default(0) double speed,
     @Default(0) double rpm,
     @Default(0) double nhietdodongco,
-    @Default(0) double mucnhienlieu
+    @Default(0) double mucnhienlieu,
+    @Default(true) bool isSafety,
 }) = _ObdDetailState;
 }

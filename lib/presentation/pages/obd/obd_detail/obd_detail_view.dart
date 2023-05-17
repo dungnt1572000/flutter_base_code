@@ -60,23 +60,16 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
             widget.obdDetailArgument.address);
         if (connection!.isConnected) {
           print('Thiet bi da connect roi');
-          timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+          timer =
+              Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+            connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
 
-              connection?.output
-                  .add(Uint8List.fromList(utf8.encode("010d\r\n")));
+            connection?.output.add(Uint8List.fromList(utf8.encode("010c\r\n")));
 
+            connection?.output.add(Uint8List.fromList(utf8.encode("0105\r\n")));
 
-              connection?.output
-                  .add(Uint8List.fromList(utf8.encode("010c\r\n")));
-
-
-              connection?.output
-                  .add(Uint8List.fromList(utf8.encode("0105\r\n")));
-
-
-              // connection?.output
-              //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
-
+            // connection?.output
+            //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
 
             await connection?.output.allSent;
           });
@@ -92,22 +85,25 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
               viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
                       int.parse(speedL[3], radix: 16)) /
                   100);
-            } else if (speedL[1] == '05') {
+            }
+            else if (speedL[1] == '05') {
               viewModel
                   .updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
             }
           }
         });
       } catch (e) {
-        showErrorSnackBar(context: context, errorMessage: 'Something become wrong please restart app ');
+        showErrorSnackBar(
+            context: context,
+            errorMessage: 'Something become wrong please restart app ');
       }
     });
 
     _sliderValueController.stream.listen((sliderValue) {
-      if (sliderValue > 0.5 && audioPlayer.state != PlayerState.playing) {
+      if (!state.isSafety && audioPlayer.state != PlayerState.playing) {
         audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
         Future.delayed(const Duration(seconds: 3))
-            .then((value) => audioPlayer.release());
+            .then((value) => audioPlayer.stop());
       } else {}
     });
   }
@@ -153,13 +149,22 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
                           'nhiet do dong co', state.nhietdodongco.toString()),
                     ],
                   ),
-                  SizedBox(height: 48,),
+                  SizedBox(
+                    height: 48,
+                  ),
                   Container(
+                    height: 250,
+                    width: 250,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.blue.withOpacity(0.5)
+                        shape: BoxShape.circle,
+                        color: state.isSafety?Colors.blue.withOpacity(0.5):Colors.red.withOpacity(0.5)),
+                    child: Center(
+                      child: Text(
+                        state.isSafety?'Safety':'Dangerous',
+                        style: AppTextStyles.labelLargeLight
+                            .copyWith(color: context.colors.textContrastOnDark),
+                      ),
                     ),
-                    child: Text('Safety',style: AppText,),
                   )
                 ],
               ),

@@ -5,7 +5,12 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
   ObdDetailViewModel() : super(ObdDetailState());
 
   void updateSpeed(double speed) {
-    state = state.copyWith(speed: speed);
+    if(speed>=35){
+      state = state.copyWith(speed: speed,isSafety: false);
+    }else{
+      state = state.copyWith(speed: speed,isSafety:true);
+    }
+
   }
 
   void updateRmp(double rmp) {
