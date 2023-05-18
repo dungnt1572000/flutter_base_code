@@ -45,7 +45,21 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
   BluetoothConnection? connection;
 
   Timer? timer;
-
+  Timer? blinking;
+  bool _isVisible = true;
+  void _startBlinking() {
+    blinking=  Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      setState(() {
+        _isVisible = !_isVisible;
+      });
+    });
+  }
+  void _stopBlinking(){
+    blinking?.cancel();
+    setState(() {
+      _isVisible = false;
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -63,11 +77,11 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
           timer =
               Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
             connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
-
+            await Future.delayed(const Duration(milliseconds: 300));
             connection?.output.add(Uint8List.fromList(utf8.encode("010c\r\n")));
-
+            await Future.delayed(const Duration(milliseconds: 300));
             connection?.output.add(Uint8List.fromList(utf8.encode("0105\r\n")));
-
+            await Future.delayed(const Duration(milliseconds: 300));
             // connection?.output
             //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
 
@@ -85,8 +99,7 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
               viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
                       int.parse(speedL[3], radix: 16)) /
                   100);
-            }
-            else if (speedL[1] == '05') {
+            } else if (speedL[1] == '05') {
               viewModel
                   .updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
             }
@@ -98,14 +111,6 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
             errorMessage: 'Something become wrong please restart app ');
       }
     });
-
-    _sliderValueController.stream.listen((sliderValue) {
-      if (!state.isSafety && audioPlayer.state != PlayerState.playing) {
-        audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
-        Future.delayed(const Duration(seconds: 3))
-            .then((value) => audioPlayer.stop());
-      } else {}
-    });
   }
 
   @override
@@ -114,60 +119,79 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
     connection?.dispose();
     timer?.cancel();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    audioPlayer.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(_provider, (ObdDetailState? previous, ObdDetailState next) {
+      if (!next.isSafety && audioPlayer.state != PlayerState.playing) {
+        audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
+        Future.delayed(const Duration(seconds: 3))
+            .then((value) => audioPlayer.stop());
+        _startBlinking();
+      }else{
+        _stopBlinking();
+      }
+    });
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          viewModel.updateSpeed(36);
+        },
+      ),
       body: SafeArea(
-        child: Container(
-          color: Colors.amber,
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildItem('SPEED', state.speed.toString()),
-                      _buildItem('RPM', state.rpm.toString()),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildItem(
-                          'muc nhien lieu', state.mucnhienlieu.toString()),
-                      _buildItem(
-                          'nhiet do dong co', state.nhietdodongco.toString()),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 48,
-                  ),
-                  Container(
-                    height: 250,
-                    width: 250,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: state.isSafety?Colors.blue.withOpacity(0.5):Colors.red.withOpacity(0.5)),
-                    child: Center(
-                      child: Text(
-                        state.isSafety?'Safety':'Dangerous',
-                        style: AppTextStyles.labelLargeLight
-                            .copyWith(color: context.colors.textContrastOnDark),
-                      ),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            color: _isVisible?Colors.red:Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: _buildItem('SPEED', state.speed.toString())),
+                    Expanded(child: _buildItem('RPM', state.rpm.toString())),
+                  ],
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: _buildItem(
+                          'Fuel', state.mucnhienlieu.toString()),
                     ),
-                  )
-                ],
-              ),
+                    Expanded(
+                      child: _buildItem(
+                          'Engine Temperature', state.nhietdodongco.toString()),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 48,
+                ),
+                Container(
+                  height: 250,
+                  width: 250,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: state.isSafety
+                          ? Colors.blue.withOpacity(0.5)
+                          : Colors.red),
+                  child: Center(
+                    child: Text(
+                      state.isSafety ? 'Safety' : 'Dangerous',
+                      style: AppTextStyles.labelLargeLight
+                          .copyWith(color: context.colors.textContrastOnDark),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ),
