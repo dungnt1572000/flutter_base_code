@@ -145,7 +145,7 @@ class _ObdDetailViewState extends ConsumerState<ObdDetailView> {
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            color: _isVisible?Colors.red:Colors.white,
+            color: _isVisible?Colors.white:Colors.red,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

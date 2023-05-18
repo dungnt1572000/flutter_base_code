@@ -94,6 +94,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void dispose() {
     super.dispose();
+    mapController.dispose();
   }
 
   @override
