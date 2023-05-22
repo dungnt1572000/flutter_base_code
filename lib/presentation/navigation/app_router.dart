@@ -47,7 +47,7 @@ class AppRouter {
         return MaterialPageRoute(
           settings: settings,
           builder: (context) => ObdDetailView(
-            obdDetailArgument: argument,
+            argument,
           ),
         );
       default:

@@ -20,6 +20,7 @@ mixin _$ObdDetailState {
   double get rpm => throw _privateConstructorUsedError;
   double get nhietdodongco => throw _privateConstructorUsedError;
   double get mucnhienlieu => throw _privateConstructorUsedError;
+  bool get isSafety => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ObdDetailStateCopyWith<ObdDetailState> get copyWith =>
@@ -33,7 +34,11 @@ abstract class $ObdDetailStateCopyWith<$Res> {
       _$ObdDetailStateCopyWithImpl<$Res, ObdDetailState>;
   @useResult
   $Res call(
-      {double speed, double rpm, double nhietdodongco, double mucnhienlieu});
+      {double speed,
+      double rpm,
+      double nhietdodongco,
+      double mucnhienlieu,
+      bool isSafety});
 }
 
 /// @nodoc
@@ -53,6 +58,7 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
     Object? rpm = null,
     Object? nhietdodongco = null,
     Object? mucnhienlieu = null,
+    Object? isSafety = null,
   }) {
     return _then(_value.copyWith(
       speed: null == speed
@@ -71,6 +77,10 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
           ? _value.mucnhienlieu
           : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
+      isSafety: null == isSafety
+          ? _value.isSafety
+          : isSafety // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -84,7 +94,11 @@ abstract class _$$_ObdDetailStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {double speed, double rpm, double nhietdodongco, double mucnhienlieu});
+      {double speed,
+      double rpm,
+      double nhietdodongco,
+      double mucnhienlieu,
+      bool isSafety});
 }
 
 /// @nodoc
@@ -102,6 +116,7 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
     Object? rpm = null,
     Object? nhietdodongco = null,
     Object? mucnhienlieu = null,
+    Object? isSafety = null,
   }) {
     return _then(_$_ObdDetailState(
       speed: null == speed
@@ -120,6 +135,10 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
           ? _value.mucnhienlieu
           : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
+      isSafety: null == isSafety
+          ? _value.isSafety
+          : isSafety // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -131,7 +150,8 @@ class _$_ObdDetailState implements _ObdDetailState {
       {this.speed = 0,
       this.rpm = 0,
       this.nhietdodongco = 0,
-      this.mucnhienlieu = 0});
+      this.mucnhienlieu = 0,
+      this.isSafety = true});
 
   @override
   @JsonKey()
@@ -145,10 +165,13 @@ class _$_ObdDetailState implements _ObdDetailState {
   @override
   @JsonKey()
   final double mucnhienlieu;
+  @override
+  @JsonKey()
+  final bool isSafety;
 
   @override
   String toString() {
-    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu)';
+    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu, isSafety: $isSafety)';
   }
 
   @override
@@ -161,12 +184,14 @@ class _$_ObdDetailState implements _ObdDetailState {
             (identical(other.nhietdodongco, nhietdodongco) ||
                 other.nhietdodongco == nhietdodongco) &&
             (identical(other.mucnhienlieu, mucnhienlieu) ||
-                other.mucnhienlieu == mucnhienlieu));
+                other.mucnhienlieu == mucnhienlieu) &&
+            (identical(other.isSafety, isSafety) ||
+                other.isSafety == isSafety));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, speed, rpm, nhietdodongco, mucnhienlieu);
+  int get hashCode => Object.hash(
+      runtimeType, speed, rpm, nhietdodongco, mucnhienlieu, isSafety);
 
   @JsonKey(ignore: true)
   @override
@@ -180,7 +205,8 @@ abstract class _ObdDetailState implements ObdDetailState {
       {final double speed,
       final double rpm,
       final double nhietdodongco,
-      final double mucnhienlieu}) = _$_ObdDetailState;
+      final double mucnhienlieu,
+      final bool isSafety}) = _$_ObdDetailState;
 
   @override
   double get speed;
@@ -190,6 +216,8 @@ abstract class _ObdDetailState implements ObdDetailState {
   double get nhietdodongco;
   @override
   double get mucnhienlieu;
+  @override
+  bool get isSafety;
   @override
   @JsonKey(ignore: true)
   _$$_ObdDetailStateCopyWith<_$_ObdDetailState> get copyWith =>
