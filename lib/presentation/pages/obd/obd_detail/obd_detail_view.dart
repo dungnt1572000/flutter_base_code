@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'dart:isolate';
 
+import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.dart';
+import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view_model.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/widget/camera_view.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/widget/object_detector_painter.dart';
 import 'package:camera/camera.dart';
@@ -15,6 +17,10 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 BluetoothConnection? connection;
+Timer? timer;
+
+final _provider = StateNotifierProvider<ObdDetailViewModel, ObdDetailState>(
+    (ref) => ObdDetailViewModel());
 
 class ObdDetailArgument {
   String address;
@@ -37,44 +43,51 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
-  Timer? timer;
-
+  ObdDetailViewModel get viewModel => ref.read(_provider.notifier);
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
-    _initializeDetector(DetectionMode.stream);
-    createIsolateForBluetooth();
-
-    Future.delayed(Duration.zero, () async {
-      try {
-        connection = await BluetoothConnection.toAddress(
-            widget.obdDetailArgument.address);
-        if (connection!.isConnected) {
-          timer =
-              Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-                connection?.output.add(
-                    Uint8List.fromList(utf8.encode("010d\r\n")));
-                await Future.delayed(const Duration(milliseconds: 300));
-                connection?.output.add(
-                    Uint8List.fromList(utf8.encode("010c\r\n")));
-                await Future.delayed(const Duration(milliseconds: 300));
-                connection?.output.add(
-                    Uint8List.fromList(utf8.encode("0105\r\n")));
-                await Future.delayed(const Duration(milliseconds: 300));
-                // connection?.output
-                //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
-
-                await connection?.output.allSent;
-              });
-        }
-      }catch (e){
-        print(e);
-      }
+    Future.delayed(Duration.zero,()async{
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+      ]);
     });
+    _initializeDetector(DetectionMode.stream);
+    // Future.delayed(Duration.zero, () async {
+    //   connection =
+    //       await BluetoothConnection.toAddress(widget.obdDetailArgument.address);
+    //   timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+    //     // sendPort.send('hello $timer');
+    //     connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
+    //     await Future.delayed(const Duration(milliseconds: 300));
+    //     connection?.output.add(Uint8List.fromList(utf8.encode("010c\r\n")));
+    //     await Future.delayed(const Duration(milliseconds: 300));
+    //     connection?.output.add(Uint8List.fromList(utf8.encode("0105\r\n")));
+    //     await Future.delayed(const Duration(milliseconds: 300));
+    //     // connection?.output
+    //     //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
+    //
+    //     await connection?.output.allSent;
+    //   });
+    //
+    //   connection?.input?.listen((event) {
+    //     String string = String.fromCharCodes(event);
+    //     print(string);
+    //     List<String> speedL = string.split(' ');
+    //     if (string.length > 3 && speedL.length>2) {
+    //       if (speedL[1] == '0D') {
+    //         viewModel.updateSpeed(int.parse(speedL[2], radix: 16) * 1.0);
+    //       } else if (speedL[1] == '0C') {
+    //         viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
+    //                 int.parse(speedL[3], radix: 16)) /
+    //             100);
+    //       } else if (speedL[1] == '05') {
+    //         viewModel.updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
+    //       }
+    //     }
+    //   });
+    // });
   }
 
   @override
@@ -91,18 +104,32 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     var receivePort = ReceivePort();
     Isolate.spawn(connectBluetooth, receivePort.sendPort);
     receivePort.listen((message) {
-      if (message is String) {}
+      print('Day la receivePort: $message');
     });
   }
 
   static void connectBluetooth(SendPort sendPort) {
-    connection?.input?.listen((event) {
-      String string = String.fromCharCodes(event);
-      // List<String> speedL = string.split(' ');
-      if (string.length > 3) {
-        sendPort.send(string);
-      }
-    });
+    sendPort.send('hello em');
+    // timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+    //   // sendPort.send('hello $timer');
+    //   connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
+    //   await Future.delayed(const Duration(milliseconds: 300));
+    //   connection?.output.add(Uint8List.fromList(utf8.encode("010c\r\n")));
+    //   await Future.delayed(const Duration(milliseconds: 300));
+    //   connection?.output.add(Uint8List.fromList(utf8.encode("0105\r\n")));
+    //   await Future.delayed(const Duration(milliseconds: 300));
+    //   // connection?.output
+    //   //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
+    //
+    //   await connection?.output.allSent;
+    // });
+    // connection?.input?.listen((event) {
+    //   String string = String.fromCharCodes(event);
+    //   print(string);
+    //   if (string.length > 3) {
+    //     sendPort.send(string);
+    //   }
+    // });
   }
 
   @override
@@ -150,6 +177,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       modelPath: modelPath,
       classifyObjects: true,
       multipleObjects: true,
+      maximumLabelsPerObject: 2
     );
     _objectDetector = ObjectDetector(options: options);
 
@@ -180,6 +208,8 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     final objects = await _objectDetector.processImage(inputImage);
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
+      print('img rotation: ${inputImage.inputImageData?.imageRotation}');
+      print('waoo: ${inputImage.inputImageData!.size.width}');
       final painter = ObjectDetectorPainter(
           objects,
           inputImage.inputImageData!.imageRotation,
@@ -189,8 +219,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       String text = 'Objects found: ${objects.length}\n\n';
       for (final object in objects) {
         text +=
-        'Object:  trackingId: ${object.trackingId} - ${object.labels.map((
-            e) => e.text)}\n\n';
+            'Object:  trackingId: ${object.trackingId} - ${object.labels.map((e) => e.text)}\n\n';
       }
       _text = text;
       // TODO: set _customPaint to draw boundingRect on top of image
