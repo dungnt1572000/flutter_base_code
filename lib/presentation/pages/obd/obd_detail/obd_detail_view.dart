@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mlkit_object_detection/google_mlkit_object_detection.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -43,17 +44,19 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
+
   ObdDetailViewModel get viewModel => ref.read(_provider.notifier);
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero,()async{
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeRight,
-        DeviceOrientation.landscapeLeft,
-      ]);
+    Future.delayed(Duration.zero, () async {
+      // SystemChrome.setPreferredOrientations([
+      //   DeviceOrientation.landscapeRight,
+      //   DeviceOrientation.landscapeLeft,
+      // ]);
     });
-    _initializeDetector(DetectionMode.stream);
+    _initializeDetector(DetectionMode.single);
     // Future.delayed(Duration.zero, () async {
     //   connection =
     //       await BluetoothConnection.toAddress(widget.obdDetailArgument.address);
@@ -89,6 +92,8 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     //   });
     // });
   }
+
+  XFile? image;
 
   @override
   void dispose() {
@@ -134,15 +139,39 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    return CameraView(
-      title: 'Object Detector',
-      customPaint: _customPaint,
-      text: _text,
-      onImage: (inputImage) {
-        processImage(inputImage);
-      },
-      onScreenModeChanged: _onScreenModeChanged,
-      initialDirection: CameraLensDirection.back,
+    return Scaffold(
+      floatingActionButton: TextButton(
+        child: Text('pick'),
+        onPressed: () async {
+          image = await ImagePicker().pickImage(source: ImageSource.gallery);
+          final path = image?.path;
+          if (path == null) {
+            return;
+          }
+          final inputImage = InputImage.fromFilePath(path);
+         await processImage(inputImage);
+         setState(() {
+
+         });
+        },
+      ),
+      body: Stack(
+        children: [
+          image == null ? SizedBox() : Image.file(io.File(image!.path)),
+          if (_customPaint != null) _customPaint!,
+        ],
+      )
+      // CameraView(
+      //   title: 'Object Detector',
+      //   customPaint: _customPaint,
+      //   text: _text,
+      //   onImage: (inputImage) {
+      //     processImage(inputImage);
+      //   },
+      //   onScreenModeChanged: _onScreenModeChanged,
+      //   initialDirection: CameraLensDirection.back,
+      // )
+      ,
     );
   }
 
@@ -173,12 +202,11 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     const path = 'assets/tfl/object_labeler.tflite';
     final modelPath = await _getModel(path);
     final options = LocalObjectDetectorOptions(
-      mode: mode,
-      modelPath: modelPath,
-      classifyObjects: true,
-      multipleObjects: true,
-      maximumLabelsPerObject: 2
-    );
+        mode: mode,
+        modelPath: modelPath,
+        classifyObjects: true,
+        multipleObjects: true,
+        maximumLabelsPerObject: 2);
     _objectDetector = ObjectDetector(options: options);
 
     // uncomment next lines if you want to use a remote model
@@ -206,25 +234,13 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       _text = '';
     });
     final objects = await _objectDetector.processImage(inputImage);
-    if (inputImage.inputImageData?.size != null &&
-        inputImage.inputImageData?.imageRotation != null) {
-      print('img rotation: ${inputImage.inputImageData?.imageRotation}');
-      print('waoo: ${inputImage.inputImageData!.size.width}');
+
       final painter = ObjectDetectorPainter(
           objects,
-          inputImage.inputImageData!.imageRotation,
-          inputImage.inputImageData!.size);
+          InputImageRotation.rotation0deg,
+          image.);
       _customPaint = CustomPaint(painter: painter);
-    } else {
-      String text = 'Objects found: ${objects.length}\n\n';
-      for (final object in objects) {
-        text +=
-            'Object:  trackingId: ${object.trackingId} - ${object.labels.map((e) => e.text)}\n\n';
-      }
-      _text = text;
-      // TODO: set _customPaint to draw boundingRect on top of image
-      _customPaint = null;
-    }
+
     _isBusy = false;
     if (mounted) {
       setState(() {});
