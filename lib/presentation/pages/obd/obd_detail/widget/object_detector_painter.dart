@@ -38,10 +38,7 @@ class ObjectDetectorPainter extends CustomPainter {
         }
 
         builder.pop();
-        print('rotation: ${rotation}');
-        print('this size height: ${size.height} and absoluteSize height: ${absoluteSize.height}');
-        print('this size width: ${size.width} and absoluteSize width: ${absoluteSize.width}');
-        print('hehe ${detectedObject.boundingBox}');
+
         final left = translateX(
             detectedObject.boundingBox.left, rotation, size, absoluteSize);
         final top = translateY(
@@ -50,7 +47,7 @@ class ObjectDetectorPainter extends CustomPainter {
             detectedObject.boundingBox.right, rotation, size, absoluteSize);
         final bottom = translateY(
             detectedObject.boundingBox.bottom, rotation, size, absoluteSize);
-        print('day la x y z d: $left $top $right $bottom');
+
         canvas.drawRect(
           Rect.fromLTRB(left, top, right, bottom),
           paint,
