@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:baseproject/presentation/domain/use_case/get_driving_direction_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
@@ -36,7 +38,8 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _HomePageState extends ConsumerState<HomePage>
+    with AutomaticKeepAliveClientMixin {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
@@ -50,6 +53,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   final _startNode = FocusNode();
   final _lastNode = FocusNode();
+  Timer? timer;
 
   @override
   void initState() {
@@ -76,17 +80,25 @@ class _HomePageState extends ConsumerState<HomePage> {
       }
       if (_permissionGranted == PermissionStatus.granted) {
         _locationData = await location!.getLocation();
-
-        location!.onLocationChanged.listen((LocationData currentLocation) {
-          _viewModel.upDateCurrentSpeed(
-            currentLocation.speedAccuracy ?? 0.0,
-          );
-        });
         _viewModel.upDateCurrentLocation(
           _locationData.latitude ?? 51.5,
           _locationData.longitude ?? -0.09,
         );
-        mapController.move(LatLng(state.latLng, state.longLng), 10);
+        mapController.move(LatLng(state.latLng, state.longLng), 15);
+        timer = Timer.periodic(const Duration(seconds: 4), (timer) async {
+          location ??= Location();
+          _locationData = await location!.getLocation();
+          _viewModel.upDateCurrentLocation(
+            _locationData.latitude ?? 51.5,
+            _locationData.longitude ?? -0.09,
+          );
+          if (state.markers.isNotEmpty &&
+              state.isDisplayDetailIntroduction == true &&
+              _locationData.latitude != state.latLng && _locationData.longitude!=state.longLng) {
+            print('abc');
+            _viewModel.getRouteByMethod(state.routeMethod);
+          }
+        });
       }
     });
   }
@@ -160,7 +172,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                   : CrossFadeState.showSecond,
               duration: const Duration(milliseconds: 300),
             ),
-            state.listForPolyLine.isNotEmpty && !state.isDisplaySearchingBar
+            state.listForPolyLine.isNotEmpty &&
+                    !state.isDisplaySearchingBar &&
+                    state.isDisplayDetailIntroduction
                 ? _builtDetailTrip(context)
                 : const SizedBox(),
           ],
@@ -356,6 +370,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         return SingleChildScrollView(
           controller: scrollController,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _buildRouteMethod(context),
               AppLoadingOverlay(
@@ -387,7 +402,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                         ),
                       ],
                     )),
-              )
+              ),
+              AppIconButton(
+                  icon: Icons.close,
+                  onTap: () => _viewModel.isDisplayDetailIntroduction(false)),
             ],
           ),
         );
@@ -483,7 +501,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildOBDScreen(BuildContext context){
+  Widget _buildOBDScreen(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
         ref.read(appNavigatorProvider).navigateTo(AppRoutes.bluetoothScreen);
@@ -501,4 +519,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

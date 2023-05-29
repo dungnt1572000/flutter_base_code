@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io' as io;
 import 'dart:isolate';
 
+import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view_model.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/widget/camera_view.dart';
@@ -13,14 +13,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mlkit_object_detection/google_mlkit_object_detection.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as mypath;
 import 'package:path_provider/path_provider.dart';
+import 'package:telephony/telephony.dart';
+
+import '../../../../ultilities/flutter_tts.dart';
 
 BluetoothConnection? connection;
 Timer? timer;
-
-final _provider = StateNotifierProvider<ObdDetailViewModel, ObdDetailState>(
-    (ref) => ObdDetailViewModel());
+Telephony? telephony ;
+final _provider =
+    StateNotifierProvider.autoDispose<ObdDetailViewModel, ObdDetailState>(
+        (ref) => ObdDetailViewModel());
 
 class ObdDetailArgument {
   String address;
@@ -36,22 +40,75 @@ class ObdDetailView extends ConsumerStatefulWidget {
   @override
   ConsumerState<ObdDetailView> createState() => _ObdDetailView();
 }
-
 class _ObdDetailView extends ConsumerState<ObdDetailView> {
   late ObjectDetector _objectDetector;
   bool _canProcess = false;
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
+  ReceivePort receivePort = ReceivePort();
+
   ObdDetailViewModel get viewModel => ref.read(_provider.notifier);
+  final FlutterTextToSpeech flutterTextToSpeech = FlutterTextToSpeech();
+
+   void createIsolate() {
+    Isolate.spawn(listenMsg, receivePort.sendPort);
+    receivePort.listen((message) {
+      print(message);
+    });
+  }
+
+  static void listenMsg(SendPort sendPort) {
+     sendPort.send('message');
+    telephony?.listenIncomingSms(onNewMessage: (message) {
+      sendPort.send(message.body);
+    },listenInBackground: false);
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero,()async{
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeRight,
-        DeviceOrientation.landscapeLeft,
-      ]);
+    Future.delayed(Duration.zero, () async {
+      telephony = Telephony.instance;
+      await flutterTextToSpeech.initial();
+    });
+    // Future.delayed(Duration.zero,()async{
+    //   SystemChrome.setPreferredOrientations([
+    //     DeviceOrientation.landscapeRight,
+    //     DeviceOrientation.landscapeLeft,
+    //   ]);
+    // });
+    Future.delayed(Duration.zero, () async {
+      bool? permissionsGranted = await telephony?.requestPhoneAndSmsPermissions;
+      if (permissionsGranted == true) {
+        telephony?.listenIncomingSms(onNewMessage: (message) async{
+         await flutterTextToSpeech.speak('${message.body}');
+         print('ms from ${message.body}');
+        },listenInBackground: false);
+      } else {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Permission'),
+              content:
+              const Text('Please access the permission for safe drive'),
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      await telephony?.requestPhoneAndSmsPermissions;
+                    },
+                    child: const Text('Access')),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'))
+              ],
+            ),
+          );
+        }
+      }
     });
     _initializeDetector(DetectionMode.stream);
     // Future.delayed(Duration.zero, () async {
@@ -134,16 +191,28 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    return CameraView(
-      title: 'Object Detector',
-      customPaint: _customPaint,
-      text: _text,
-      onImage: (inputImage) {
-        processImage(inputImage);
-      },
-      onScreenModeChanged: _onScreenModeChanged,
-      initialDirection: CameraLensDirection.back,
-    );
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          // await flutterTextToSpeech.setSpeechRate(0.75);
+          await flutterTextToSpeech
+              .speak('from dungdeptry31212 with content: Hello');
+        },
+        child: Text('pick'),
+      ),
+      body: SizedBox(),
+    )
+        //   CameraView(
+        //   title: 'Object Detector',
+        //   customPaint: _customPaint,
+        //   text: _text,
+        //   onImage: (inputImage) {
+        //     processImage(inputImage);
+        //   },
+        //   onScreenModeChanged: _onScreenModeChanged,
+        //   initialDirection: CameraLensDirection.back,
+        // )
+        ;
   }
 
   void _onScreenModeChanged(ScreenMode mode) {
@@ -159,42 +228,15 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
   }
 
   void _initializeDetector(DetectionMode mode) async {
-    print('Set detector in mode: $mode');
-
-    // uncomment next lines if you want to use the default model
-    // final options = ObjectDetectorOptions(
-    //     mode: mode,
-    //     classifyObjects: true,
-    //     multipleObjects: true);
-    // _objectDetector = ObjectDetector(options: options);
-
-    // uncomment next lines if you want to use a local model
-    // make sure to add tflite model to assets/ml
     const path = 'assets/tfl/object_labeler.tflite';
     final modelPath = await _getModel(path);
     final options = LocalObjectDetectorOptions(
-      mode: mode,
-      modelPath: modelPath,
-      classifyObjects: true,
-      multipleObjects: true,
-      maximumLabelsPerObject: 2
-    );
+        mode: mode,
+        modelPath: modelPath,
+        classifyObjects: true,
+        multipleObjects: true,
+        maximumLabelsPerObject: 2);
     _objectDetector = ObjectDetector(options: options);
-
-    // uncomment next lines if you want to use a remote model
-    // make sure to add model to firebase
-    // final modelName = 'bird-classifier';
-    // final response =
-    //     await FirebaseObjectDetectorModelManager().downloadModel(modelName);
-    // print('Downloaded: $response');
-    // final options = FirebaseObjectDetectorOptions(
-    //   mode: mode,
-    //   modelName: modelName,
-    //   classifyObjects: true,
-    //   multipleObjects: true,
-    // );
-    // _objectDetector = ObjectDetector(options: options);
-
     _canProcess = true;
   }
 
@@ -208,8 +250,6 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     final objects = await _objectDetector.processImage(inputImage);
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
-      print('img rotation: ${inputImage.inputImageData?.imageRotation}');
-      print('waoo: ${inputImage.inputImageData!.size.width}');
       final painter = ObjectDetectorPainter(
           objects,
           inputImage.inputImageData!.imageRotation,
@@ -236,7 +276,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       return 'flutter_assets/$assetPath';
     }
     final path = '${(await getApplicationSupportDirectory()).path}/$assetPath';
-    await io.Directory(dirname(path)).create(recursive: true);
+    await io.Directory(mypath.dirname(path)).create(recursive: true);
     final file = io.File(path);
     if (!await file.exists()) {
       final byteData = await rootBundle.load(assetPath);

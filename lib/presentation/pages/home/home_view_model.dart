@@ -39,7 +39,11 @@ class HomeViewModel extends StateNotifier<HomeState> {
     state = state.copyWith(isDisplaySearchingBar: isDisplay);
   }
 
-  void displayUtilities(bool display){
+  void isDisplayDetailIntroduction(bool isDisplay) {
+    state = state.copyWith(isDisplayDetailIntroduction: isDisplay);
+  }
+
+  void displayUtilities(bool display) {
     state = state.copyWith(displayUtilities: display);
   }
 
@@ -94,11 +98,13 @@ class HomeViewModel extends StateNotifier<HomeState> {
           );
           state = state.copyWith(
             status: LoadingStatus.success,
-            distance: directionObj.routes?[0].distance??0.0,
-            duration: directionObj.routes?[0].duration??0.0,
+            distance: directionObj.routes?[0].distance ?? 0.0,
+            duration: directionObj.routes?[0].duration ?? 0.0,
             listForPolyLine: directionObj.routes?[0].geometry?.coordinates!
-                .map((e) => LatLng(e[1], e[0]))
-                .toList() ??[],
+                    .map((e) => LatLng(e[1], e[0]))
+                    .toList() ??
+                [],
+            isDisplayDetailIntroduction: true
           );
         }
         if (method == RouteMethod.driving) {
@@ -119,6 +125,7 @@ class HomeViewModel extends StateNotifier<HomeState> {
             distance: directionObj.routes?[0].distance ?? 0.0,
             duration: directionObj.routes?[0].duration ?? 0.0,
             listForPolyLine: listLatLng ?? [],
+            isDisplayDetailIntroduction: true,
           );
         }
         return true;

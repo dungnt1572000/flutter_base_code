@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'bluetooth_device_searching_state.dart';
 
-final _provider = StateNotifierProvider<BluetoothDeviceSearchViewModel,
+final _provider = StateNotifierProvider.autoDispose<BluetoothDeviceSearchViewModel,
     BluetoothDeviceSearchState>((ref) => BluetoothDeviceSearchViewModel());
 
 class BluetoothDeviceSearchView extends ConsumerStatefulWidget {
@@ -90,17 +90,27 @@ class _BluetoothDeviceSearchViewState
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    flutterBluetoothSerial.cancelDiscovery();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.refresh),
         onPressed: () {
-          checkBluetooth().then((_) {
-            startScan();
-          });
-          Future.delayed(const Duration(seconds: 5)).then((_) {
-            stopScan();
-          });
+          ref.read(appNavigatorProvider).navigateTo(
+              AppRoutes.obdDetail,
+              arguments: ObdDetailArgument('abc'));
+          // checkBluetooth().then((_) {
+          //   startScan();
+          // });
+          // Future.delayed(const Duration(seconds: 5)).then((_) {
+          //   stopScan();
+          // });
         },
       ),
       appBar: const BaseAppBar(
