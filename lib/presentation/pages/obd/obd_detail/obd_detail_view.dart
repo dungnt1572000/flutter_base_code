@@ -27,7 +27,7 @@ Timer? timer;
 Telephony? telephony;
 
 final _provider =
-    StateNotifierProvider.autoDispose<ObdDetailViewModel, ObdDetailState>(
+StateNotifierProvider.autoDispose<ObdDetailViewModel, ObdDetailState>(
         (ref) => ObdDetailViewModel());
 
 class ObdDetailArgument {
@@ -74,35 +74,27 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       telephony = Telephony.instance;
       await flutterTextToSpeech.initial();
       bool? permissionsGranted = await telephony?.requestPhoneAndSmsPermissions;
-      final avalable = await speechToText.initialize();
-      if (avalable) {
-        speechToText.listen(
-          onResult: (result) {
-            setState(() {
-              mytext = result.recognizedWords;
-            });
-          },
-        );
-      }
+      await speechToText.initialize();
       if (permissionsGranted == true) {
         telephony?.listenIncomingSms(
-            onNewMessage: (message) async {
-              if (speechToText.isNotListening) {
-                print('waoooo');
-              }
-              flutterTextToSpeech
+            onNewMessage: (message)  {
+               flutterTextToSpeech
                   .speak(
-                      'you have message from ${message.address} with content: ${message.body}')
-                  .then((_) async {
-                await Future.delayed(Duration(seconds: 3));
-                listenToUser = true;
-                speechToText.listen(
-                  onResult: (result) {
-                    setState(() {
-                      mytext = result.recognizedWords;
-                    });
-                  },
-                );
+                  'you have message from ${message
+                      .address} with content: ${message.body}')
+                  .then((_)  {
+                    flutterTextToSpeech.isCompleteSpeaker().then((value) {
+                  Future.delayed(const Duration(seconds: 3)).then((value) {
+                    speechToText.listen(
+                      onResult: (result) {
+                        setState(() {
+                          mytext = result.recognizedWords;
+                        });
+                      },
+                    );
+                    listenToUser = true;
+                  });
+                });
               });
             },
             listenInBackground: false);
@@ -110,34 +102,44 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
         if (mounted) {
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Permission'),
-              content:
+            builder: (context) =>
+                AlertDialog(
+                  title: const Text('Permission'),
+                  content:
                   const Text('Please access the permission for safe drive'),
-              actions: [
-                TextButton(
-                    onPressed: () async {
-                      await telephony?.requestPhoneAndSmsPermissions;
-                    },
-                    child: const Text('Access')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Cancel'))
-              ],
-            ),
+                  actions: [
+                    TextButton(
+                        onPressed: () async {
+                          await telephony?.requestPhoneAndSmsPermissions;
+                        },
+                        child: const Text('Access')),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'))
+                  ],
+                ),
           );
         }
       }
     });
     _initializeDetector(DetectionMode.stream);
-    timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    timer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
       viewModel.updateSpeed(Random().nextInt(10) * 1.0);
       print('listening: ${speechToText.isNotListening} and $listenToUser');
       if (speechToText.isNotListening && listenToUser) {
         listenToUser = false;
-        print('khong listen');
+        if (mytext.isEmpty || !mytext.contains(AppConstant.reply)) {
+          flutterTextToSpeech.speak(AppConstant.instructionReplyMessage);
+          setState(() {
+            mytext = '';
+          });
+        } else {
+          var myholo = mytext.substring(mytext.indexOf('reply') + 5);
+          print('Day la textholo: $myholo');
+          flutterTextToSpeech.speak('you are going to send: $myholo');
+        }
       }
     });
     // Future.delayed(Duration.zero, () async {
@@ -209,29 +211,17 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
         ),
       ),
     )
-        //   CameraView(
-        //   title: 'Object Detector',
-        //   customPaint: _customPaint,
-        //   text: _text,
-        //   onImage: (inputImage) {
-        //     processImage(inputImage);
-        //   },
-        //   onScreenModeChanged: _onScreenModeChanged,
-        //   initialDirection: CameraLensDirection.back,
-        // )
+    //   CameraView(
+    //   title: 'Object Detector',
+    //   customPaint: _customPaint,
+    //   text: _text,
+    //   onImage: (inputImage) {
+    //     processImage(inputImage);
+    //   },
+    //   onScreenModeChanged: _onScreenModeChanged,
+    //   initialDirection: CameraLensDirection.back,
+    // )
         ;
-  }
-
-  void _onScreenModeChanged(ScreenMode mode) {
-    switch (mode) {
-      case ScreenMode.gallery:
-        _initializeDetector(DetectionMode.single);
-        return;
-
-      case ScreenMode.liveFeed:
-        _initializeDetector(DetectionMode.stream);
-        return;
-    }
   }
 
   void _initializeDetector(DetectionMode mode) async {
@@ -266,7 +256,8 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       String text = 'Objects found: ${objects.length}\n\n';
       for (final object in objects) {
         text +=
-            'Object:  trackingId: ${object.trackingId} - ${object.labels.map((e) => e.text)}\n\n';
+        'Object:  trackingId: ${object.trackingId} - ${object.labels.map((
+            e) => e.text)}\n\n';
       }
       _text = text;
       // TODO: set _customPaint to draw boundingRect on top of image

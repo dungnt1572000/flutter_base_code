@@ -17,6 +17,12 @@ class FlutterTextToSpeech {
     await flutterTts.speak(msg);
   }
 
+  Future<bool> isCompleteSpeaker() async {
+    var i = false;
+    await flutterTts.awaitSpeakCompletion(true);
+    return i;
+  }
+
   Future stop() async {
     await flutterTts.stop();
   }
