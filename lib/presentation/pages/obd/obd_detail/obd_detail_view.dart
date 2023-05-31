@@ -19,9 +19,6 @@ import 'package:telephony/telephony.dart';
 
 import '../../../../ultilities/flutter_tts.dart';
 
-BluetoothConnection? connection;
-Timer? timer;
-Telephony? telephony ;
 final _provider =
     StateNotifierProvider.autoDispose<ObdDetailViewModel, ObdDetailState>(
         (ref) => ObdDetailViewModel());
@@ -46,24 +43,12 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
   bool _isBusy = false;
   CustomPaint? _customPaint;
   String? _text;
-  ReceivePort receivePort = ReceivePort();
+  BluetoothConnection? connection;
+  Timer? timer;
+  Telephony? telephony ;
 
   ObdDetailViewModel get viewModel => ref.read(_provider.notifier);
   final FlutterTextToSpeech flutterTextToSpeech = FlutterTextToSpeech();
-
-   void createIsolate() {
-    Isolate.spawn(listenMsg, receivePort.sendPort);
-    receivePort.listen((message) {
-      print(message);
-    });
-  }
-
-  static void listenMsg(SendPort sendPort) {
-     sendPort.send('message');
-    telephony?.listenIncomingSms(onNewMessage: (message) {
-      sendPort.send(message.body);
-    },listenInBackground: false);
-  }
 
   @override
   void initState() {
@@ -72,12 +57,6 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       telephony = Telephony.instance;
       await flutterTextToSpeech.initial();
     });
-    // Future.delayed(Duration.zero,()async{
-    //   SystemChrome.setPreferredOrientations([
-    //     DeviceOrientation.landscapeRight,
-    //     DeviceOrientation.landscapeLeft,
-    //   ]);
-    // });
     Future.delayed(Duration.zero, () async {
       bool? permissionsGranted = await telephony?.requestPhoneAndSmsPermissions;
       if (permissionsGranted == true) {
@@ -157,44 +136,11 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     super.dispose();
   }
 
-  void createIsolateForBluetooth() {
-    var receivePort = ReceivePort();
-    Isolate.spawn(connectBluetooth, receivePort.sendPort);
-    receivePort.listen((message) {
-      print('Day la receivePort: $message');
-    });
-  }
-
-  static void connectBluetooth(SendPort sendPort) {
-    sendPort.send('hello em');
-    // timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-    //   // sendPort.send('hello $timer');
-    //   connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
-    //   await Future.delayed(const Duration(milliseconds: 300));
-    //   connection?.output.add(Uint8List.fromList(utf8.encode("010c\r\n")));
-    //   await Future.delayed(const Duration(milliseconds: 300));
-    //   connection?.output.add(Uint8List.fromList(utf8.encode("0105\r\n")));
-    //   await Future.delayed(const Duration(milliseconds: 300));
-    //   // connection?.output
-    //   //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
-    //
-    //   await connection?.output.allSent;
-    // });
-    // connection?.input?.listen((event) {
-    //   String string = String.fromCharCodes(event);
-    //   print(string);
-    //   if (string.length > 3) {
-    //     sendPort.send(string);
-    //   }
-    // });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // await flutterTextToSpeech.setSpeechRate(0.75);
           await flutterTextToSpeech
               .speak('from dungdeptry31212 with content: Hello');
         },
@@ -214,19 +160,6 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
         // )
         ;
   }
-
-  void _onScreenModeChanged(ScreenMode mode) {
-    switch (mode) {
-      case ScreenMode.gallery:
-        _initializeDetector(DetectionMode.single);
-        return;
-
-      case ScreenMode.liveFeed:
-        _initializeDetector(DetectionMode.stream);
-        return;
-    }
-  }
-
   void _initializeDetector(DetectionMode mode) async {
     const path = 'assets/tfl/object_labeler.tflite';
     final modelPath = await _getModel(path);
