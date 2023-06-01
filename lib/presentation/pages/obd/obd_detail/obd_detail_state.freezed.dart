@@ -20,6 +20,7 @@ mixin _$ObdDetailState {
   double get rpm => throw _privateConstructorUsedError;
   double get nhietdodongco => throw _privateConstructorUsedError;
   double get mucnhienlieu => throw _privateConstructorUsedError;
+  String get telephone => throw _privateConstructorUsedError;
   bool get isSafety => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -38,6 +39,7 @@ abstract class $ObdDetailStateCopyWith<$Res> {
       double rpm,
       double nhietdodongco,
       double mucnhienlieu,
+      String telephone,
       bool isSafety});
 }
 
@@ -58,6 +60,7 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
     Object? rpm = null,
     Object? nhietdodongco = null,
     Object? mucnhienlieu = null,
+    Object? telephone = null,
     Object? isSafety = null,
   }) {
     return _then(_value.copyWith(
@@ -77,6 +80,10 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
           ? _value.mucnhienlieu
           : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
+      telephone: null == telephone
+          ? _value.telephone
+          : telephone // ignore: cast_nullable_to_non_nullable
+              as String,
       isSafety: null == isSafety
           ? _value.isSafety
           : isSafety // ignore: cast_nullable_to_non_nullable
@@ -98,6 +105,7 @@ abstract class _$$_ObdDetailStateCopyWith<$Res>
       double rpm,
       double nhietdodongco,
       double mucnhienlieu,
+      String telephone,
       bool isSafety});
 }
 
@@ -116,6 +124,7 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
     Object? rpm = null,
     Object? nhietdodongco = null,
     Object? mucnhienlieu = null,
+    Object? telephone = null,
     Object? isSafety = null,
   }) {
     return _then(_$_ObdDetailState(
@@ -135,6 +144,10 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
           ? _value.mucnhienlieu
           : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
+      telephone: null == telephone
+          ? _value.telephone
+          : telephone // ignore: cast_nullable_to_non_nullable
+              as String,
       isSafety: null == isSafety
           ? _value.isSafety
           : isSafety // ignore: cast_nullable_to_non_nullable
@@ -151,6 +164,7 @@ class _$_ObdDetailState implements _ObdDetailState {
       this.rpm = 0,
       this.nhietdodongco = 0,
       this.mucnhienlieu = 0,
+      this.telephone = '',
       this.isSafety = true});
 
   @override
@@ -167,11 +181,14 @@ class _$_ObdDetailState implements _ObdDetailState {
   final double mucnhienlieu;
   @override
   @JsonKey()
+  final String telephone;
+  @override
+  @JsonKey()
   final bool isSafety;
 
   @override
   String toString() {
-    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu, isSafety: $isSafety)';
+    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu, telephone: $telephone, isSafety: $isSafety)';
   }
 
   @override
@@ -185,13 +202,15 @@ class _$_ObdDetailState implements _ObdDetailState {
                 other.nhietdodongco == nhietdodongco) &&
             (identical(other.mucnhienlieu, mucnhienlieu) ||
                 other.mucnhienlieu == mucnhienlieu) &&
+            (identical(other.telephone, telephone) ||
+                other.telephone == telephone) &&
             (identical(other.isSafety, isSafety) ||
                 other.isSafety == isSafety));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, speed, rpm, nhietdodongco, mucnhienlieu, isSafety);
+  int get hashCode => Object.hash(runtimeType, speed, rpm, nhietdodongco,
+      mucnhienlieu, telephone, isSafety);
 
   @JsonKey(ignore: true)
   @override
@@ -206,6 +225,7 @@ abstract class _ObdDetailState implements ObdDetailState {
       final double rpm,
       final double nhietdodongco,
       final double mucnhienlieu,
+      final String telephone,
       final bool isSafety}) = _$_ObdDetailState;
 
   @override
@@ -216,6 +236,8 @@ abstract class _ObdDetailState implements ObdDetailState {
   double get nhietdodongco;
   @override
   double get mucnhienlieu;
+  @override
+  String get telephone;
   @override
   bool get isSafety;
   @override

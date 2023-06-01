@@ -5,14 +5,15 @@ class FlutterTextToSpeech{
    Future<void> initial()async {
      await flutterTts.setLanguage("en-US");
 
-     await flutterTts.setSpeechRate(0.5);
+     await flutterTts.setSpeechRate(0.3);
 
-     await flutterTts.setVolume(1.0);
+     await flutterTts.setVolume(0.95);
 
      await flutterTts.setPitch(1.0);
+
+     await flutterTts.awaitSpeakCompletion(true);
    }
    Future speak(String msg)async{
-     await flutterTts.setSpeechRate(0.5);
      await flutterTts.speak(msg);
    }
 

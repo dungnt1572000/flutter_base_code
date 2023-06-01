@@ -13,6 +13,12 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
 
   }
 
+  void updateMsgInfor(String address){
+    state = state.copyWith(
+      telephone: address,
+    );
+  }
+
   void updateRmp(double rmp) {
     state = state.copyWith(rpm: rmp);
   }
