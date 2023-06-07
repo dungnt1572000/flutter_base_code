@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' as io;
 import 'dart:isolate';
 import 'dart:math';
@@ -8,6 +9,9 @@ import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.d
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view_model.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/widget/camera_view.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/widget/object_detector_painter.dart';
+import 'package:baseproject/presentation/resources/app_colors.dart';
+import 'package:baseproject/presentation/resources/app_text_styles.dart';
+import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,11 +69,11 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     if (result != null && result) {
       telephony.listenIncomingSms(
           onNewMessage: (message) {
-            Timer(Duration(milliseconds: 500), () async {
+            Timer(const Duration(milliseconds: 500), () async {
               await flutterTextToSpeech
                   .speak('${message.address} send content: ${message.body}');
               phoneNumber = message.address ?? '';
-              await Future.delayed(Duration(seconds: 4), () async {
+              await Future.delayed(const Duration(seconds: 4), () async {
                 await flutterTextToSpeech
                     .speak('You start with Reply for reply message');
 
@@ -99,35 +103,66 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     Future.delayed(Duration.zero, () async {
       await flutterTextToSpeech.initial();
       await initPlatformState();
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+      ]);
     });
-    _initializeDetector(DetectionMode.stream);
-    timer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
-      setState(() {
-        text = Random().nextInt(10).toString();
-      });
-      print('${speechToText.isNotListening}&& $liseningUser');
-      if (speechToText.isNotListening && liseningUser) {
-        liseningUser = false;
-        print(mytalk);
-        print('day la phone: $phoneNumber');
-        if (!mytalk.contains('reply')) {
-          flutterTextToSpeech.speak('you start with reply for reply message');
-        } else {
-          mytalk = mytalk.substring(mytalk.indexOf('reply') + 5);
-          flutterTextToSpeech.speak(mytalk);
-
-            telephony.sendSms(to: phoneNumber, message: mytalk);
-
+    Future.delayed(Duration.zero, () async {
+      connection =
+          await BluetoothConnection.toAddress(widget.obdDetailArgument.address);
+      if (!connection!.isConnected) {
+        if (mounted) {
+          showErrorSnackBar(
+              context: context,
+              errorMessage: 'Can not connect to device,please reset app');
         }
       }
+      timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+        if (connection != null && connection!.isConnected) {
+          connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
+          await connection?.output.allSent;
+          // print('${speechToText.isNotListening}&& $liseningUser');
+          if (speechToText.isNotListening && liseningUser) {
+            liseningUser = false;
+            print(mytalk);
+            print('day la phone: $phoneNumber');
+            if (!mytalk.contains('reply')) {
+              flutterTextToSpeech
+                  .speak('you start with reply for reply message');
+            } else {
+              mytalk = mytalk.substring(mytalk.indexOf('reply') + 5);
+              flutterTextToSpeech.speak(mytalk);
+
+              telephony.sendSms(to: phoneNumber, message: mytalk);
+            }
+          }
+        } else {
+          connection = await BluetoothConnection.toAddress(
+              widget.obdDetailArgument.address);
+        }
+      });
+      connection?.input?.listen((event) {
+        String string = String.fromCharCodes(event);
+        print(string);
+        List<String> speedL = string.split(' ');
+        if (string.length > 3 && speedL.length > 2) {
+          if (speedL[1] == '0D') {
+            viewModel.updateMsgInfor(
+                (int.parse(speedL[2], radix: 16) * 1.0).toString());
+          } else if (speedL[1] == '0C') {
+            viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
+                    int.parse(speedL[3], radix: 16)) /
+                100);
+          } else if (speedL[1] == '05') {
+            viewModel.updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
+          }
+        }
+      });
     });
-    // Future.delayed(Duration.zero, () async {
-    //   connection =
-    //       await BluetoothConnection.toAddress(widget.obdDetailArgument.address);
     //   timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
     //     // sendPort.send('hello $timer');
-    //     connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
-    //     await Future.delayed(const Duration(milliseconds: 300));
+
     //     connection?.output.add(Uint8List.fromList(utf8.encode("010c\r\n")));
     //     await Future.delayed(const Duration(milliseconds: 300));
     //     connection?.output.add(Uint8List.fromList(utf8.encode("0105\r\n")));
@@ -138,22 +173,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     //     await connection?.output.allSent;
     //   });
     //
-    //   connection?.input?.listen((event) {
-    //     String string = String.fromCharCodes(event);
-    //     print(string);
-    //     List<String> speedL = string.split(' ');
-    //     if (string.length > 3 && speedL.length>2) {
-    //       if (speedL[1] == '0D') {
-    //         viewModel.updateSpeed(int.parse(speedL[2], radix: 16) * 1.0);
-    //       } else if (speedL[1] == '0C') {
-    //         viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
-    //                 int.parse(speedL[3], radix: 16)) /
-    //             100);
-    //       } else if (speedL[1] == '05') {
-    //         viewModel.updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
-    //       }
-    //     }
-    //   });
+
     // });
   }
 
@@ -172,81 +192,63 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {},
-        child: Text('pick'),
+        child: const Text('pick'),
       ),
-      body: Container(
-        child: Text(text),
-      ),
-    )
-        //   CameraView(
-        //   title: 'Object Detector',
-        //   customPaint: _customPaint,
-        //   text: _text,
-        //   onImage: (inputImage) {
-        //     processImage(inputImage);
-        //   },
-        //   onScreenModeChanged: _onScreenModeChanged,
-        //   initialDirection: CameraLensDirection.back,
-        // )
-        ;
+      body: SafeArea(
+          child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _carInformation(),
+            const SizedBox(height: 48,),
+            _buildAlert(),
+          ],
+        ),
+      )),
+    );
   }
 
-  void _initializeDetector(DetectionMode mode) async {
-    const path = 'assets/tfl/object_labeler.tflite';
-    final modelPath = await _getModel(path);
-    final options = LocalObjectDetectorOptions(
-        mode: mode,
-        modelPath: modelPath,
-        classifyObjects: true,
-        multipleObjects: true,
-        maximumLabelsPerObject: 2);
-    _objectDetector = ObjectDetector(options: options);
-    _canProcess = true;
+  Widget _carInformation(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(
+          child: Container(
+            height: 150,
+            decoration: BoxDecoration(
+              border: Border.all(color: context.colors.success)
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text('Speed',style: AppTextStyles.textMediumBold.copyWith(color: context.colors.textPrimary),),Text(state.speed.toString())],
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: 150,
+            decoration: BoxDecoration(
+                border: Border.all(color: context.colors.success)
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text('RPM',style: AppTextStyles.textMediumBold.copyWith(color: context.colors.textPrimary),),Text(state.rpm.toString())],
+            ),
+          ),
+        )
+      ],
+    );
   }
-
-  // Future<void> processImage(InputImage inputImage) async {
-  //   if (!_canProcess) return;
-  //   if (_isBusy) return;
-  //   _isBusy = true;
-  //   setState(() {
-  //     _text = '';
-  //   });
-  //   final objects = await _objectDetector.processImage(inputImage);
-  //   if (inputImage.inputImageData?.size != null &&
-  //       inputImage.inputImageData?.imageRotation != null) {
-  //     final painter = ObjectDetectorPainter(
-  //         objects,
-  //         inputImage.inputImageData!.imageRotation,
-  //         inputImage.inputImageData!.size);
-  //     _customPaint = CustomPaint(painter: painter);
-  //   } else {
-  //     String text = 'Objects found: ${objects.length}\n\n';
-  //     for (final object in objects) {
-  //       text +=
-  //           'Object:  trackingId: ${object.trackingId} - ${object.labels.map((e) => e.text)}\n\n';
-  //     }
-  //     _text = text;
-  //     // TODO: set _customPaint to draw boundingRect on top of image
-  //     _customPaint = null;
-  //   }
-  //   _isBusy = false;
-  //   if (mounted) {
-  //     setState(() {});
-  //   }
-  // }
-
-  Future<String> _getModel(String assetPath) async {
-    if (io.Platform.isAndroid) {
-      return 'flutter_assets/$assetPath';
-    }
-    final path = '${(await getApplicationSupportDirectory()).path}/$assetPath';
-    await io.Directory(mypath.dirname(path)).create(recursive: true);
-    final file = io.File(path);
-    if (!await file.exists()) {
-      final byteData = await rootBundle.load(assetPath);
-      await file.writeAsBytes(byteData.buffer
-          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    }
-    return file.path;
+  Widget _buildAlert(){
+    return Container(
+      height: 300,
+      width: 300,
+      decoration:  BoxDecoration(
+        shape: BoxShape.circle,
+        color: state.isSafety?Colors.blue:context.colors.alert,
+      ),
+      child: const Center(
+        child: Text('Safe'),
+      ),
+    );
   }
 }

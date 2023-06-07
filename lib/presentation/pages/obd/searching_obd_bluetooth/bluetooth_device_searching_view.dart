@@ -8,13 +8,15 @@ import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_bar.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_lading_indicator.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
+import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'bluetooth_device_searching_state.dart';
 
-final _provider = StateNotifierProvider.autoDispose<BluetoothDeviceSearchViewModel,
+final _provider = StateNotifierProvider.autoDispose<
+    BluetoothDeviceSearchViewModel,
     BluetoothDeviceSearchState>((ref) => BluetoothDeviceSearchViewModel());
 
 class BluetoothDeviceSearchView extends ConsumerStatefulWidget {
@@ -58,7 +60,7 @@ class _BluetoothDeviceSearchViewState
     }
   }
 
-  void startScan() {
+  void startScan() async {
     viewModel.loading();
     flutterBluetoothSerial.startDiscovery().listen((device) {
       if (device.device.name != null &&
@@ -68,7 +70,7 @@ class _BluetoothDeviceSearchViewState
             device.device.name ?? 'Unknown', device.device.address));
       }
     });
-    Future.delayed(Duration.zero, () async {
+    await Future.delayed(Duration.zero, () async {
       final result = await flutterBluetoothSerial.getBondedDevices();
       if (result.isNotEmpty) {
         for (int i = 0; i < result.length; i++) {
@@ -102,8 +104,7 @@ class _BluetoothDeviceSearchViewState
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.refresh),
         onPressed: () {
-          ref.read(appNavigatorProvider).navigateTo(
-              AppRoutes.obdDetail,
+          ref.read(appNavigatorProvider).navigateTo(AppRoutes.obdDetail,
               arguments: ObdDetailArgument('abc'));
           // checkBluetooth().then((_) {
           //   startScan();
@@ -122,28 +123,34 @@ class _BluetoothDeviceSearchViewState
         status: state.status,
         child: SafeArea(
           child: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-                children: [
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  ...state.listDevice
-                      .map((e) => TextButton(
-                          onPressed: () async {
-                            ref.read(appNavigatorProvider).navigateTo(
-                                AppRoutes.obdDetail,
-                                arguments: ObdDetailArgument(e.address));
-                          },
-                          child: Text('${e.name} ${e.address}')))
-                      .toList()
-                ],
-            ),
-        ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: state.listDevice.isEmpty &&state.status == LoadingStatus.success
+                    ? const Text('0 device is detected')
+                    : Column(
+                        children: [
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          ...state.listDevice
+                              .map(
+                                (e) => TextButton(
+                                  onPressed: () async {
+                                    ref.read(appNavigatorProvider).navigateTo(
+                                        AppRoutes.obdDetail,
+                                        arguments:
+                                            ObdDetailArgument(e.address));
+                                  },
+                                  child: Text('${e.name} ${e.address}'),
+                                ),
+                              )
+                              .toList()
+                        ],
+                      ),
               ),
             ),
+          ),
         ),
       ),
     );
