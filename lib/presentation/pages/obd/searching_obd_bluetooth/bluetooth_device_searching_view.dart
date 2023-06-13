@@ -8,6 +8,8 @@ import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_bar.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_lading_indicator.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
+import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
+import 'package:baseproject/presentation/widget/snack_bar/infor_snack_bar.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -44,11 +46,8 @@ class _BluetoothDeviceSearchViewState
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkBluetooth().then((_) {
-      startScan();
-    });
-    Future.delayed(const Duration(seconds: 5)).then((_) {
-      stopScan();
+    Future.delayed(Duration.zero, () async {
+      await checkBluetooth();
     });
   }
 
@@ -56,11 +55,21 @@ class _BluetoothDeviceSearchViewState
   Future checkBluetooth() async {
     bool? isEnabled = await flutterBluetoothSerial.isEnabled ?? false;
     if (!isEnabled) {
-      await flutterBluetoothSerial.requestEnable();
+      final check = await flutterBluetoothSerial.requestEnable() ?? false;
+      if (check) {
+        startScan();
+      } else {
+        if (mounted) {
+          showInforSnackBar(
+              context: context, message: "please access buetooth");
+        }
+      }
+    } else {
+        startScan();
     }
   }
 
-  void startScan() async {
+  void startScan() {
     viewModel.loading();
     flutterBluetoothSerial.startDiscovery().listen((device) {
       if (device.device.name != null &&
@@ -70,7 +79,7 @@ class _BluetoothDeviceSearchViewState
             device.device.name ?? 'Unknown', device.device.address));
       }
     });
-    await Future.delayed(Duration.zero, () async {
+    Future.delayed(Duration.zero, () async {
       final result = await flutterBluetoothSerial.getBondedDevices();
       if (result.isNotEmpty) {
         for (int i = 0; i < result.length; i++) {
@@ -81,6 +90,9 @@ class _BluetoothDeviceSearchViewState
           }
         }
       }
+    });
+    Future.delayed(const Duration(seconds: 5)).then((_) {
+      stopScan();
     });
   }
 
@@ -126,7 +138,8 @@ class _BluetoothDeviceSearchViewState
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: state.listDevice.isEmpty &&state.status == LoadingStatus.success
+                child: state.listDevice.isEmpty &&
+                        state.status == LoadingStatus.success
                     ? const Text('0 device is detected')
                     : Column(
                         children: [

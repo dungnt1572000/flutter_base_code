@@ -4,6 +4,8 @@ import 'dart:io' as io;
 import 'dart:isolate';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
+import 'package:baseproject/data/providers/flutter_serial_blue_provider.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view_model.dart';
@@ -12,6 +14,7 @@ import 'package:baseproject/presentation/pages/obd/obd_detail/widget/object_dete
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
+import 'package:baseproject/presentation/widget/snack_bar/infor_snack_bar.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,25 +47,27 @@ class ObdDetailView extends ConsumerStatefulWidget {
   ConsumerState<ObdDetailView> createState() => _ObdDetailView();
 }
 
-class _ObdDetailView extends ConsumerState<ObdDetailView> {
-  late ObjectDetector _objectDetector;
-  bool _canProcess = false;
-  bool _isBusy = false;
-  CustomPaint? _customPaint;
+class _ObdDetailView extends ConsumerState<ObdDetailView>
+    with SingleTickerProviderStateMixin {
   String text = '';
   String mytalk = '';
   String phoneNumber = '';
   BluetoothConnection? connection;
   Timer? timer;
+  Timer? timerBlink;
   Telephony telephony = Telephony.instance;
   final speechToText = SpeechToText();
-  bool liseningUser = false;
+  bool listeningUser = false;
+
+  bool isBlink = false;
 
   ObdDetailViewModel get viewModel => ref.read(_provider.notifier);
 
   ObdDetailState get state => ref.watch(_provider);
 
   final FlutterTextToSpeech flutterTextToSpeech = FlutterTextToSpeech();
+
+  final audioPlayer = AudioPlayer();
 
   Future<void> initPlatformState() async {
     final bool? result = await telephony.requestPhoneAndSmsPermissions;
@@ -84,7 +89,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
                       mytalk = result.recognizedWords;
                     },
                   );
-                  liseningUser = true;
+                  listeningUser = true;
                 } else {
                   print('deo on roi');
                 }
@@ -107,80 +112,77 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
         DeviceOrientation.landscapeRight,
         DeviceOrientation.landscapeLeft,
       ]);
-    });
-    Future.delayed(Duration.zero, () async {
-      connection =
-          await BluetoothConnection.toAddress(widget.obdDetailArgument.address);
-      if (!connection!.isConnected) {
+      try {
+        connection = await BluetoothConnection.toAddress(
+            widget.obdDetailArgument.address);
+        if (!connection!.isConnected) {
+          if (mounted) {
+            showErrorSnackBar(
+                context: context,
+                errorMessage: 'Can not connect to device,please reset app');
+          }
+        } else {
+          if(mounted) {
+            showInforSnackBar(context: context, message: "Connect Success");
+          }
+          timer =
+              Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
+            if (connection != null && connection!.isConnected) {
+              connection?.output
+                  .add(Uint8List.fromList(utf8.encode("010d\r\n")));
+              await connection?.output.allSent;
+              // print('${speechToText.isNotListening}&& $liseningUser');
+              if (speechToText.isNotListening && listeningUser) {
+                listeningUser = false;
+                print(mytalk);
+                print('day la phone: $phoneNumber');
+                if (!mytalk.contains('reply')) {
+                  flutterTextToSpeech
+                      .speak('you start with reply for reply message');
+                } else {
+                  mytalk = mytalk.substring(mytalk.indexOf('reply') + 5);
+                  flutterTextToSpeech.speak(mytalk);
+
+                  telephony.sendSms(to: phoneNumber, message: mytalk);
+                }
+              }
+            } else {
+              connection = await BluetoothConnection.toAddress(
+                  widget.obdDetailArgument.address);
+            }
+          });
+          connection?.input?.listen((event) {
+            String string = String.fromCharCodes(event);
+            print(string);
+            List<String> speedL = string.split(' ');
+            if (string.length > 3 && speedL.length > 2) {
+              if (speedL[1] == '0D') {
+                viewModel.updateSpeed((int.parse(speedL[2], radix: 16) * 1.0));
+              } else if (speedL[1] == '0C') {
+                viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
+                        int.parse(speedL[3], radix: 16)) /
+                    100);
+              } else if (speedL[1] == '05') {
+                viewModel
+                    .updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
+              }
+            }
+          });
+        }
+      } catch (e) {
         if (mounted) {
           showErrorSnackBar(
               context: context,
-              errorMessage: 'Can not connect to device,please reset app');
+              errorMessage:
+                  'Can not connect to device,please reset app or you can connect it manually');
+          ref.read(flutterSerialBlueProvider).openSettings();
         }
       }
-      timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-        if (connection != null && connection!.isConnected) {
-          connection?.output.add(Uint8List.fromList(utf8.encode("010d\r\n")));
-          await connection?.output.allSent;
-          // print('${speechToText.isNotListening}&& $liseningUser');
-          if (speechToText.isNotListening && liseningUser) {
-            liseningUser = false;
-            print(mytalk);
-            print('day la phone: $phoneNumber');
-            if (!mytalk.contains('reply')) {
-              flutterTextToSpeech
-                  .speak('you start with reply for reply message');
-            } else {
-              mytalk = mytalk.substring(mytalk.indexOf('reply') + 5);
-              flutterTextToSpeech.speak(mytalk);
-
-              telephony.sendSms(to: phoneNumber, message: mytalk);
-            }
-          }
-        } else {
-          connection = await BluetoothConnection.toAddress(
-              widget.obdDetailArgument.address);
-        }
-      });
-      connection?.input?.listen((event) {
-        String string = String.fromCharCodes(event);
-        print(string);
-        List<String> speedL = string.split(' ');
-        if (string.length > 3 && speedL.length > 2) {
-          if (speedL[1] == '0D') {
-            viewModel.updateMsgInfor(
-                (int.parse(speedL[2], radix: 16) * 1.0).toString());
-          } else if (speedL[1] == '0C') {
-            viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
-                    int.parse(speedL[3], radix: 16)) /
-                100);
-          } else if (speedL[1] == '05') {
-            viewModel.updatemucnhienlieu(int.parse(speedL[2], radix: 16) * 1.0);
-          }
-        }
-      });
     });
-    //   timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) async {
-    //     // sendPort.send('hello $timer');
-
-    //     connection?.output.add(Uint8List.fromList(utf8.encode("010c\r\n")));
-    //     await Future.delayed(const Duration(milliseconds: 300));
-    //     connection?.output.add(Uint8List.fromList(utf8.encode("0105\r\n")));
-    //     await Future.delayed(const Duration(milliseconds: 300));
-    //     // connection?.output
-    //     //     .add(Uint8List.fromList(utf8.encode("015e\r\n")));
-    //
-    //     await connection?.output.allSent;
-    //   });
-    //
-
-    // });
   }
 
   @override
   void dispose() {
-    _canProcess = false;
-    _objectDetector.close();
     connection?.dispose();
     timer?.cancel();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -189,6 +191,25 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(_provider, (ObdDetailState? previous, ObdDetailState next) {
+      if (!state.isSafety) {
+        if (audioPlayer.state != PlayerState.playing) {
+          audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
+        }
+        timerBlink = Timer(const Duration(milliseconds: 500), () {
+          setState(() {
+            isBlink = !isBlink;
+          });
+        });
+      }
+      if (state.isSafety && previous?.isSafety != next.isSafety) {
+        audioPlayer.stop();
+        setState(() {
+          isBlink = false;
+        });
+        timerBlink?.cancel();
+      }
+    });
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {},
@@ -196,18 +217,24 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
       ),
       body: SafeArea(
           child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _carInformation(),
-            const SizedBox(height: 48,),
-            _buildAlert(),
-          ],
+        child: Container(
+          decoration: BoxDecoration(
+              color: isBlink ? Colors.red.withOpacity(0.5) : null),
+          child: Column(
+            children: [
+              _carInformation(),
+              const SizedBox(
+                height: 48,
+              ),
+              _buildAlert(),
+            ],
+          ),
         ),
       )),
     );
   }
 
-  Widget _carInformation(){
+  Widget _carInformation() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -215,11 +242,17 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
           child: Container(
             height: 150,
             decoration: BoxDecoration(
-              border: Border.all(color: context.colors.success)
-            ),
+                border: Border.all(color: context.colors.success)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text('Speed',style: AppTextStyles.textMediumBold.copyWith(color: context.colors.textPrimary),),Text(state.speed.toString())],
+              children: [
+                Text(
+                  'Speed',
+                  style: AppTextStyles.textMediumBold
+                      .copyWith(color: context.colors.textPrimary),
+                ),
+                Text(state.speed.toString())
+              ],
             ),
           ),
         ),
@@ -227,27 +260,38 @@ class _ObdDetailView extends ConsumerState<ObdDetailView> {
           child: Container(
             height: 150,
             decoration: BoxDecoration(
-                border: Border.all(color: context.colors.success)
-            ),
+                border: Border.all(color: context.colors.success)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text('RPM',style: AppTextStyles.textMediumBold.copyWith(color: context.colors.textPrimary),),Text(state.rpm.toString())],
+              children: [
+                Text(
+                  'RPM',
+                  style: AppTextStyles.textMediumBold
+                      .copyWith(color: context.colors.textPrimary),
+                ),
+                Text(state.rpm.toString())
+              ],
             ),
           ),
         )
       ],
     );
   }
-  Widget _buildAlert(){
+
+  Widget _buildAlert() {
     return Container(
       height: 300,
       width: 300,
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: state.isSafety?Colors.blue:context.colors.alert,
+        color: state.isSafety ? Colors.blue : Colors.red,
       ),
-      child: const Center(
-        child: Text('Safe'),
+      child: Center(
+        child: Text(
+          state.isSafety ? 'Safe' : 'Dangerous',
+          style: AppTextStyles.textLargeBold
+              .copyWith(color: context.colors.textContrastOnDark, fontSize: 30),
+        ),
       ),
     );
   }

@@ -1,27 +1,28 @@
 import 'package:baseproject/presentation/resources/app_colors.dart';
-import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
-void showErrorSnackBar({
+import '../../resources/app_text_styles.dart';
+
+void showInforSnackBar({
   required BuildContext context,
-  required String errorMessage,
+  required String message,
 }) {
-  if (errorMessage.isNotEmpty) {
+  if (message.isNotEmpty) {
     final snackBar = SnackBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(0),
       padding: const EdgeInsets.all(0),
-      content: ErrorSnackBar(errorMessage: errorMessage),
+      content: InforSnackBar(errorMessage: message),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 
-class ErrorSnackBar extends StatelessWidget {
-  const ErrorSnackBar({
+class InforSnackBar extends StatelessWidget {
+  const InforSnackBar({
     required this.errorMessage,
     Key? key,
   }) : super(key: key);
@@ -36,7 +37,7 @@ class ErrorSnackBar extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: maxHeight),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: context.colors.error,
+        color: context.colors.secondaryBackgroundPrimary,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
