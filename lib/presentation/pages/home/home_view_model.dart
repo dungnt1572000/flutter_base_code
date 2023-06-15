@@ -66,11 +66,11 @@ class HomeViewModel extends StateNotifier<HomeState> {
   }
 
   void addMarker(LatLng latLng) {
-    if (state.markers.length > 1) {
-      state = state.copyWith(markers: [], listForPolyLine: []);
-    } else {
-      state = state.copyWith(markers: [...state.markers, latLng]);
-    }
+    state = state.copyWith(markers: [...state.markers, latLng]);
+  }
+
+  void clearMarker() {
+    state = state.copyWith(markers: [], listForPolyLine: []);
   }
 
   void changeMethod(RouteMethod routeMethod) {
@@ -97,15 +97,14 @@ class HomeViewModel extends StateNotifier<HomeState> {
                 'geojson', 'full'),
           );
           state = state.copyWith(
-            status: LoadingStatus.success,
-            distance: directionObj.routes?[0].distance ?? 0.0,
-            duration: directionObj.routes?[0].duration ?? 0.0,
-            listForPolyLine: directionObj.routes?[0].geometry?.coordinates!
-                    .map((e) => LatLng(e[1], e[0]))
-                    .toList() ??
-                [],
-            isDisplayDetailIntroduction: true
-          );
+              status: LoadingStatus.success,
+              distance: directionObj.routes?[0].distance ?? 0.0,
+              duration: directionObj.routes?[0].duration ?? 0.0,
+              listForPolyLine: directionObj.routes?[0].geometry?.coordinates!
+                      .map((e) => LatLng(e[1], e[0]))
+                      .toList() ??
+                  [],
+              isDisplayDetailIntroduction: true);
         }
         if (method == RouteMethod.driving) {
           final directionObj = await getDrivingDirectionObjectUseCase.run(

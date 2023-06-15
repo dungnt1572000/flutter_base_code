@@ -20,8 +20,13 @@ mixin _$ObdDetailState {
   double get rpm => throw _privateConstructorUsedError;
   double get nhietdodongco => throw _privateConstructorUsedError;
   double get mucnhienlieu => throw _privateConstructorUsedError;
+  double get latitude => throw _privateConstructorUsedError;
+  double get longitude => throw _privateConstructorUsedError;
   String get telephone => throw _privateConstructorUsedError;
   bool get isSafety => throw _privateConstructorUsedError;
+  double get distance => throw _privateConstructorUsedError;
+  double get time => throw _privateConstructorUsedError;
+  List<LatLng> get listForPolyLine => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ObdDetailStateCopyWith<ObdDetailState> get copyWith =>
@@ -39,8 +44,13 @@ abstract class $ObdDetailStateCopyWith<$Res> {
       double rpm,
       double nhietdodongco,
       double mucnhienlieu,
+      double latitude,
+      double longitude,
       String telephone,
-      bool isSafety});
+      bool isSafety,
+      double distance,
+      double time,
+      List<LatLng> listForPolyLine});
 }
 
 /// @nodoc
@@ -60,8 +70,13 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
     Object? rpm = null,
     Object? nhietdodongco = null,
     Object? mucnhienlieu = null,
+    Object? latitude = null,
+    Object? longitude = null,
     Object? telephone = null,
     Object? isSafety = null,
+    Object? distance = null,
+    Object? time = null,
+    Object? listForPolyLine = null,
   }) {
     return _then(_value.copyWith(
       speed: null == speed
@@ -80,6 +95,14 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
           ? _value.mucnhienlieu
           : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
       telephone: null == telephone
           ? _value.telephone
           : telephone // ignore: cast_nullable_to_non_nullable
@@ -88,6 +111,18 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
           ? _value.isSafety
           : isSafety // ignore: cast_nullable_to_non_nullable
               as bool,
+      distance: null == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as double,
+      time: null == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as double,
+      listForPolyLine: null == listForPolyLine
+          ? _value.listForPolyLine
+          : listForPolyLine // ignore: cast_nullable_to_non_nullable
+              as List<LatLng>,
     ) as $Val);
   }
 }
@@ -105,8 +140,13 @@ abstract class _$$_ObdDetailStateCopyWith<$Res>
       double rpm,
       double nhietdodongco,
       double mucnhienlieu,
+      double latitude,
+      double longitude,
       String telephone,
-      bool isSafety});
+      bool isSafety,
+      double distance,
+      double time,
+      List<LatLng> listForPolyLine});
 }
 
 /// @nodoc
@@ -124,8 +164,13 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
     Object? rpm = null,
     Object? nhietdodongco = null,
     Object? mucnhienlieu = null,
+    Object? latitude = null,
+    Object? longitude = null,
     Object? telephone = null,
     Object? isSafety = null,
+    Object? distance = null,
+    Object? time = null,
+    Object? listForPolyLine = null,
   }) {
     return _then(_$_ObdDetailState(
       speed: null == speed
@@ -144,6 +189,14 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
           ? _value.mucnhienlieu
           : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
       telephone: null == telephone
           ? _value.telephone
           : telephone // ignore: cast_nullable_to_non_nullable
@@ -152,6 +205,18 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
           ? _value.isSafety
           : isSafety // ignore: cast_nullable_to_non_nullable
               as bool,
+      distance: null == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as double,
+      time: null == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as double,
+      listForPolyLine: null == listForPolyLine
+          ? _value._listForPolyLine
+          : listForPolyLine // ignore: cast_nullable_to_non_nullable
+              as List<LatLng>,
     ));
   }
 }
@@ -164,8 +229,14 @@ class _$_ObdDetailState implements _ObdDetailState {
       this.rpm = 0,
       this.nhietdodongco = 0,
       this.mucnhienlieu = 0,
+      this.latitude = AppConstant.latitude,
+      this.longitude = AppConstant.longitude,
       this.telephone = '',
-      this.isSafety = true});
+      this.isSafety = true,
+      this.distance = 0.0,
+      this.time = 0.0,
+      final List<LatLng> listForPolyLine = const []})
+      : _listForPolyLine = listForPolyLine;
 
   @override
   @JsonKey()
@@ -181,14 +252,34 @@ class _$_ObdDetailState implements _ObdDetailState {
   final double mucnhienlieu;
   @override
   @JsonKey()
+  final double latitude;
+  @override
+  @JsonKey()
+  final double longitude;
+  @override
+  @JsonKey()
   final String telephone;
   @override
   @JsonKey()
   final bool isSafety;
+  @override
+  @JsonKey()
+  final double distance;
+  @override
+  @JsonKey()
+  final double time;
+  final List<LatLng> _listForPolyLine;
+  @override
+  @JsonKey()
+  List<LatLng> get listForPolyLine {
+    if (_listForPolyLine is EqualUnmodifiableListView) return _listForPolyLine;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_listForPolyLine);
+  }
 
   @override
   String toString() {
-    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu, telephone: $telephone, isSafety: $isSafety)';
+    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu, latitude: $latitude, longitude: $longitude, telephone: $telephone, isSafety: $isSafety, distance: $distance, time: $time, listForPolyLine: $listForPolyLine)';
   }
 
   @override
@@ -202,15 +293,35 @@ class _$_ObdDetailState implements _ObdDetailState {
                 other.nhietdodongco == nhietdodongco) &&
             (identical(other.mucnhienlieu, mucnhienlieu) ||
                 other.mucnhienlieu == mucnhienlieu) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
             (identical(other.telephone, telephone) ||
                 other.telephone == telephone) &&
             (identical(other.isSafety, isSafety) ||
-                other.isSafety == isSafety));
+                other.isSafety == isSafety) &&
+            (identical(other.distance, distance) ||
+                other.distance == distance) &&
+            (identical(other.time, time) || other.time == time) &&
+            const DeepCollectionEquality()
+                .equals(other._listForPolyLine, _listForPolyLine));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, speed, rpm, nhietdodongco,
-      mucnhienlieu, telephone, isSafety);
+  int get hashCode => Object.hash(
+      runtimeType,
+      speed,
+      rpm,
+      nhietdodongco,
+      mucnhienlieu,
+      latitude,
+      longitude,
+      telephone,
+      isSafety,
+      distance,
+      time,
+      const DeepCollectionEquality().hash(_listForPolyLine));
 
   @JsonKey(ignore: true)
   @override
@@ -225,8 +336,13 @@ abstract class _ObdDetailState implements ObdDetailState {
       final double rpm,
       final double nhietdodongco,
       final double mucnhienlieu,
+      final double latitude,
+      final double longitude,
       final String telephone,
-      final bool isSafety}) = _$_ObdDetailState;
+      final bool isSafety,
+      final double distance,
+      final double time,
+      final List<LatLng> listForPolyLine}) = _$_ObdDetailState;
 
   @override
   double get speed;
@@ -237,9 +353,19 @@ abstract class _ObdDetailState implements ObdDetailState {
   @override
   double get mucnhienlieu;
   @override
+  double get latitude;
+  @override
+  double get longitude;
+  @override
   String get telephone;
   @override
   bool get isSafety;
+  @override
+  double get distance;
+  @override
+  double get time;
+  @override
+  List<LatLng> get listForPolyLine;
   @override
   @JsonKey(ignore: true)
   _$$_ObdDetailStateCopyWith<_$_ObdDetailState> get copyWith =>

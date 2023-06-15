@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:baseproject/data/providers/destination_provider.dart';
 import 'package:baseproject/presentation/domain/use_case/get_driving_direction_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
@@ -13,6 +14,7 @@ import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
 import 'package:baseproject/presentation/widget/icon_button.dart';
 import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
+import 'package:baseproject/ultilities/app_constant.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:baseproject/ultilities/route_method.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +40,7 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage>
-    with AutomaticKeepAliveClientMixin {
+class _HomePageState extends ConsumerState<HomePage> {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   late LocationData _locationData;
@@ -81,24 +82,10 @@ class _HomePageState extends ConsumerState<HomePage>
       if (_permissionGranted == PermissionStatus.granted) {
         _locationData = await location!.getLocation();
         _viewModel.upDateCurrentLocation(
-          _locationData.latitude ?? 51.5,
-          _locationData.longitude ?? -0.09,
+          _locationData.latitude ?? AppConstant.latitude,
+          _locationData.longitude ?? AppConstant.longitude,
         );
         mapController.move(LatLng(state.latLng, state.longLng), 15);
-        timer = Timer.periodic(const Duration(seconds: 4), (timer) async {
-          location ??= Location();
-          _locationData = await location!.getLocation();
-          _viewModel.upDateCurrentLocation(
-            _locationData.latitude ?? 51.5,
-            _locationData.longitude ?? -0.09,
-          );
-          if (state.markers.isNotEmpty &&
-              state.isDisplayDetailIntroduction == true &&
-              _locationData.latitude != state.latLng && _locationData.longitude!=state.longLng) {
-            print('abc');
-            _viewModel.getRouteByMethod(state.routeMethod);
-          }
-        });
       }
     });
   }
@@ -125,8 +112,8 @@ class _HomePageState extends ConsumerState<HomePage>
         onPressed: () async {
           _locationData = await location!.getLocation();
           _viewModel.upDateCurrentLocation(
-            _locationData.latitude ?? 51.5,
-            _locationData.longitude ?? -0.09,
+            _locationData.latitude ?? AppConstant.latitude,
+            _locationData.longitude ?? AppConstant.longitude,
           );
           mapController.move(LatLng(state.latLng, state.longLng), 15);
         },
@@ -188,19 +175,23 @@ class _HomePageState extends ConsumerState<HomePage>
       mapController: mapController,
       options: MapOptions(
         onTap: (tapPosition, point) {
-          mapController.move(point, 18);
-          _viewModel.addMarker(point);
+          if (state.markers.length > 1) {
+            _viewModel.clearMarker();
+          } else {
+            mapController.move(point, 18);
+            _viewModel.addMarker(point);
+            ref.read(destinationProvider.notifier).update((state) => point);
+          }
         },
         onMapReady: () {
           mapController.move(LatLng(state.latLng, state.longLng), 18);
         },
-        center: LatLng(51.5, -0.09),
+        center: LatLng(AppConstant.latitude, AppConstant.longitude),
         zoom: 5,
       ),
       children: [
         TileLayer(
-          urlTemplate:
-              'https://tile.openstreetmap.org/{z}/{x}/{y}.png?layers=H',
+          urlTemplate: AppConstant.mapUrlTheme,
           userAgentPackageName: 'com.example.baseproject',
         ),
         MarkerLayer(markers: [
@@ -326,8 +317,14 @@ class _HomePageState extends ConsumerState<HomePage>
                                   LatLng(searchPbj.center![1],
                                       searchPbj.center![0]),
                                   18);
-                              _viewModel.addMarker(LatLng(
-                                  searchPbj.center![1], searchPbj.center![0]));
+                              _viewModel.addMarker(
+                                LatLng(
+                                    searchPbj.center![1], searchPbj.center![0]),
+                              );
+                              ref.read(destinationProvider.notifier).update(
+                                    (state) => LatLng(searchPbj.center![1],
+                                        searchPbj.center![0]),
+                                  );
                             },
                             title:
                                 Text('${state.listSearchingPlace[index].text}'),
@@ -519,8 +516,4 @@ class _HomePageState extends ConsumerState<HomePage>
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
