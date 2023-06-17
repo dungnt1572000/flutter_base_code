@@ -8,7 +8,15 @@ import 'package:baseproject/data/services/preference_services/shared_preferences
 import 'package:baseproject/presentation/domain/use_case/get_app_theme_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_driving_direction_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_distance_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_rpm_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_speed_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_distance_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_rpm_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,6 +62,30 @@ class AppModules {
     );
     injector.registerLazySingleton<GetWalkingDirectionObjectUseCase>(
       () => GetWalkingDirectionObjectUseCase(),
+    );
+    injector.registerLazySingleton<GetShowSpeedUseCase>(
+      () => GetShowSpeedUseCase(),
+    );
+    injector.registerLazySingleton<SaveShowSpeedUseCase>(
+      () => SaveShowSpeedUseCase(),
+    );
+    injector.registerLazySingleton<GetShowDistanceUseCase>(
+      () => GetShowDistanceUseCase(),
+    );
+    injector.registerLazySingleton<GetShowDurationUseCase>(
+      () => GetShowDurationUseCase(),
+    );
+    injector.registerLazySingleton<SaveShowDistanceUseCase>(
+      () => SaveShowDistanceUseCase(),
+    );
+    injector.registerLazySingleton<SaveShowDurationUseCase>(
+      () => SaveShowDurationUseCase(),
+    );
+    injector.registerLazySingleton<SaveShowRpmUseCase>(
+      () => SaveShowRpmUseCase(),
+    );
+    injector.registerLazySingleton<GetShowRpmUseCase>(
+      () => GetShowRpmUseCase(),
     );
   }
 }

@@ -18,5 +18,11 @@ class ObdDetailState with _$ObdDetailState{
     @Default(0.0) double distance,
     @Default(0.0) double time,
     @Default([]) List<LatLng> listForPolyLine,
+    @Default(false) bool showOptions,
+    @Default(true) bool showSpeed,
+    @Default(true) bool showTime,
+    @Default(true) bool showDistance,
+    @Default(true) bool showRpm,
+    @Default(true) bool following,
 }) = _ObdDetailState;
 }

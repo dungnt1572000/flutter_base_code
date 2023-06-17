@@ -1,33 +1,32 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' as io;
-import 'dart:isolate';
-import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:baseproject/data/providers/destination_provider.dart';
 import 'package:baseproject/data/providers/flutter_serial_blue_provider.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_distance_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_rpm_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_speed_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_distance_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_rpm_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
-import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view_model.dart';
-import 'package:baseproject/presentation/pages/obd/obd_detail/widget/camera_view.dart';
-import 'package:baseproject/presentation/pages/obd/obd_detail/widget/object_detector_painter.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
+import 'package:baseproject/presentation/widget/icon_button.dart';
 import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
 import 'package:baseproject/presentation/widget/snack_bar/infor_snack_bar.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mlkit_object_detection/google_mlkit_object_detection.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
-import 'package:path/path.dart' as mypath;
-import 'package:path_provider/path_provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:telephony/telephony.dart';
 
@@ -38,9 +37,16 @@ import '../../../domain/use_case/get_driving_direction_object_use_case.dart';
 final _provider =
     StateNotifierProvider.autoDispose<ObdDetailViewModel, ObdDetailState>(
   (ref) => ObdDetailViewModel(
-    getDrivingDirectionObjectUseCase:
-        injector.get<GetDrivingDirectionObjectUseCase>(),
-  ),
+      getDrivingDirectionObjectUseCase:
+          injector.get<GetDrivingDirectionObjectUseCase>(),
+      getShowSpeedUseCase: injector.get<GetShowSpeedUseCase>(),
+      saveShowSpeedUseCase: injector.get<SaveShowSpeedUseCase>(),
+      saveShowDurationUseCase: injector.get<SaveShowDurationUseCase>(),
+      saveShowDistanceUseCase: injector.get<SaveShowDistanceUseCase>(),
+      getShowDurationUseCase: injector.get<GetShowDurationUseCase>(),
+      getShowDistanceUseCase: injector.get<GetShowDistanceUseCase>(),
+      getShowRpmUseCase: injector.get<GetShowRpmUseCase>(),
+      saveShowRpmUseCase: injector.get<SaveShowRpmUseCase>()),
 );
 
 class ObdDetailArgument {
@@ -86,8 +92,6 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
 
   LatLng get destination => ref.watch(destinationProvider);
 
-  void setUpLocation() {}
-
   @override
   void initState() {
     super.initState();
@@ -119,11 +123,11 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
             viewModel.updateCurrentLocation(LatLng(
                 locationData.latitude ?? state.latitude,
                 locationData.longitude ?? state.longitude));
-            mapController.move(LatLng(state.latitude, state.longitude), 18);
+            if (state.following) {
+              mapController.move(LatLng(state.latitude, state.longitude), 18);
+            }
             viewModel.getRoutes(destination);
-          } catch (e) {
-            print("Loi roi");
-          }
+          } catch (e) {}
         });
         await flutterTextToSpeech.initial();
         await initPlatformState();
@@ -146,11 +150,8 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 connection?.output
                     .add(Uint8List.fromList(utf8.encode("010d\r\n")));
                 await connection?.output.allSent;
-                // print('${speechToText.isNotListening}&& $liseningUser');
                 if (speechToText.isNotListening && listeningUser) {
                   listeningUser = false;
-                  print(mytalk);
-                  print('day la phone: $phoneNumber');
                   if (!mytalk.contains('reply')) {
                     flutterTextToSpeech
                         .speak('you start with reply for reply message');
@@ -168,7 +169,6 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
             });
             connection?.input?.listen((event) {
               String string = String.fromCharCodes(event);
-              print(string);
               List<String> speedL = string.split(' ');
               if (string.length > 3 && speedL.length > 2) {
                 if (speedL[1] == '0D') {
@@ -186,13 +186,13 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
             });
           }
         } catch (e) {
-          // if (mounted) {
-          //   showErrorSnackBar(
-          //       context: context,
-          //       errorMessage:
-          //           'Can not connect to device,please reset app or you can connect it manually');
-          //   ref.read(flutterSerialBlueProvider).openSettings();
-          // }
+          if (mounted) {
+            showErrorSnackBar(
+                context: context,
+                errorMessage:
+                    'Can not connect to device,please reset app or you can connect it manually');
+            ref.read(flutterSerialBlueProvider).openSettings();
+          }
         }
       }
     });
@@ -274,59 +274,180 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
               ],
             ),
             Positioned(
-                left: 12,
-                top: 12,
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: context.colors.primaryMain)),
-                      padding: const EdgeInsets.all(15),
-                      alignment: Alignment.center,
-                      child: Text(
-                        '${state.speed}\nkm/h',
-                        style: AppTextStyles.labelLarge
-                            .copyWith(color: context.colors.backdropPrimary),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    state.distance != 0.0
-                        ? Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: context.colors.primaryMain)),
-                            padding: const EdgeInsets.all(15),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '${state.distance.ceil()} m',
-                              style: AppTextStyles.labelLarge.copyWith(
-                                  color: context.colors.backdropPrimary),
-                            ),
-                          )
-                        : const SizedBox(),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: context.colors.primaryMain)),
-                      padding: const EdgeInsets.all(15),
-                      alignment: Alignment.center,
-                      child: Text(
-                        '${state.time.ceil()}s',
-                        style: AppTextStyles.labelLarge
-                            .copyWith(color: context.colors.backdropPrimary),
-                      ),
-                    )
-                  ],
-                )),
+              left: 12,
+              top: 12,
+              child: buildInformation(),
+            ),
+            Positioned(
+              right: 12,
+              child: buildSettings(),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildInformation() {
+    return Column(
+      children: [
+        if (state.showSpeed)
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: context.colors.primaryMain)),
+            alignment: Alignment.center,
+            child: Stack(fit: StackFit.loose, children: [
+              const Positioned(
+                right: 5,
+                child: Text("km/h"),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  '${state.speed}',
+                  style: AppTextStyles.labelLarge.copyWith(
+                      color: context.colors.backdropPrimary, fontSize: 50),
+                ),
+              ),
+            ]),
+          ),
+        if (state.showRpm)
+          const SizedBox(
+            height: 8,
+          ),
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: context.colors.primaryMain)),
+          alignment: Alignment.center,
+          child: Stack(fit: StackFit.loose, children: [
+            const Positioned(
+              right: 5,
+              child: Text("rpm"),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                '${state.rpm.ceil()}',
+                style: AppTextStyles.labelLarge.copyWith(
+                    color: context.colors.backdropPrimary, fontSize: 50),
+              ),
+            ),
+          ]),
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        if (state.showDistance)
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: context.colors.primaryMain)),
+            padding: const EdgeInsets.all(15),
+            alignment: Alignment.center,
+            child: Text(
+              '${state.distance.ceil()} m',
+              style: AppTextStyles.labelLarge
+                  .copyWith(color: context.colors.backdropPrimary),
+            ),
+          ),
+        const SizedBox(
+          height: 8,
+        ),
+        if (state.showTime)
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: context.colors.primaryMain)),
+            padding: const EdgeInsets.all(15),
+            alignment: Alignment.center,
+            child: Text(
+              '${state.time.ceil()}s',
+              style: AppTextStyles.labelLarge
+                  .copyWith(color: context.colors.backdropPrimary),
+            ),
+          )
+      ],
+    );
+  }
+
+  Widget buildSettings() {
+    return AnimatedCrossFade(
+      crossFadeState: state.showOptions
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
+      firstChild: Column(children: [
+        Container(
+          color: Colors.white.withOpacity(0.3),
+          width: 150,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Row(
+                children: [
+                  Checkbox(
+                    value: state.following,
+                    onChanged: (value) =>
+                        viewModel.updateFollowing(value ?? true),
+                  ),
+                  const Text(
+                    "Follow location",
+                    style: AppTextStyles.labelSmall,
+                  )
+                ],
+              ),
+              Row(children: [
+                Checkbox(
+                  value: state.showSpeed,
+                  onChanged: (value) async =>
+                      viewModel.updateOption(showSpeed: value),
+                ),
+                const Text("Show speed", style: AppTextStyles.labelSmall),
+              ]),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: state.showDistance,
+                    onChanged: (value) =>
+                        viewModel.updateOption(showDistance: value),
+                  ),
+                  const Text(
+                    "Show distance",
+                    style: AppTextStyles.labelSmall,
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: state.showTime,
+                    onChanged: (value) =>
+                        viewModel.updateOption(showTime: value),
+                  ),
+                  const Text(
+                    "Show Time",
+                    style: AppTextStyles.labelSmall,
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+        AppIconButton(
+          icon: Icons.clear,
+          onTap: () => viewModel.updateShowOption(false),
+        ),
+      ]),
+      secondChild: AppIconButton(
+        icon: Icons.settings,
+        onTap: () {
+          viewModel.updateShowOption(true);
+        },
+      ),
+      duration: const Duration(milliseconds: 300),
     );
   }
 
@@ -351,9 +472,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     },
                   );
                   listeningUser = true;
-                } else {
-                  print('deo on roi');
-                }
+                } else {}
               });
             });
           },

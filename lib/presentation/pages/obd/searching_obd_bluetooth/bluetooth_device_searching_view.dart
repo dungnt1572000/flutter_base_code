@@ -6,9 +6,7 @@ import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/bluet
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/model/devices_bluetooth.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_bar.dart';
-import 'package:baseproject/presentation/widget/app_indicator/app_lading_indicator.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
-import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
 import 'package:baseproject/presentation/widget/snack_bar/infor_snack_bar.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:flutter/material.dart';
