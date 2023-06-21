@@ -1,9 +1,11 @@
 import 'package:baseproject/presentation/domain/use_case/get_show_distance_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_fuel_consumption_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_rpm_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_speed_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_fuel_consumption_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_rpm_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.dart';
@@ -25,6 +27,8 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
     required this.getShowDistanceUseCase,
     required this.saveShowRpmUseCase,
     required this.getShowRpmUseCase,
+    required this.getShowFuelConsumptionUseCase,
+    required this.saveShowFuelConsumptionUseCase,
   }) : super(ObdDetailState()) {
     initOption();
   }
@@ -38,6 +42,8 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
   SaveShowDurationUseCase saveShowDurationUseCase;
   GetShowRpmUseCase getShowRpmUseCase;
   SaveShowRpmUseCase saveShowRpmUseCase;
+  GetShowFuelConsumptionUseCase getShowFuelConsumptionUseCase;
+  SaveShowFuelConsumptionUseCase saveShowFuelConsumptionUseCase;
 
   void updateSpeed(double speed) {
     if (speed >= 35) {
@@ -57,12 +63,8 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
     state = state.copyWith(rpm: rmp);
   }
 
-  void updateNhietdodongco(double nhietdodongco) {
-    state = state.copyWith(nhietdodongco: nhietdodongco);
-  }
-
-  void updatemucnhienlieu(double mucnhienlieu) {
-    state = state.copyWith(mucnhienlieu: mucnhienlieu);
+  void updateFuelConsumption(double consumption) {
+    state = state.copyWith(fuelConsumption: consumption);
   }
 
   void updateCurrentLocation(LatLng latLng) {
@@ -99,24 +101,29 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
     final showDurationUseCase = getShowDurationUseCase.run();
     final showDistanceUseCase = getShowDistanceUseCase.run();
     final showRpmUseCase = getShowRpmUseCase.run();
+    final showFuelConsumption = getShowFuelConsumptionUseCase.run();
     state = state.copyWith(
       showSpeed: showSpeedUseCase,
       showDistance: showDistanceUseCase,
       showTime: showDurationUseCase,
       showRpm: showRpmUseCase,
+      showFuelConsumption: showFuelConsumption,
     );
   }
 
-  Future updateOption(
-      {bool? showSpeed,
-      bool? showDistance,
-      bool? showTime,
-      bool? showRpm}) async {
+  Future updateOption({
+    bool? showSpeed,
+    bool? showDistance,
+    bool? showTime,
+    bool? showRpm,
+    bool? showFuelConsumption,
+  }) async {
     state = state.copyWith(
       showDistance: showDistance ?? state.showDistance,
       showSpeed: showSpeed ?? state.showSpeed,
       showTime: showTime ?? state.showTime,
       showRpm: showRpm ?? state.showRpm,
+      showFuelConsumption: showFuelConsumption ?? state.showFuelConsumption,
     );
     if (showSpeed != null) {
       await saveShowSpeedUseCase.run(showSpeed);
@@ -129,6 +136,9 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
     }
     if (showRpm != null) {
       await saveShowRpmUseCase.run(showRpm);
+    }
+    if (showFuelConsumption != null) {
+      await saveShowFuelConsumptionUseCase.run(showFuelConsumption);
     }
   }
 

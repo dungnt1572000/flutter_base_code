@@ -6,10 +6,12 @@ import 'package:baseproject/data/providers/destination_provider.dart';
 import 'package:baseproject/data/providers/flutter_serial_blue_provider.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_distance_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_fuel_consumption_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_rpm_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_speed_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_distance_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_fuel_consumption_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_rpm_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
@@ -37,16 +39,21 @@ import '../../../domain/use_case/get_driving_direction_object_use_case.dart';
 final _provider =
     StateNotifierProvider.autoDispose<ObdDetailViewModel, ObdDetailState>(
   (ref) => ObdDetailViewModel(
-      getDrivingDirectionObjectUseCase:
-          injector.get<GetDrivingDirectionObjectUseCase>(),
-      getShowSpeedUseCase: injector.get<GetShowSpeedUseCase>(),
-      saveShowSpeedUseCase: injector.get<SaveShowSpeedUseCase>(),
-      saveShowDurationUseCase: injector.get<SaveShowDurationUseCase>(),
-      saveShowDistanceUseCase: injector.get<SaveShowDistanceUseCase>(),
-      getShowDurationUseCase: injector.get<GetShowDurationUseCase>(),
-      getShowDistanceUseCase: injector.get<GetShowDistanceUseCase>(),
-      getShowRpmUseCase: injector.get<GetShowRpmUseCase>(),
-      saveShowRpmUseCase: injector.get<SaveShowRpmUseCase>()),
+    getDrivingDirectionObjectUseCase:
+        injector.get<GetDrivingDirectionObjectUseCase>(),
+    getShowSpeedUseCase: injector.get<GetShowSpeedUseCase>(),
+    saveShowSpeedUseCase: injector.get<SaveShowSpeedUseCase>(),
+    saveShowDurationUseCase: injector.get<SaveShowDurationUseCase>(),
+    saveShowDistanceUseCase: injector.get<SaveShowDistanceUseCase>(),
+    getShowDurationUseCase: injector.get<GetShowDurationUseCase>(),
+    getShowDistanceUseCase: injector.get<GetShowDistanceUseCase>(),
+    getShowRpmUseCase: injector.get<GetShowRpmUseCase>(),
+    saveShowRpmUseCase: injector.get<SaveShowRpmUseCase>(),
+    getShowFuelConsumptionUseCase:
+        injector.get<GetShowFuelConsumptionUseCase>(),
+    saveShowFuelConsumptionUseCase:
+        injector.get<SaveShowFuelConsumptionUseCase>(),
+  ),
 );
 
 class ObdDetailArgument {
@@ -148,7 +155,13 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 (timer) async {
               if (connection != null && connection!.isConnected) {
                 connection?.output
+                    .add(Uint8List.fromList(utf8.encode("010c\r\n")));
+                await Future.delayed(const Duration(milliseconds: 250));
+                connection?.output
                     .add(Uint8List.fromList(utf8.encode("010d\r\n")));
+                await Future.delayed(const Duration(milliseconds: 250));
+                connection?.output
+                    .add(Uint8List.fromList(utf8.encode("01A2\r\n")));
                 await connection?.output.allSent;
                 if (speechToText.isNotListening && listeningUser) {
                   listeningUser = false;
@@ -163,8 +176,23 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                   }
                 }
               } else {
-                connection = await BluetoothConnection.toAddress(
-                    widget.obdDetailArgument.address);
+                try {
+                  connection = await BluetoothConnection.toAddress(
+                      widget.obdDetailArgument.address);
+
+                  connection?.dispose();
+                  if (mounted) {
+                    showErrorSnackBar(
+                        context: context,
+                        errorMessage:
+                            "Lost connect to device, please try again");
+                    Navigator.pop(context);
+                  }
+                } catch (e) {
+                  showErrorSnackBar(
+                      context: context, errorMessage: "Lost connect to Device");
+                  Navigator.pop(context);
+                }
               }
             });
             connection?.input?.listen((event) {
@@ -173,14 +201,16 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
               if (string.length > 3 && speedL.length > 2) {
                 if (speedL[1] == '0D') {
                   viewModel
-                      .updateSpeed((int.parse(speedL[2], radix: 16) * 1.0));
+                      .updateSpeed((int.parse(speedL[2], radix: 16) * 3.6));
                 } else if (speedL[1] == '0C') {
                   viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
                           int.parse(speedL[3], radix: 16)) /
-                      100);
-                } else if (speedL[1] == '05') {
-                  viewModel.updatemucnhienlieu(
-                      int.parse(speedL[2], radix: 16) * 1.0);
+                      4);
+                }
+                if (speedL[1] == 'A2') {
+                  print(speedL[1]);
+                  viewModel.updateFuelConsumption(
+                      int.parse(speedL[2], radix: 16) / 10);
                 }
               }
             });
@@ -230,10 +260,6 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
       }
     });
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
-        child: const Text('pick'),
-      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -279,6 +305,73 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
               child: buildInformation(),
             ),
             Positioned(
+                bottom: 5,
+                right: 5,
+                child: Column(
+                  children: [
+                    if (state.showDistance)
+                      Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: context.colors.primaryMain)),
+                        padding: const EdgeInsets.all(15),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.social_distance),
+                            Text(
+                              ' ${state.distance.ceil()} m',
+                              style: AppTextStyles.labelLarge.copyWith(
+                                  color: context.colors.backdropPrimary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    if (state.showTime)
+                      Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: context.colors.primaryMain)),
+                        padding: const EdgeInsets.all(15),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.timelapse),
+                            Text(
+                              ' ${state.time.ceil()}s',
+                              style: AppTextStyles.labelLarge.copyWith(
+                                  color: context.colors.backdropPrimary),
+                            ),
+                          ],
+                        ),
+                      ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    if (state.showFuelConsumption)
+                      Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: context.colors.primaryMain)),
+                        padding: const EdgeInsets.all(15),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.local_gas_station_rounded),
+                            Text(
+                              ' ${state.fuelConsumption} l/km',
+                              style: AppTextStyles.labelLarge.copyWith(
+                                  color: context.colors.backdropPrimary),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                )),
+            Positioned(
               right: 12,
               child: buildSettings(),
             )
@@ -293,77 +386,77 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
       children: [
         if (state.showSpeed)
           Container(
+            constraints: const BoxConstraints(minHeight: 95, minWidth: 105),
             decoration: BoxDecoration(
                 border: Border.all(color: context.colors.primaryMain)),
             alignment: Alignment.center,
             child: Stack(fit: StackFit.loose, children: [
               const Positioned(
-                right: 5,
-                child: Text("km/h"),
+                top:0,
+                right: 0,
+                left: 0,
+                child: Center(child: Text("km/h")),
               ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Text(
-                  '${state.speed}',
+                  state.speed.toStringAsFixed(1),
                   style: AppTextStyles.labelLarge.copyWith(
                       color: context.colors.backdropPrimary, fontSize: 50),
                 ),
               ),
             ]),
           ),
+        const SizedBox(
+          height: 8,
+        ),
         if (state.showRpm)
-          const SizedBox(
-            height: 8,
-          ),
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: context.colors.primaryMain)),
-          alignment: Alignment.center,
-          child: Stack(fit: StackFit.loose, children: [
-            const Positioned(
-              right: 5,
-              child: Text("rpm"),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                '${state.rpm.ceil()}',
-                style: AppTextStyles.labelLarge.copyWith(
-                    color: context.colors.backdropPrimary, fontSize: 50),
+          Container(
+            constraints: const BoxConstraints(minHeight: 95, minWidth: 105),
+            decoration: BoxDecoration(
+                border: Border.all(color: context.colors.primaryMain)),
+            alignment: Alignment.center,
+            child: Stack(fit: StackFit.loose, children: [
+              Positioned(
+                right: 5,
+                child: Row(
+                  children: const [
+                    Icon(Icons.speed),
+                    Text(" rpm"),
+                  ],
+                ),
               ),
-            ),
-          ]),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        if (state.showDistance)
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: context.colors.primaryMain)),
-            padding: const EdgeInsets.all(15),
-            alignment: Alignment.center,
-            child: Text(
-              '${state.distance.ceil()} m',
-              style: AppTextStyles.labelLarge
-                  .copyWith(color: context.colors.backdropPrimary),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  '${state.rpm.ceil()}',
+                  style: AppTextStyles.labelLarge.copyWith(
+                      color: context.colors.backdropPrimary, fontSize: 50),
+                ),
+              ),
+            ]),
           ),
         const SizedBox(
           height: 8,
         ),
-        if (state.showTime)
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: context.colors.primaryMain)),
-            padding: const EdgeInsets.all(15),
-            alignment: Alignment.center,
-            child: Text(
-              '${state.time.ceil()}s',
-              style: AppTextStyles.labelLarge
-                  .copyWith(color: context.colors.backdropPrimary),
-            ),
-          )
+      ],
+    );
+  }
+
+  Widget buildSelectItem(Function(bool) function, String title) {
+    return Row(
+      children: [
+        Checkbox(
+          value: state.following,
+          onChanged: (value) => function(value ?? true),
+        ),
+        Expanded(
+          child: Text(
+            title,
+            style: AppTextStyles.labelSmall,
+            maxLines: 2,
+          ),
+        )
       ],
     );
   }
@@ -375,8 +468,9 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
           : CrossFadeState.showSecond,
       firstChild: Column(children: [
         Container(
-          color: Colors.white.withOpacity(0.3),
+          color: Colors.white,
           width: 150,
+          height: 200,
           child: ListView(
             shrinkWrap: true,
             children: [
@@ -387,9 +481,12 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     onChanged: (value) =>
                         viewModel.updateFollowing(value ?? true),
                   ),
-                  const Text(
-                    "Follow location",
-                    style: AppTextStyles.labelSmall,
+                  const Expanded(
+                    child: Text(
+                      "Follow location",
+                      style: AppTextStyles.labelSmall,
+                      maxLines: 2,
+                    ),
                   )
                 ],
               ),
@@ -399,7 +496,12 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                   onChanged: (value) async =>
                       viewModel.updateOption(showSpeed: value),
                 ),
-                const Text("Show speed", style: AppTextStyles.labelSmall),
+                const Expanded(
+                    child: Text(
+                  "Show speed",
+                  style: AppTextStyles.labelSmall,
+                  maxLines: 2,
+                )),
               ]),
               const SizedBox(
                 height: 8,
@@ -411,9 +513,12 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     onChanged: (value) =>
                         viewModel.updateOption(showDistance: value),
                   ),
-                  const Text(
-                    "Show distance",
-                    style: AppTextStyles.labelSmall,
+                  const Expanded(
+                    child: Text(
+                      "Show distance",
+                      style: AppTextStyles.labelSmall,
+                      maxLines: 2,
+                    ),
                   )
                 ],
               ),
@@ -427,9 +532,31 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     onChanged: (value) =>
                         viewModel.updateOption(showTime: value),
                   ),
-                  const Text(
-                    "Show Time",
-                    style: AppTextStyles.labelSmall,
+                  const Expanded(
+                    child: Text(
+                      "Show Time",
+                      style: AppTextStyles.labelSmall,
+                      maxLines: 2,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: state.showFuelConsumption,
+                    onChanged: (value) => viewModel.updateOption(
+                        showFuelConsumption: value ?? true),
+                  ),
+                  const Expanded(
+                    child: Text(
+                      "Show Fuel Consumption",
+                      style: AppTextStyles.labelSmall,
+                      maxLines: 2,
+                    ),
                   )
                 ],
               ),

@@ -2,10 +2,12 @@ import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppIconButton extends StatelessWidget {
-  const AppIconButton({Key? key, required this.icon, required this.onTap})
+  const AppIconButton(
+      {Key? key, required this.icon, required this.onTap, this.iconColor})
       : super(key: key);
   final IconData icon;
   final VoidCallback onTap;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class AppIconButton extends StatelessWidget {
       onPressed: onTap,
       child: Icon(
         icon,
-        color: context.colors.iconPrimary,
+        color: iconColor ?? context.colors.iconPrimary,
       ),
     );
   }

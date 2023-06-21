@@ -11,6 +11,7 @@ import 'package:baseproject/presentation/pages/home/home_state.dart';
 import 'package:baseproject/presentation/pages/home/home_view_model.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
+import 'package:baseproject/presentation/widget/app_dialog.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
 import 'package:baseproject/presentation/widget/icon_button.dart';
 import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
@@ -109,7 +110,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     }));
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        backgroundColor: context.colors.backdropSecondary,
         onPressed: () async {
+          location = Location();
           _locationData = await location!.getLocation();
           _viewModel.upDateCurrentLocation(
             _locationData.latitude ?? AppConstant.latitude,
@@ -117,7 +120,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           );
           mapController.move(LatLng(state.latLng, state.longLng), 15);
         },
-        child: const Icon(Icons.location_searching),
+        child: Icon(Icons.location_searching,color: context.colors.primaryMain,),
       ),
       body: SafeArea(
         child: Stack(
@@ -137,6 +140,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     _buildFindButton(context),
                     _buildSaveDriving(context),
                     _buildOBDScreen(context),
+                    _buildInstruction(context),
                     AppIconButton(
                         icon: Icons.close,
                         onTap: () => _viewModel.displayUtilities(false)),
@@ -170,6 +174,24 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  Widget _buildInstruction(BuildContext context){
+    return ElevatedButton(
+      onPressed: () async {
+        showInstructionDialog(context, AppConstant.homeInstruction);
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: context.colors.surface,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: context.colors.primaryMain),
+        ),
+      ),
+      child: Text(
+        'Instruction',
+        style: AppTextStyles.labelMedium
+            .copyWith(color: context.colors.primaryText),
+      ),
+    );
+  }
   Widget _buildMap() {
     return FlutterMap(
       mapController: mapController,
@@ -230,52 +252,79 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Form(
         child: Container(
       color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Choose Start Place',
-              style: AppTextStyles.labelMedium
-                  .copyWith(color: context.colors.primaryText),
+            const SizedBox(
+              height: 8,
             ),
             TextFormField(
               controller: _startLocation,
               focusNode: _startNode,
-              maxLines: 1,
               decoration: InputDecoration(
-                suffix: IconButton(
+                labelText: 'Start Location',
+                hintText: 'Enter start location',
+                labelStyle: AppTextStyles.labelLarge.copyWith(color: context.colors.primaryMain),
+                prefixIcon: Icon(Icons.location_on,color: context.colors.primaryMain,),
+                suffixIcon: IconButton(
                   onPressed: () async {
                     await _viewModel
                         .getSearchingList(_startLocation.text.trim());
                   },
                   icon: Icon(
                     Icons.search,
-                    color: context.colors.iconPrimary,
+                    color: context.colors.primaryMain,
                   ),
                 ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: context.colors.primaryMain),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
               ),
             ),
-            Text(
-              'Choose Last Place',
-              style: AppTextStyles.labelMedium
-                  .copyWith(color: context.colors.primaryText),
+            const SizedBox(
+              height: 16,
             ),
             TextFormField(
               controller: _lastLocation,
               focusNode: _lastNode,
               maxLines: 1,
               decoration: InputDecoration(
-                suffix: IconButton(
+                labelText: 'Last Location',
+                hintText: 'Enter last location',
+                labelStyle: AppTextStyles.labelLarge.copyWith(color: context.colors.primaryMain),
+                prefixIcon: Icon(Icons.location_on,color: context.colors.primaryMain,),
+                suffixIcon: IconButton(
                   onPressed: () async {
                     await _viewModel
                         .getSearchingList(_lastLocation.text.trim());
                   },
                   icon: Icon(
                     Icons.search,
-                    color: context.colors.iconPrimary,
+                    color: context.colors.primaryMain,
                   ),
                 ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: context.colors.primaryMain),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
               ),
             ),
             ElevatedButton(
@@ -296,17 +345,11 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             AppLoadingOverlay(
               status: state.status,
-              child: SizedBox(
-                height: 350,
-                child: state.listSearchingPlace.isEmpty
-                    ? Center(
-                        child: Text(
-                          'Search Anywhere',
-                          style: AppTextStyles.labelMedium
-                              .copyWith(color: context.colors.primaryText),
-                        ),
-                      )
-                    : ListView.builder(
+              child: state.listSearchingPlace.isEmpty
+                  ? const SizedBox()
+                  : Container(
+                height: 250,
+                    child: ListView.builder(
                         itemCount: state.listSearchingPlace.length,
                         itemBuilder: (context, index) {
                           final searchPbj = state.listSearchingPlace[index];
@@ -327,11 +370,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   );
                             },
                             title:
-                                Text('${state.listSearchingPlace[index].text}'),
+                                Text('${state.listSearchingPlace[index].text}',style: AppTextStyles.labelSmall.copyWith(color: context.colors.textPrimary),),
                           );
                         },
                       ),
-              ),
+                  ),
             ),
           ],
         ),
@@ -351,7 +394,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
       child: Text(
-        'Find',
+        'Find Way',
         style: AppTextStyles.labelMedium
             .copyWith(color: context.colors.primaryText),
       ),
@@ -373,27 +416,27 @@ class _HomePageState extends ConsumerState<HomePage> {
               AppLoadingOverlay(
                 status: state.status,
                 child: Container(
-                    margin: const EdgeInsets.only(top: 16),
+                    margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
                     width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
-                    decoration: const BoxDecoration(
+                    padding:  const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                    decoration:  BoxDecoration(
                       color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: context.colors.primaryMain,
+                        width: 1
+                      )
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Current Speed: ${state.currentSpeed}',
+                          'Duration: ${state.duration.ceil()} s',
                           style: AppTextStyles.textLarge
                               .copyWith(color: context.colors.primaryText),
                         ),
                         Text(
-                          'Time: ${state.duration}',
-                          style: AppTextStyles.textLarge
-                              .copyWith(color: context.colors.primaryText),
-                        ),
-                        Text(
-                          'Distance: ${state.distance}',
+                          'Distance: ${state.distance.toStringAsFixed(2)} m',
                           style: AppTextStyles.textLarge
                               .copyWith(color: context.colors.primaryText),
                         ),
@@ -431,14 +474,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             height: 50,
             decoration: BoxDecoration(
               color: state.routeMethod == RouteMethod.driving
-                  ? Colors.blue
+                  ? context.colors.primaryMain.withOpacity(0.6)
                   : Colors.white,
-              border: Border.all(color: context.colors.border),
+              border: Border.all(color: context.colors.primaryMain,width: 1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               Icons.drive_eta,
-              color: context.colors.iconPrimary,
+              color: state.routeMethod == RouteMethod.driving? Colors.white:Colors.orange,
             ),
           ),
         ),
@@ -459,14 +502,14 @@ class _HomePageState extends ConsumerState<HomePage> {
             height: 50,
             decoration: BoxDecoration(
               color: state.routeMethod == RouteMethod.walking
-                  ? Colors.blue
+                  ? context.colors.primaryMain.withOpacity(0.6)
                   : Colors.white,
               border: Border.all(color: context.colors.border),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               Icons.nordic_walking,
-              color: context.colors.iconPrimary,
+              color: state.routeMethod == RouteMethod.walking? Colors.white:Colors.orange,
             ),
           ),
         ),

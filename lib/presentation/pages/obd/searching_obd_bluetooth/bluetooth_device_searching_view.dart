@@ -4,10 +4,14 @@ import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view.dart';
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/bluetooth_device_searching_view_model.dart';
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/model/devices_bluetooth.dart';
+import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_bar.dart';
+import 'package:baseproject/presentation/widget/app_dialog.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
+import 'package:baseproject/presentation/widget/icon_button.dart';
 import 'package:baseproject/presentation/widget/snack_bar/infor_snack_bar.dart';
+import 'package:baseproject/ultilities/app_constant.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -63,7 +67,7 @@ class _BluetoothDeviceSearchViewState
         }
       }
     } else {
-        startScan();
+      startScan();
     }
   }
 
@@ -106,13 +110,18 @@ class _BluetoothDeviceSearchViewState
     // TODO: implement dispose
     super.dispose();
     flutterBluetoothSerial.cancelDiscovery();
+    flutterBluetoothSerial.disconnect();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
+        backgroundColor: context.colors.backdropSecondary,
+        child: Icon(
+          Icons.refresh,
+          color: context.colors.primaryMain,
+        ),
         onPressed: () {
           ref.read(appNavigatorProvider).navigateTo(AppRoutes.obdDetail,
               arguments: ObdDetailArgument('abc'));
@@ -124,41 +133,96 @@ class _BluetoothDeviceSearchViewState
           // });
         },
       ),
-      appBar: const BaseAppBar(
-          title: Text(
-        'Bluetooth Searching',
-        style: AppTextStyles.headingMedium,
-      )),
-      body: AppLoadingOverlay(
-        status: state.status,
-        child: SafeArea(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: context.colors.action,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20.0),
+              bottomRight: Radius.circular(20.0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: context.colors.primaryMain.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios_new_outlined,
+                color: context.colors.primaryMain,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(
+              'My App',
+              style: AppTextStyles.labelLarge
+                  .copyWith(color: context.colors.primaryMain),
+            ),
+            centerTitle: true,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.info_outline,
+                  color: context.colors.primaryMain,
+                ),
+                onPressed: () {
+                  showInstructionDialog(
+                      context, AppConstant.bluetoothSearching);
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: AppLoadingOverlay(
+          status: state.status,
           child: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: state.listDevice.isEmpty &&
-                        state.status == LoadingStatus.success
-                    ? const Text('0 device is detected')
-                    : Column(
-                        children: [
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          ...state.listDevice
-                              .map(
-                                (e) => TextButton(
-                                  onPressed: () async {
-                                    ref.read(appNavigatorProvider).navigateTo(
-                                        AppRoutes.obdDetail,
-                                        arguments:
-                                            ObdDetailArgument(e.address));
-                                  },
-                                  child: Text('${e.name} ${e.address}'),
-                                ),
-                              )
-                              .toList()
-                        ],
-                      ),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: state.listDevice.isEmpty &&
+                          state.status == LoadingStatus.success
+                      ? Text('0 device is detected',
+                          style: AppTextStyles.labelSmall
+                              .copyWith(color: context.colors.primaryMain))
+                      : Column(
+                          children: [
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            ...state.listDevice
+                                .map(
+                                  (e) => TextButton(
+                                    onPressed: () async {
+                                      ref.read(appNavigatorProvider).navigateTo(
+                                          AppRoutes.obdDetail,
+                                          arguments:
+                                              ObdDetailArgument(e.address));
+                                    },
+                                    child: Text(
+                                      '${e.name} ${e.address}',
+                                      style: AppTextStyles.labelSmall.copyWith(
+                                          color: context.colors.primaryMain),
+                                    ),
+                                  ),
+                                )
+                                .toList()
+                          ],
+                        ),
+                ),
               ),
             ),
           ),

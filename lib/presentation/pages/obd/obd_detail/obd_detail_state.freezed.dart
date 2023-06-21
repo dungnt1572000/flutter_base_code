@@ -18,21 +18,22 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ObdDetailState {
   double get speed => throw _privateConstructorUsedError;
   double get rpm => throw _privateConstructorUsedError;
-  double get nhietdodongco => throw _privateConstructorUsedError;
-  double get mucnhienlieu => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
   String get telephone => throw _privateConstructorUsedError;
   bool get isSafety => throw _privateConstructorUsedError;
   double get distance => throw _privateConstructorUsedError;
   double get time => throw _privateConstructorUsedError;
+  double get fuelConsumption => throw _privateConstructorUsedError;
   List<LatLng> get listForPolyLine => throw _privateConstructorUsedError;
   bool get showOptions => throw _privateConstructorUsedError;
   bool get showSpeed => throw _privateConstructorUsedError;
   bool get showTime => throw _privateConstructorUsedError;
   bool get showDistance => throw _privateConstructorUsedError;
   bool get showRpm => throw _privateConstructorUsedError;
+  bool get showFuelConsumption => throw _privateConstructorUsedError;
   bool get following => throw _privateConstructorUsedError;
+  String get errorMessage => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ObdDetailStateCopyWith<ObdDetailState> get copyWith =>
@@ -48,21 +49,22 @@ abstract class $ObdDetailStateCopyWith<$Res> {
   $Res call(
       {double speed,
       double rpm,
-      double nhietdodongco,
-      double mucnhienlieu,
       double latitude,
       double longitude,
       String telephone,
       bool isSafety,
       double distance,
       double time,
+      double fuelConsumption,
       List<LatLng> listForPolyLine,
       bool showOptions,
       bool showSpeed,
       bool showTime,
       bool showDistance,
       bool showRpm,
-      bool following});
+      bool showFuelConsumption,
+      bool following,
+      String errorMessage});
 }
 
 /// @nodoc
@@ -80,21 +82,22 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
   $Res call({
     Object? speed = null,
     Object? rpm = null,
-    Object? nhietdodongco = null,
-    Object? mucnhienlieu = null,
     Object? latitude = null,
     Object? longitude = null,
     Object? telephone = null,
     Object? isSafety = null,
     Object? distance = null,
     Object? time = null,
+    Object? fuelConsumption = null,
     Object? listForPolyLine = null,
     Object? showOptions = null,
     Object? showSpeed = null,
     Object? showTime = null,
     Object? showDistance = null,
     Object? showRpm = null,
+    Object? showFuelConsumption = null,
     Object? following = null,
+    Object? errorMessage = null,
   }) {
     return _then(_value.copyWith(
       speed: null == speed
@@ -104,14 +107,6 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
       rpm: null == rpm
           ? _value.rpm
           : rpm // ignore: cast_nullable_to_non_nullable
-              as double,
-      nhietdodongco: null == nhietdodongco
-          ? _value.nhietdodongco
-          : nhietdodongco // ignore: cast_nullable_to_non_nullable
-              as double,
-      mucnhienlieu: null == mucnhienlieu
-          ? _value.mucnhienlieu
-          : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
       latitude: null == latitude
           ? _value.latitude
@@ -136,6 +131,10 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
+              as double,
+      fuelConsumption: null == fuelConsumption
+          ? _value.fuelConsumption
+          : fuelConsumption // ignore: cast_nullable_to_non_nullable
               as double,
       listForPolyLine: null == listForPolyLine
           ? _value.listForPolyLine
@@ -161,10 +160,18 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
           ? _value.showRpm
           : showRpm // ignore: cast_nullable_to_non_nullable
               as bool,
+      showFuelConsumption: null == showFuelConsumption
+          ? _value.showFuelConsumption
+          : showFuelConsumption // ignore: cast_nullable_to_non_nullable
+              as bool,
       following: null == following
           ? _value.following
           : following // ignore: cast_nullable_to_non_nullable
               as bool,
+      errorMessage: null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -180,21 +187,22 @@ abstract class _$$_ObdDetailStateCopyWith<$Res>
   $Res call(
       {double speed,
       double rpm,
-      double nhietdodongco,
-      double mucnhienlieu,
       double latitude,
       double longitude,
       String telephone,
       bool isSafety,
       double distance,
       double time,
+      double fuelConsumption,
       List<LatLng> listForPolyLine,
       bool showOptions,
       bool showSpeed,
       bool showTime,
       bool showDistance,
       bool showRpm,
-      bool following});
+      bool showFuelConsumption,
+      bool following,
+      String errorMessage});
 }
 
 /// @nodoc
@@ -210,21 +218,22 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
   $Res call({
     Object? speed = null,
     Object? rpm = null,
-    Object? nhietdodongco = null,
-    Object? mucnhienlieu = null,
     Object? latitude = null,
     Object? longitude = null,
     Object? telephone = null,
     Object? isSafety = null,
     Object? distance = null,
     Object? time = null,
+    Object? fuelConsumption = null,
     Object? listForPolyLine = null,
     Object? showOptions = null,
     Object? showSpeed = null,
     Object? showTime = null,
     Object? showDistance = null,
     Object? showRpm = null,
+    Object? showFuelConsumption = null,
     Object? following = null,
+    Object? errorMessage = null,
   }) {
     return _then(_$_ObdDetailState(
       speed: null == speed
@@ -234,14 +243,6 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
       rpm: null == rpm
           ? _value.rpm
           : rpm // ignore: cast_nullable_to_non_nullable
-              as double,
-      nhietdodongco: null == nhietdodongco
-          ? _value.nhietdodongco
-          : nhietdodongco // ignore: cast_nullable_to_non_nullable
-              as double,
-      mucnhienlieu: null == mucnhienlieu
-          ? _value.mucnhienlieu
-          : mucnhienlieu // ignore: cast_nullable_to_non_nullable
               as double,
       latitude: null == latitude
           ? _value.latitude
@@ -267,6 +268,10 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as double,
+      fuelConsumption: null == fuelConsumption
+          ? _value.fuelConsumption
+          : fuelConsumption // ignore: cast_nullable_to_non_nullable
+              as double,
       listForPolyLine: null == listForPolyLine
           ? _value._listForPolyLine
           : listForPolyLine // ignore: cast_nullable_to_non_nullable
@@ -291,10 +296,18 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
           ? _value.showRpm
           : showRpm // ignore: cast_nullable_to_non_nullable
               as bool,
+      showFuelConsumption: null == showFuelConsumption
+          ? _value.showFuelConsumption
+          : showFuelConsumption // ignore: cast_nullable_to_non_nullable
+              as bool,
       following: null == following
           ? _value.following
           : following // ignore: cast_nullable_to_non_nullable
               as bool,
+      errorMessage: null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -305,21 +318,22 @@ class _$_ObdDetailState implements _ObdDetailState {
   _$_ObdDetailState(
       {this.speed = 0,
       this.rpm = 0,
-      this.nhietdodongco = 0,
-      this.mucnhienlieu = 0,
       this.latitude = AppConstant.latitude,
       this.longitude = AppConstant.longitude,
       this.telephone = '',
       this.isSafety = true,
       this.distance = 0.0,
       this.time = 0.0,
+      this.fuelConsumption = 0.0,
       final List<LatLng> listForPolyLine = const [],
       this.showOptions = false,
       this.showSpeed = true,
       this.showTime = true,
       this.showDistance = true,
       this.showRpm = true,
-      this.following = true})
+      this.showFuelConsumption = true,
+      this.following = true,
+      this.errorMessage = ''})
       : _listForPolyLine = listForPolyLine;
 
   @override
@@ -328,12 +342,6 @@ class _$_ObdDetailState implements _ObdDetailState {
   @override
   @JsonKey()
   final double rpm;
-  @override
-  @JsonKey()
-  final double nhietdodongco;
-  @override
-  @JsonKey()
-  final double mucnhienlieu;
   @override
   @JsonKey()
   final double latitude;
@@ -352,6 +360,9 @@ class _$_ObdDetailState implements _ObdDetailState {
   @override
   @JsonKey()
   final double time;
+  @override
+  @JsonKey()
+  final double fuelConsumption;
   final List<LatLng> _listForPolyLine;
   @override
   @JsonKey()
@@ -378,11 +389,17 @@ class _$_ObdDetailState implements _ObdDetailState {
   final bool showRpm;
   @override
   @JsonKey()
+  final bool showFuelConsumption;
+  @override
+  @JsonKey()
   final bool following;
+  @override
+  @JsonKey()
+  final String errorMessage;
 
   @override
   String toString() {
-    return 'ObdDetailState(speed: $speed, rpm: $rpm, nhietdodongco: $nhietdodongco, mucnhienlieu: $mucnhienlieu, latitude: $latitude, longitude: $longitude, telephone: $telephone, isSafety: $isSafety, distance: $distance, time: $time, listForPolyLine: $listForPolyLine, showOptions: $showOptions, showSpeed: $showSpeed, showTime: $showTime, showDistance: $showDistance, showRpm: $showRpm, following: $following)';
+    return 'ObdDetailState(speed: $speed, rpm: $rpm, latitude: $latitude, longitude: $longitude, telephone: $telephone, isSafety: $isSafety, distance: $distance, time: $time, fuelConsumption: $fuelConsumption, listForPolyLine: $listForPolyLine, showOptions: $showOptions, showSpeed: $showSpeed, showTime: $showTime, showDistance: $showDistance, showRpm: $showRpm, showFuelConsumption: $showFuelConsumption, following: $following, errorMessage: $errorMessage)';
   }
 
   @override
@@ -392,10 +409,6 @@ class _$_ObdDetailState implements _ObdDetailState {
             other is _$_ObdDetailState &&
             (identical(other.speed, speed) || other.speed == speed) &&
             (identical(other.rpm, rpm) || other.rpm == rpm) &&
-            (identical(other.nhietdodongco, nhietdodongco) ||
-                other.nhietdodongco == nhietdodongco) &&
-            (identical(other.mucnhienlieu, mucnhienlieu) ||
-                other.mucnhienlieu == mucnhienlieu) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
@@ -407,6 +420,8 @@ class _$_ObdDetailState implements _ObdDetailState {
             (identical(other.distance, distance) ||
                 other.distance == distance) &&
             (identical(other.time, time) || other.time == time) &&
+            (identical(other.fuelConsumption, fuelConsumption) ||
+                other.fuelConsumption == fuelConsumption) &&
             const DeepCollectionEquality()
                 .equals(other._listForPolyLine, _listForPolyLine) &&
             (identical(other.showOptions, showOptions) ||
@@ -418,8 +433,12 @@ class _$_ObdDetailState implements _ObdDetailState {
             (identical(other.showDistance, showDistance) ||
                 other.showDistance == showDistance) &&
             (identical(other.showRpm, showRpm) || other.showRpm == showRpm) &&
+            (identical(other.showFuelConsumption, showFuelConsumption) ||
+                other.showFuelConsumption == showFuelConsumption) &&
             (identical(other.following, following) ||
-                other.following == following));
+                other.following == following) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @override
@@ -427,21 +446,22 @@ class _$_ObdDetailState implements _ObdDetailState {
       runtimeType,
       speed,
       rpm,
-      nhietdodongco,
-      mucnhienlieu,
       latitude,
       longitude,
       telephone,
       isSafety,
       distance,
       time,
+      fuelConsumption,
       const DeepCollectionEquality().hash(_listForPolyLine),
       showOptions,
       showSpeed,
       showTime,
       showDistance,
       showRpm,
-      following);
+      showFuelConsumption,
+      following,
+      errorMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -454,30 +474,27 @@ abstract class _ObdDetailState implements ObdDetailState {
   factory _ObdDetailState(
       {final double speed,
       final double rpm,
-      final double nhietdodongco,
-      final double mucnhienlieu,
       final double latitude,
       final double longitude,
       final String telephone,
       final bool isSafety,
       final double distance,
       final double time,
+      final double fuelConsumption,
       final List<LatLng> listForPolyLine,
       final bool showOptions,
       final bool showSpeed,
       final bool showTime,
       final bool showDistance,
       final bool showRpm,
-      final bool following}) = _$_ObdDetailState;
+      final bool showFuelConsumption,
+      final bool following,
+      final String errorMessage}) = _$_ObdDetailState;
 
   @override
   double get speed;
   @override
   double get rpm;
-  @override
-  double get nhietdodongco;
-  @override
-  double get mucnhienlieu;
   @override
   double get latitude;
   @override
@@ -491,6 +508,8 @@ abstract class _ObdDetailState implements ObdDetailState {
   @override
   double get time;
   @override
+  double get fuelConsumption;
+  @override
   List<LatLng> get listForPolyLine;
   @override
   bool get showOptions;
@@ -503,7 +522,11 @@ abstract class _ObdDetailState implements ObdDetailState {
   @override
   bool get showRpm;
   @override
+  bool get showFuelConsumption;
+  @override
   bool get following;
+  @override
+  String get errorMessage;
   @override
   @JsonKey(ignore: true)
   _$$_ObdDetailStateCopyWith<_$_ObdDetailState> get copyWith =>

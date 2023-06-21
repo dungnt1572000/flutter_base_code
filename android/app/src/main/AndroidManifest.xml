@@ -17,7 +17,7 @@
 
     <application
         android:requestLegacyExternalStorage="true"
-        android:label="baseproject"
+        android:label="Safety Drive"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

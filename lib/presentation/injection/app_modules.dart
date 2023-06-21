@@ -10,11 +10,13 @@ import 'package:baseproject/presentation/domain/use_case/get_driving_direction_o
 import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_distance_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/get_show_fuel_consumption_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_rpm_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_show_speed_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_distance_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_duration_use_case.dart';
+import 'package:baseproject/presentation/domain/use_case/save_show_fuel_consumption_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_rpm_use_case.dart';
 import 'package:baseproject/presentation/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
@@ -86,6 +88,12 @@ class AppModules {
     );
     injector.registerLazySingleton<GetShowRpmUseCase>(
       () => GetShowRpmUseCase(),
+    );
+    injector.registerLazySingleton<GetShowFuelConsumptionUseCase>(
+      () => GetShowFuelConsumptionUseCase(),
+    );
+    injector.registerLazySingleton<SaveShowFuelConsumptionUseCase>(
+      () => SaveShowFuelConsumptionUseCase(),
     );
   }
 }

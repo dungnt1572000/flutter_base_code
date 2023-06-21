@@ -4,4 +4,6 @@ class AppImages {
   static const String _path = "assets/images";
 
   static const String notFound = "$_path/404.png";
+
+  static const String appLogo = "$_path/app_logo.jpg";
 }

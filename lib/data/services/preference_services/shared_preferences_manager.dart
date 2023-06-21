@@ -71,4 +71,16 @@ class SharePreferencesManager {
 
   Future<bool> removeIsShowRpm() async =>
       _sharePreferences.remove(PreferenceKeys.isShowRpm.name);
+
+  Future<void> saveIsShowFuelConsumption(
+      {required bool fuelConsumption}) async {
+    _sharePreferences.setBool(
+        PreferenceKeys.isShowFuelConsumption.name, fuelConsumption);
+  }
+
+  bool? getIsShowFuelConsumption() =>
+      _sharePreferences.getBool(PreferenceKeys.isShowFuelConsumption.name);
+
+  Future<bool> removeIsShowFuelConsumption() async =>
+      _sharePreferences.remove(PreferenceKeys.isShowFuelConsumption.name);
 }

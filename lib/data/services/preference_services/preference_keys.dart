@@ -4,4 +4,5 @@ enum PreferenceKeys{
   isShowDistance,
   isShowDuration,
   isShowRpm,
+  isShowFuelConsumption,
 }

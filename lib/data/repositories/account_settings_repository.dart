@@ -43,4 +43,12 @@ class AccountSettingsRepository {
   Future<void> saveIsShowRpm(bool rpm) async {
     await _sharePreferencesManager.saveIsShowRpm(isShowRpm: rpm);
   }
+
+  bool getIsShowFuelConsumption() =>
+      _sharePreferencesManager.getIsShowFuelConsumption() ?? true;
+
+  Future<void> saveIsFuelConsumption(bool fuelConsumption) async {
+    await _sharePreferencesManager.saveIsShowFuelConsumption(
+        fuelConsumption: fuelConsumption);
+  }
 }
