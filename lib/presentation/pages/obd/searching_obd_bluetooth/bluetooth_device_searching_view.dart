@@ -6,10 +6,8 @@ import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/bluet
 import 'package:baseproject/presentation/pages/obd/searching_obd_bluetooth/model/devices_bluetooth.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
-import 'package:baseproject/presentation/widget/app_bar.dart';
 import 'package:baseproject/presentation/widget/app_dialog.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
-import 'package:baseproject/presentation/widget/icon_button.dart';
 import 'package:baseproject/presentation/widget/snack_bar/infor_snack_bar.dart';
 import 'package:baseproject/ultilities/app_constant.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
@@ -42,7 +40,6 @@ class _BluetoothDeviceSearchViewState
 
   BluetoothDeviceSearchViewModel get viewModel => ref.read(_provider.notifier);
 
-  late BluetoothConnection connection;
 
   @override
   void initState() {
@@ -110,7 +107,6 @@ class _BluetoothDeviceSearchViewState
     // TODO: implement dispose
     super.dispose();
     flutterBluetoothSerial.cancelDiscovery();
-    flutterBluetoothSerial.disconnect();
   }
 
   @override
@@ -123,22 +119,20 @@ class _BluetoothDeviceSearchViewState
           color: context.colors.primaryMain,
         ),
         onPressed: () {
-          ref.read(appNavigatorProvider).navigateTo(AppRoutes.obdDetail,
-              arguments: ObdDetailArgument('abc'));
-          // checkBluetooth().then((_) {
-          //   startScan();
-          // });
-          // Future.delayed(const Duration(seconds: 5)).then((_) {
-          //   stopScan();
-          // });
+          checkBluetooth().then((_) {
+            startScan();
+          });
+          Future.delayed(const Duration(seconds: 5)).then((_) {
+            stopScan();
+          });
         },
       ),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56.0),
+        preferredSize: const Size.fromHeight(56.0),
         child: Container(
           decoration: BoxDecoration(
             color: context.colors.action,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(20.0),
               bottomRight: Radius.circular(20.0),
             ),
@@ -147,7 +141,7 @@ class _BluetoothDeviceSearchViewState
                 color: context.colors.primaryMain.withOpacity(0.5),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -189,7 +183,7 @@ class _BluetoothDeviceSearchViewState
           status: state.status,
           child: SingleChildScrollView(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
