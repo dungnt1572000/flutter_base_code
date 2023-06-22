@@ -261,7 +261,7 @@ mixin _$Features {
   String? get type => throw _privateConstructorUsedError;
   @JsonKey(name: 'place_type')
   List<String>? get placeType => throw _privateConstructorUsedError;
-  int? get relevance => throw _privateConstructorUsedError;
+  double? get relevance => throw _privateConstructorUsedError;
   Properties? get properties => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
   @JsonKey(name: 'place_name')
@@ -286,7 +286,7 @@ abstract class $FeaturesCopyWith<$Res> {
       {String? id,
       String? type,
       @JsonKey(name: 'place_type') List<String>? placeType,
-      int? relevance,
+      double? relevance,
       Properties? properties,
       String? text,
       @JsonKey(name: 'place_name') String? placeName,
@@ -340,7 +340,7 @@ class _$FeaturesCopyWithImpl<$Res, $Val extends Features>
       relevance: freezed == relevance
           ? _value.relevance
           : relevance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       properties: freezed == properties
           ? _value.properties
           : properties // ignore: cast_nullable_to_non_nullable
@@ -408,7 +408,7 @@ abstract class _$$_FeaturesCopyWith<$Res> implements $FeaturesCopyWith<$Res> {
       {String? id,
       String? type,
       @JsonKey(name: 'place_type') List<String>? placeType,
-      int? relevance,
+      double? relevance,
       Properties? properties,
       String? text,
       @JsonKey(name: 'place_name') String? placeName,
@@ -462,7 +462,7 @@ class __$$_FeaturesCopyWithImpl<$Res>
       relevance: freezed == relevance
           ? _value.relevance
           : relevance // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       properties: freezed == properties
           ? _value.properties
           : properties // ignore: cast_nullable_to_non_nullable
@@ -534,7 +534,7 @@ class _$_Features implements _Features {
   }
 
   @override
-  final int? relevance;
+  final double? relevance;
   @override
   final Properties? properties;
   @override
@@ -637,7 +637,7 @@ abstract class _Features implements Features {
       {final String? id,
       final String? type,
       @JsonKey(name: 'place_type') final List<String>? placeType,
-      final int? relevance,
+      final double? relevance,
       final Properties? properties,
       final String? text,
       @JsonKey(name: 'place_name') final String? placeName,
@@ -656,7 +656,7 @@ abstract class _Features implements Features {
   @JsonKey(name: 'place_type')
   List<String>? get placeType;
   @override
-  int? get relevance;
+  double? get relevance;
   @override
   Properties? get properties;
   @override

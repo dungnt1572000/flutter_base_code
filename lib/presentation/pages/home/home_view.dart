@@ -11,7 +11,9 @@ import 'package:baseproject/presentation/pages/home/home_state.dart';
 import 'package:baseproject/presentation/pages/home/home_view_model.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
+import 'package:baseproject/presentation/widget/app_button.dart';
 import 'package:baseproject/presentation/widget/app_dialog.dart';
+import 'package:baseproject/presentation/widget/app_indicator/app_lading_indicator.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
 import 'package:baseproject/presentation/widget/icon_button.dart';
 import 'package:baseproject/presentation/widget/snack_bar/error_snack_bar.dart';
@@ -120,7 +122,10 @@ class _HomePageState extends ConsumerState<HomePage> {
           );
           mapController.move(LatLng(state.latLng, state.longLng), 15);
         },
-        child: Icon(Icons.location_searching,color: context.colors.primaryMain,),
+        child: Icon(
+          Icons.location_searching,
+          color: context.colors.primaryMain,
+        ),
       ),
       body: SafeArea(
         child: Stack(
@@ -138,7 +143,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildFindButton(context),
-                    _buildSaveDriving(context),
+                    // _buildSaveDriving(context),
                     _buildOBDScreen(context),
                     _buildInstruction(context),
                     AppIconButton(
@@ -174,7 +179,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildInstruction(BuildContext context){
+  Widget _buildInstruction(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
         showInstructionDialog(context, AppConstant.homeInstruction);
@@ -192,6 +197,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
     );
   }
+
   Widget _buildMap() {
     return FlutterMap(
       mapController: mapController,
@@ -266,8 +272,12 @@ class _HomePageState extends ConsumerState<HomePage> {
               decoration: InputDecoration(
                 labelText: 'Start Location',
                 hintText: 'Enter start location',
-                labelStyle: AppTextStyles.labelLarge.copyWith(color: context.colors.primaryMain),
-                prefixIcon: Icon(Icons.location_on,color: context.colors.primaryMain,),
+                labelStyle: AppTextStyles.labelLarge
+                    .copyWith(color: context.colors.primaryMain),
+                prefixIcon: Icon(
+                  Icons.location_on,
+                  color: context.colors.primaryMain,
+                ),
                 suffixIcon: IconButton(
                   onPressed: () async {
                     await _viewModel
@@ -300,8 +310,12 @@ class _HomePageState extends ConsumerState<HomePage> {
               decoration: InputDecoration(
                 labelText: 'Last Location',
                 hintText: 'Enter last location',
-                labelStyle: AppTextStyles.labelLarge.copyWith(color: context.colors.primaryMain),
-                prefixIcon: Icon(Icons.location_on,color: context.colors.primaryMain,),
+                labelStyle: AppTextStyles.labelLarge
+                    .copyWith(color: context.colors.primaryMain),
+                prefixIcon: Icon(
+                  Icons.location_on,
+                  color: context.colors.primaryMain,
+                ),
                 suffixIcon: IconButton(
                   onPressed: () async {
                     await _viewModel
@@ -327,55 +341,54 @@ class _HomePageState extends ConsumerState<HomePage> {
                 fillColor: Colors.grey[200],
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                _viewModel.isDisplaySearchingBar(false);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: context.colors.surface,
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(color: context.colors.primaryMain),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _viewModel.isDisplaySearchingBar(false);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: context.colors.surface,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: context.colors.primaryMain),
+                    ),
+                  ),
+                  child: Text(
+                    'Close',
+                    style: AppTextStyles.labelMedium
+                        .copyWith(color: context.colors.primaryText),
+                  ),
                 ),
-              ),
-              child: Text(
-                'Close',
-                style: AppTextStyles.labelMedium
-                    .copyWith(color: context.colors.primaryText),
-              ),
+                if (state.status == LoadingStatus.inProgress)
+                  const AppLoadingIndicator()
+              ],
             ),
-            AppLoadingOverlay(
-              status: state.status,
-              child: state.listSearchingPlace.isEmpty
-                  ? const SizedBox()
-                  : Container(
-                height: 250,
+            state.listSearchingPlace.isEmpty
+                ? const SizedBox()
+                : SizedBox(
+                    height: 250,
                     child: ListView.builder(
-                        itemCount: state.listSearchingPlace.length,
-                        itemBuilder: (context, index) {
-                          final searchPbj = state.listSearchingPlace[index];
-                          return ListTile(
-                            onTap: () {
-                              _viewModel.isDisplaySearchingBar(false);
-                              mapController.move(
-                                  LatLng(searchPbj.center![1],
-                                      searchPbj.center![0]),
-                                  18);
-                              _viewModel.addMarker(
+                      itemCount: state.listSearchingPlace.length,
+                      itemBuilder: (context, index) {
+                        final searchPbj = state.listSearchingPlace[index];
+                        return ListTile(
+                          onTap: () {
+                            _viewModel.isDisplaySearchingBar(false);
+                            mapController.move(
                                 LatLng(
                                     searchPbj.center![1], searchPbj.center![0]),
-                              );
-                              ref.read(destinationProvider.notifier).update(
-                                    (state) => LatLng(searchPbj.center![1],
-                                        searchPbj.center![0]),
-                                  );
-                            },
-                            title:
-                                Text('${state.listSearchingPlace[index].text}',style: AppTextStyles.labelSmall.copyWith(color: context.colors.textPrimary),),
-                          );
-                        },
-                      ),
+                                18);
+                          },
+                          title: Text(
+                            '${state.listSearchingPlace[index].placeName}',
+                            style: AppTextStyles.labelSmall
+                                .copyWith(color: context.colors.textPrimary),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-            ),
           ],
         ),
       ),
@@ -416,17 +429,16 @@ class _HomePageState extends ConsumerState<HomePage> {
               AppLoadingOverlay(
                 status: state.status,
                 child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     width: double.infinity,
-                    padding:  const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
-                    decoration:  BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: context.colors.primaryMain,
-                        width: 1
-                      )
-                    ),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: context.colors.primaryMain, width: 1)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -476,12 +488,14 @@ class _HomePageState extends ConsumerState<HomePage> {
               color: state.routeMethod == RouteMethod.driving
                   ? context.colors.primaryMain.withOpacity(0.6)
                   : Colors.white,
-              border: Border.all(color: context.colors.primaryMain,width: 1),
+              border: Border.all(color: context.colors.primaryMain, width: 1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               Icons.drive_eta,
-              color: state.routeMethod == RouteMethod.driving? Colors.white:Colors.orange,
+              color: state.routeMethod == RouteMethod.driving
+                  ? Colors.white
+                  : Colors.orange,
             ),
           ),
         ),
@@ -509,7 +523,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             child: Icon(
               Icons.nordic_walking,
-              color: state.routeMethod == RouteMethod.walking? Colors.white:Colors.orange,
+              color: state.routeMethod == RouteMethod.walking
+                  ? Colors.white
+                  : Colors.orange,
             ),
           ),
         ),

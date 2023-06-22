@@ -158,7 +158,7 @@ class _BluetoothDeviceSearchViewState
               },
             ),
             title: Text(
-              'My App',
+              'Bluetooth Searching',
               style: AppTextStyles.labelLarge
                   .copyWith(color: context.colors.primaryMain),
             ),

@@ -128,9 +128,10 @@ class HomeViewModel extends StateNotifier<HomeState> {
           );
         }
         return true;
-      } on Exception catch (error) {
+      } on Exception {
         state = state.copyWith(
-            errorMsg: error.toString(), status: LoadingStatus.error);
+            errorMsg: "Can not find a way you want",
+            status: LoadingStatus.error);
       }
     } else {
       state = state.copyWith(

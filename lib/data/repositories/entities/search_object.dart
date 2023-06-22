@@ -21,7 +21,7 @@ class Features with _$Features {
     String? id,
     String? type,
     @JsonKey(name: 'place_type') List<String>? placeType,
-    int? relevance,
+    double? relevance,
     Properties? properties,
     String? text,
     @JsonKey(name: 'place_name') String? placeName,

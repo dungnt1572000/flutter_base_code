@@ -31,7 +31,7 @@ _$_Features _$$_FeaturesFromJson(Map<String, dynamic> json) => _$_Features(
       placeType: (json['place_type'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      relevance: json['relevance'] as int?,
+      relevance: (json['relevance'] as num?)?.toDouble(),
       properties: json['properties'] == null
           ? null
           : Properties.fromJson(json['properties'] as Map<String, dynamic>),
