@@ -9,8 +9,10 @@ class ObdDetailState with _$ObdDetailState{
   factory ObdDetailState({
     @Default(0) double speed,
     @Default(0) double rpm,
-    @Default(AppConstant.latitude) double latitude,
-    @Default(AppConstant.longitude) double longitude,
+    @Default(AppConstant.latitude) double currentLatitude,
+    @Default(AppConstant.longitude) double currentLongitude,
+    @Default(AppConstant.latitude) double simulatorLatitude,
+    @Default(AppConstant.longitude) double simulatorLongitude,
     @Default('') String telephone,
     @Default(true) bool isSafety,
     @Default(0.0) double distance,

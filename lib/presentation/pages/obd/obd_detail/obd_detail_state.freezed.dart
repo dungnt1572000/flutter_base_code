@@ -18,8 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ObdDetailState {
   double get speed => throw _privateConstructorUsedError;
   double get rpm => throw _privateConstructorUsedError;
-  double get latitude => throw _privateConstructorUsedError;
-  double get longitude => throw _privateConstructorUsedError;
+  double get currentLatitude => throw _privateConstructorUsedError;
+  double get currentLongitude => throw _privateConstructorUsedError;
+  double get simulatorLatitude => throw _privateConstructorUsedError;
+  double get simulatorLongitude => throw _privateConstructorUsedError;
   String get telephone => throw _privateConstructorUsedError;
   bool get isSafety => throw _privateConstructorUsedError;
   double get distance => throw _privateConstructorUsedError;
@@ -49,8 +51,10 @@ abstract class $ObdDetailStateCopyWith<$Res> {
   $Res call(
       {double speed,
       double rpm,
-      double latitude,
-      double longitude,
+      double currentLatitude,
+      double currentLongitude,
+      double simulatorLatitude,
+      double simulatorLongitude,
       String telephone,
       bool isSafety,
       double distance,
@@ -82,8 +86,10 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
   $Res call({
     Object? speed = null,
     Object? rpm = null,
-    Object? latitude = null,
-    Object? longitude = null,
+    Object? currentLatitude = null,
+    Object? currentLongitude = null,
+    Object? simulatorLatitude = null,
+    Object? simulatorLongitude = null,
     Object? telephone = null,
     Object? isSafety = null,
     Object? distance = null,
@@ -108,13 +114,21 @@ class _$ObdDetailStateCopyWithImpl<$Res, $Val extends ObdDetailState>
           ? _value.rpm
           : rpm // ignore: cast_nullable_to_non_nullable
               as double,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
+      currentLatitude: null == currentLatitude
+          ? _value.currentLatitude
+          : currentLatitude // ignore: cast_nullable_to_non_nullable
               as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
+      currentLongitude: null == currentLongitude
+          ? _value.currentLongitude
+          : currentLongitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      simulatorLatitude: null == simulatorLatitude
+          ? _value.simulatorLatitude
+          : simulatorLatitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      simulatorLongitude: null == simulatorLongitude
+          ? _value.simulatorLongitude
+          : simulatorLongitude // ignore: cast_nullable_to_non_nullable
               as double,
       telephone: null == telephone
           ? _value.telephone
@@ -187,8 +201,10 @@ abstract class _$$_ObdDetailStateCopyWith<$Res>
   $Res call(
       {double speed,
       double rpm,
-      double latitude,
-      double longitude,
+      double currentLatitude,
+      double currentLongitude,
+      double simulatorLatitude,
+      double simulatorLongitude,
       String telephone,
       bool isSafety,
       double distance,
@@ -218,8 +234,10 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
   $Res call({
     Object? speed = null,
     Object? rpm = null,
-    Object? latitude = null,
-    Object? longitude = null,
+    Object? currentLatitude = null,
+    Object? currentLongitude = null,
+    Object? simulatorLatitude = null,
+    Object? simulatorLongitude = null,
     Object? telephone = null,
     Object? isSafety = null,
     Object? distance = null,
@@ -244,13 +262,21 @@ class __$$_ObdDetailStateCopyWithImpl<$Res>
           ? _value.rpm
           : rpm // ignore: cast_nullable_to_non_nullable
               as double,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
+      currentLatitude: null == currentLatitude
+          ? _value.currentLatitude
+          : currentLatitude // ignore: cast_nullable_to_non_nullable
               as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
+      currentLongitude: null == currentLongitude
+          ? _value.currentLongitude
+          : currentLongitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      simulatorLatitude: null == simulatorLatitude
+          ? _value.simulatorLatitude
+          : simulatorLatitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      simulatorLongitude: null == simulatorLongitude
+          ? _value.simulatorLongitude
+          : simulatorLongitude // ignore: cast_nullable_to_non_nullable
               as double,
       telephone: null == telephone
           ? _value.telephone
@@ -318,8 +344,10 @@ class _$_ObdDetailState implements _ObdDetailState {
   _$_ObdDetailState(
       {this.speed = 0,
       this.rpm = 0,
-      this.latitude = AppConstant.latitude,
-      this.longitude = AppConstant.longitude,
+      this.currentLatitude = AppConstant.latitude,
+      this.currentLongitude = AppConstant.longitude,
+      this.simulatorLatitude = AppConstant.latitude,
+      this.simulatorLongitude = AppConstant.longitude,
       this.telephone = '',
       this.isSafety = true,
       this.distance = 0.0,
@@ -344,10 +372,16 @@ class _$_ObdDetailState implements _ObdDetailState {
   final double rpm;
   @override
   @JsonKey()
-  final double latitude;
+  final double currentLatitude;
   @override
   @JsonKey()
-  final double longitude;
+  final double currentLongitude;
+  @override
+  @JsonKey()
+  final double simulatorLatitude;
+  @override
+  @JsonKey()
+  final double simulatorLongitude;
   @override
   @JsonKey()
   final String telephone;
@@ -399,7 +433,7 @@ class _$_ObdDetailState implements _ObdDetailState {
 
   @override
   String toString() {
-    return 'ObdDetailState(speed: $speed, rpm: $rpm, latitude: $latitude, longitude: $longitude, telephone: $telephone, isSafety: $isSafety, distance: $distance, time: $time, fuelConsumption: $fuelConsumption, listForPolyLine: $listForPolyLine, showOptions: $showOptions, showSpeed: $showSpeed, showTime: $showTime, showDistance: $showDistance, showRpm: $showRpm, showFuelConsumption: $showFuelConsumption, following: $following, errorMessage: $errorMessage)';
+    return 'ObdDetailState(speed: $speed, rpm: $rpm, currentLatitude: $currentLatitude, currentLongitude: $currentLongitude, simulatorLatitude: $simulatorLatitude, simulatorLongitude: $simulatorLongitude, telephone: $telephone, isSafety: $isSafety, distance: $distance, time: $time, fuelConsumption: $fuelConsumption, listForPolyLine: $listForPolyLine, showOptions: $showOptions, showSpeed: $showSpeed, showTime: $showTime, showDistance: $showDistance, showRpm: $showRpm, showFuelConsumption: $showFuelConsumption, following: $following, errorMessage: $errorMessage)';
   }
 
   @override
@@ -409,10 +443,14 @@ class _$_ObdDetailState implements _ObdDetailState {
             other is _$_ObdDetailState &&
             (identical(other.speed, speed) || other.speed == speed) &&
             (identical(other.rpm, rpm) || other.rpm == rpm) &&
-            (identical(other.latitude, latitude) ||
-                other.latitude == latitude) &&
-            (identical(other.longitude, longitude) ||
-                other.longitude == longitude) &&
+            (identical(other.currentLatitude, currentLatitude) ||
+                other.currentLatitude == currentLatitude) &&
+            (identical(other.currentLongitude, currentLongitude) ||
+                other.currentLongitude == currentLongitude) &&
+            (identical(other.simulatorLatitude, simulatorLatitude) ||
+                other.simulatorLatitude == simulatorLatitude) &&
+            (identical(other.simulatorLongitude, simulatorLongitude) ||
+                other.simulatorLongitude == simulatorLongitude) &&
             (identical(other.telephone, telephone) ||
                 other.telephone == telephone) &&
             (identical(other.isSafety, isSafety) ||
@@ -442,26 +480,29 @@ class _$_ObdDetailState implements _ObdDetailState {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      speed,
-      rpm,
-      latitude,
-      longitude,
-      telephone,
-      isSafety,
-      distance,
-      time,
-      fuelConsumption,
-      const DeepCollectionEquality().hash(_listForPolyLine),
-      showOptions,
-      showSpeed,
-      showTime,
-      showDistance,
-      showRpm,
-      showFuelConsumption,
-      following,
-      errorMessage);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        speed,
+        rpm,
+        currentLatitude,
+        currentLongitude,
+        simulatorLatitude,
+        simulatorLongitude,
+        telephone,
+        isSafety,
+        distance,
+        time,
+        fuelConsumption,
+        const DeepCollectionEquality().hash(_listForPolyLine),
+        showOptions,
+        showSpeed,
+        showTime,
+        showDistance,
+        showRpm,
+        showFuelConsumption,
+        following,
+        errorMessage
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -474,8 +515,10 @@ abstract class _ObdDetailState implements ObdDetailState {
   factory _ObdDetailState(
       {final double speed,
       final double rpm,
-      final double latitude,
-      final double longitude,
+      final double currentLatitude,
+      final double currentLongitude,
+      final double simulatorLatitude,
+      final double simulatorLongitude,
       final String telephone,
       final bool isSafety,
       final double distance,
@@ -496,9 +539,13 @@ abstract class _ObdDetailState implements ObdDetailState {
   @override
   double get rpm;
   @override
-  double get latitude;
+  double get currentLatitude;
   @override
-  double get longitude;
+  double get currentLongitude;
+  @override
+  double get simulatorLatitude;
+  @override
+  double get simulatorLongitude;
   @override
   String get telephone;
   @override

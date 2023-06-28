@@ -46,7 +46,7 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
   SaveShowFuelConsumptionUseCase saveShowFuelConsumptionUseCase;
 
   void updateSpeed(double speed) {
-    if (speed >= 35) {
+    if (speed >= 3500000000) {
       state = state.copyWith(speed: speed, isSafety: false);
     } else {
       state = state.copyWith(speed: speed, isSafety: true);
@@ -68,28 +68,54 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
   }
 
   void updateCurrentLocation(LatLng latLng) {
-    state =
-        state.copyWith(latitude: latLng.latitude, longitude: latLng.longitude);
+    state = state.copyWith(
+        currentLatitude: latLng.latitude, currentLongitude: latLng.longitude);
   }
 
-  Future<bool> getRoutes(LatLng destination) async {
+  void updateLastLocation(LatLng latLng) {
+    state = state.copyWith(
+      simulatorLatitude: latLng.latitude,
+      simulatorLongitude: latLng.longitude,
+    );
+  }
+
+  Future<bool> getRoutes(LatLng destination, [LatLng? startDestination]) async {
     try {
-      final result = await getDrivingDirectionObjectUseCase.run(
-        DirectionObjectInput(
-          '${state.longitude},${state.latitude};${destination.longitude},${destination.latitude}',
-          ApiConstant.accessToken,
-          'maxspeed',
-          'geojson',
-          'full',
-        ),
-      );
-      state = state.copyWith(
-          distance: result.routes?[0].distance ?? state.distance,
-          time: result.routes?[0].duration ?? state.time,
-          listForPolyLine: result.routes?[0].geometry?.coordinates!
-                  .map((e) => LatLng(e[1], e[0]))
-                  .toList() ??
-              []);
+      if (startDestination == null) {
+        final result = await getDrivingDirectionObjectUseCase.run(
+          DirectionObjectInput(
+            '${state.currentLongitude},${state.currentLatitude};${destination.longitude},${destination.latitude}',
+            ApiConstant.accessToken,
+            'maxspeed',
+            'geojson',
+            'full',
+          ),
+        );
+        state = state.copyWith(
+            distance: result.routes?[0].distance ?? state.distance,
+            time: result.routes?[0].duration ?? state.time,
+            listForPolyLine: result.routes?[0].geometry?.coordinates!
+                    .map((e) => LatLng(e[1], e[0]))
+                    .toList() ??
+                []);
+      } else {
+        final result = await getDrivingDirectionObjectUseCase.run(
+          DirectionObjectInput(
+            '${startDestination.longitude},${startDestination.latitude};${destination.longitude},${destination.latitude}',
+            ApiConstant.accessToken,
+            'maxspeed',
+            'geojson',
+            'full',
+          ),
+        );
+        state = state.copyWith(
+            distance: result.routes?[0].distance ?? state.distance,
+            time: result.routes?[0].duration ?? state.time,
+            listForPolyLine: result.routes?[0].geometry?.coordinates!
+                    .map((e) => LatLng(e[1], e[0]))
+                    .toList() ??
+                []);
+      }
       return true;
     } catch (e) {
       return false;

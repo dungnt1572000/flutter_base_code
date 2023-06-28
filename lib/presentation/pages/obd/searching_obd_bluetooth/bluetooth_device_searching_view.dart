@@ -40,7 +40,6 @@ class _BluetoothDeviceSearchViewState
 
   BluetoothDeviceSearchViewModel get viewModel => ref.read(_provider.notifier);
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -98,7 +97,8 @@ class _BluetoothDeviceSearchViewState
   // Stop scanning for Bluetooth devices
   void stopScan() {
     flutterBluetoothSerial.cancelDiscovery();
-    viewModel.initData(_devicesBluetoothList);
+    viewModel.initData(
+        [..._devicesBluetoothList, CustomDevicesBluetooth("abc", "abcxyz")]);
     viewModel.ending();
   }
 
@@ -201,10 +201,45 @@ class _BluetoothDeviceSearchViewState
                                 .map(
                                   (e) => TextButton(
                                     onPressed: () async {
-                                      ref.read(appNavigatorProvider).navigateTo(
-                                          AppRoutes.obdDetail,
-                                          arguments:
-                                              ObdDetailArgument(e.address));
+                                      await showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: const Text(
+                                                'Continue with Simulator Mode'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    ref
+                                                        .read(
+                                                            appNavigatorProvider)
+                                                        .navigateTo(
+                                                            AppRoutes.obdDetail,
+                                                            arguments:
+                                                                ObdDetailArgument(
+                                                                    e.address,
+                                                                    true,));
+                                                  },
+                                                  child: const Text("OK")),
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    ref
+                                                        .read(
+                                                            appNavigatorProvider)
+                                                        .navigateTo(
+                                                            AppRoutes.obdDetail,
+                                                            arguments:
+                                                                ObdDetailArgument(
+                                                                    e.address,
+                                                                    false));
+                                                  },
+                                                  child: const Text("NO"))
+                                            ],
+                                          );
+                                        },
+                                      );
                                     },
                                     child: Text(
                                       '${e.name} ${e.address}',
