@@ -98,7 +98,7 @@ class _BluetoothDeviceSearchViewState
   void stopScan() {
     flutterBluetoothSerial.cancelDiscovery();
     viewModel.initData(
-        [..._devicesBluetoothList, CustomDevicesBluetooth("abc", "abcxyz")]);
+        [..._devicesBluetoothList]);
     viewModel.ending();
   }
 
