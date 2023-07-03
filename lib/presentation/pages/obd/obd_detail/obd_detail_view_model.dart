@@ -72,13 +72,6 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
         currentLatitude: latLng.latitude, currentLongitude: latLng.longitude);
   }
 
-  void updateLastLocation(LatLng latLng) {
-    state = state.copyWith(
-      simulatorLatitude: latLng.latitude,
-      simulatorLongitude: latLng.longitude,
-    );
-  }
-
   Future<bool> getRoutes(LatLng destination, [LatLng? startDestination]) async {
     try {
       if (startDestination == null) {

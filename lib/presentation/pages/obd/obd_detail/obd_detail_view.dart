@@ -97,7 +97,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
   Location? location;
   late LocationData locationData;
 
-  LatLng get destination => ref.watch(destinationProvider);
+  LatLng? get destination => ref.watch(destinationProvider);
 
   @override
   void initState() {
@@ -125,7 +125,9 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
             );
             mapController.move(
                 LatLng(state.currentLatitude, state.currentLongitude), 18);
-            viewModel.getRoutes(destination);
+            if (destination != null) {
+              viewModel.getRoutes(destination!);
+            }
           } catch (e) {
             if (mounted) {
               showErrorSnackBar(
@@ -146,7 +148,9 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 mapController.move(
                     LatLng(state.currentLatitude, state.currentLongitude), 18);
               }
-              viewModel.getRoutes(destination);
+              if (destination != null) {
+                viewModel.getRoutes(destination!);
+              }
             } catch (e) {
               rethrow;
             }
@@ -250,7 +254,9 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                       .allMatches(speedL[0])
                       .map((match) => double.parse(match.group(0)!))
                       .toList();
-                  viewModel.updateLastLocation(LatLng(numbers[0], numbers[1]));
+                  ref
+                      .read(destinationProvider.notifier)
+                      .update((state) => LatLng(numbers[0], numbers[1]));
                   viewModel.getRoutes(LatLng(numbers[0], numbers[1]),
                       LatLng(state.currentLatitude, state.currentLongitude));
                 }
@@ -338,14 +344,15 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                               Icons.location_searching,
                               size: 32,
                             )),
-                    Marker(
-                      height: 50,
-                      point: ref.watch(destinationProvider),
-                      builder: (context) => const Icon(
-                        Icons.location_on_rounded,
-                        size: 32,
-                      ),
-                    )
+                    if (ref.watch(destinationProvider) != null)
+                      Marker(
+                        height: 50,
+                        point: ref.watch(destinationProvider)!,
+                        builder: (context) => const Icon(
+                          Icons.location_on_rounded,
+                          size: 32,
+                        ),
+                      )
                   ],
                 ),
                 PolylineLayer(
