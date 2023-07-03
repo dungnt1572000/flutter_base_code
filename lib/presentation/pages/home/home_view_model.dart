@@ -119,7 +119,6 @@ class HomeViewModel extends StateNotifier<HomeState> {
           final listLatLng = directionObj.routes![0].geometry?.coordinates!
               .map((e) => LatLng(e[1], e[0]))
               .toList();
-          print("Day la lenght ${listLatLng?.length}");
           state = state.copyWith(
             status: LoadingStatus.success,
             distance: directionObj.routes?[0].distance ?? 0.0,
