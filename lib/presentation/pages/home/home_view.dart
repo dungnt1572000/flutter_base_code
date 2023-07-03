@@ -246,8 +246,9 @@ class _HomePageState extends ConsumerState<HomePage> {
           polylines: [
             Polyline(
                 points: state.listForPolyLine,
-                color: Colors.red,
-                borderStrokeWidth: 2.5),
+                // color: Colors.red,
+                borderColor: Colors.blue,
+                borderStrokeWidth: 5),
           ],
         )
       ],

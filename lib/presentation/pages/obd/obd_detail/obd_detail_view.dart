@@ -359,7 +359,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                   polylines: [
                     Polyline(
                         points: state.listForPolyLine,
-                        color: Colors.red,
+                        borderColor: Colors.blue,
                         borderStrokeWidth: 2.5),
                   ],
                 )
