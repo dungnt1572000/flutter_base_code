@@ -46,7 +46,7 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
   SaveShowFuelConsumptionUseCase saveShowFuelConsumptionUseCase;
 
   void updateSpeed(double speed) {
-    if (speed >= 3500000000) {
+    if (speed >= 350) {
       state = state.copyWith(speed: speed, isSafety: false);
     } else {
       state = state.copyWith(speed: speed, isSafety: true);
@@ -59,8 +59,12 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
     );
   }
 
-  void updateRmp(double rmp) {
-    state = state.copyWith(rpm: rmp);
+  void updateRmp(double rpm) {
+    if (rpm >= 3000) {
+      state = state.copyWith(rpm: rpm, isSafety: false);
+    } else {
+      state = state.copyWith(rpm: rpm, isSafety: true);
+    }
   }
 
   void updateFuelConsumption(double consumption) {
