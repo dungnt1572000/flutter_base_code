@@ -10,6 +10,7 @@ import 'package:baseproject/presentation/navigation/app_routes.dart';
 import 'package:baseproject/presentation/pages/home/home_state.dart';
 import 'package:baseproject/presentation/pages/home/home_view_model.dart';
 import 'package:baseproject/presentation/resources/app_colors.dart';
+import 'package:baseproject/presentation/resources/app_images.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_dialog.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_lading_indicator.dart';
@@ -224,10 +225,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         MarkerLayer(markers: [
           Marker(
               point: LatLng(state.latLng, state.longLng),
-              builder: (context) => const Icon(
-                    Icons.location_searching,
-                    size: 32,
-                  )),
+              builder: (context) => Image.asset(AppImages.carLocationIcon)),
           ...state.markers
               .map(
                 (e) => Marker(

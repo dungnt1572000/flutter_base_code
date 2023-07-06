@@ -35,6 +35,7 @@ import 'package:telephony/telephony.dart';
 import '../../../../ultilities/app_constant.dart';
 import '../../../../ultilities/flutter_tts.dart';
 import '../../../domain/use_case/get_driving_direction_object_use_case.dart';
+import '../../../resources/app_images.dart';
 
 final _provider =
     StateNotifierProvider.autoDispose<ObdDetailViewModel, ObdDetailState>(
@@ -340,10 +341,8 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     Marker(
                         point: LatLng(
                             state.currentLatitude, state.currentLongitude),
-                        builder: (context) => const Icon(
-                              Icons.location_searching,
-                              size: 32,
-                            )),
+                        builder: (context) =>
+                            Image.asset(AppImages.carLocationIcon)),
                     if (ref.watch(destinationProvider) != null)
                       Marker(
                         height: 50,
