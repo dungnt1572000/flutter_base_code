@@ -1,6 +1,6 @@
+import 'package:baseproject/data/domain/use_case/use_case.dart';
 import 'package:baseproject/data/repositories/entities/search_object.dart';
 import 'package:baseproject/data/repositories/user_map_repository.dart';
-import 'package:baseproject/presentation/domain/use_case/use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 
 class GetSearchingObjectUseCase
