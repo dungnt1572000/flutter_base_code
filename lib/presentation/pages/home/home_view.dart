@@ -1,9 +1,6 @@
 import 'dart:async';
 
 import 'package:baseproject/data/providers/destination_provider.dart';
-import 'package:baseproject/presentation/domain/use_case/get_driving_direction_object_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:baseproject/presentation/navigation/app_navigator_provider.dart';
 import 'package:baseproject/presentation/navigation/app_routes.dart';
@@ -25,6 +22,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+
+import '../../../data/domain/use_case/get_driving_direction_object_use_case.dart';
+import '../../../data/domain/use_case/get_searching_object_use_case.dart';
+import '../../../data/domain/use_case/get_walking_direction_object_use_case.dart';
 
 final provider = StateNotifierProvider.autoDispose<HomeViewModel, HomeState>(
   (ref) => HomeViewModel(

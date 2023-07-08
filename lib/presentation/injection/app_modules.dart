@@ -1,3 +1,6 @@
+import 'package:baseproject/data/domain/use_case/get_show_speed_use_case.dart';
+import 'package:baseproject/data/domain/use_case/get_walking_direction_object_use_case.dart';
+import 'package:baseproject/data/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/data/repositories/account_settings_repository.dart';
 import 'package:baseproject/data/repositories/user_map_repository.dart';
 import 'package:baseproject/data/services/network_service/api_client.dart';
@@ -5,23 +8,21 @@ import 'package:baseproject/data/services/network_service/dio_helper.dart';
 import 'package:baseproject/data/services/network_service/network_action_manager.dart';
 import 'package:baseproject/data/services/network_service/not_found_404_interceptor.dart';
 import 'package:baseproject/data/services/preference_services/shared_preferences_manager.dart';
-import 'package:baseproject/presentation/domain/use_case/get_app_theme_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_driving_direction_object_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_searching_object_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_distance_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_duration_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_fuel_consumption_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_rpm_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_speed_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_walking_direction_object_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_distance_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_duration_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_fuel_consumption_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_rpm_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../data/domain/use_case/get_app_theme_use_case.dart';
+import '../../data/domain/use_case/get_driving_direction_object_use_case.dart';
+import '../../data/domain/use_case/get_searching_object_use_case.dart';
+import '../../data/domain/use_case/get_show_distance_use_case.dart';
+import '../../data/domain/use_case/get_show_duration_use_case.dart';
+import '../../data/domain/use_case/get_show_fuel_consumption_use_case.dart';
+import '../../data/domain/use_case/get_show_rpm_use_case.dart';
+import '../../data/domain/use_case/save_show_distance_use_case.dart';
+import '../../data/domain/use_case/save_show_duration_use_case.dart';
+import '../../data/domain/use_case/save_show_fuel_consumption_use_case.dart';
+import '../../data/domain/use_case/save_show_rpm_use_case.dart';
 
 class AppModules {
   static Future<void> inject() async {

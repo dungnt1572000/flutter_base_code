@@ -4,16 +4,6 @@ import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:baseproject/data/providers/destination_provider.dart';
 import 'package:baseproject/data/providers/flutter_serial_blue_provider.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_distance_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_duration_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_fuel_consumption_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_rpm_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/get_show_speed_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_distance_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_duration_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_fuel_consumption_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_rpm_use_case.dart';
-import 'package:baseproject/presentation/domain/use_case/save_show_speed_use_case.dart';
 import 'package:baseproject/presentation/injection/injector.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_state.dart';
 import 'package:baseproject/presentation/pages/obd/obd_detail/obd_detail_view_model.dart';
@@ -32,9 +22,19 @@ import 'package:location/location.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:telephony/telephony.dart';
 
+import '../../../../data/domain/use_case/get_driving_direction_object_use_case.dart';
+import '../../../../data/domain/use_case/get_show_distance_use_case.dart';
+import '../../../../data/domain/use_case/get_show_duration_use_case.dart';
+import '../../../../data/domain/use_case/get_show_fuel_consumption_use_case.dart';
+import '../../../../data/domain/use_case/get_show_rpm_use_case.dart';
+import '../../../../data/domain/use_case/get_show_speed_use_case.dart';
+import '../../../../data/domain/use_case/save_show_distance_use_case.dart';
+import '../../../../data/domain/use_case/save_show_duration_use_case.dart';
+import '../../../../data/domain/use_case/save_show_fuel_consumption_use_case.dart';
+import '../../../../data/domain/use_case/save_show_rpm_use_case.dart';
+import '../../../../data/domain/use_case/save_show_speed_use_case.dart';
 import '../../../../ultilities/app_constant.dart';
 import '../../../../ultilities/flutter_tts.dart';
-import '../../../domain/use_case/get_driving_direction_object_use_case.dart';
 import '../../../resources/app_images.dart';
 
 final _provider =
