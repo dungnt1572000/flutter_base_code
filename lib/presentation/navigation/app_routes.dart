@@ -5,10 +5,6 @@ class AppRoutes {
 
   static const String notFound404Error = '/notFound404Error';
 
-  static const String saveDriving = '/saveDriving';
-
-  static const String analyzedTextScreen = '/analyzedTextScreen';
-
   static const String bluetoothScreen = '/bluetoothScreen';
 
   static const String obdDetail = '/obdDetail';

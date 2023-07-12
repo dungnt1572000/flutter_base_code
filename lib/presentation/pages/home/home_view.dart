@@ -532,30 +532,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildSaveDriving(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
-        bool result = await ref
-            .read(appNavigatorProvider)
-            .navigateTo(AppRoutes.saveDriving);
-        if (result) {
-          location = Location();
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: context.colors.surface,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: context.colors.primaryMain),
-        ),
-      ),
-      child: Text(
-        'Save Driving',
-        style: AppTextStyles.labelMedium
-            .copyWith(color: context.colors.primaryText),
-      ),
-    );
-  }
-
   Widget _buildOBDScreen(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
