@@ -21,6 +21,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:telephony/telephony.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../../../data/domain/use_case/get_driving_direction_object_use_case.dart';
 import '../../../../data/domain/use_case/get_show_distance_use_case.dart';
@@ -104,6 +105,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
+      Wakelock.enable();
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeRight,
         DeviceOrientation.landscapeLeft,
@@ -299,6 +301,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
     timer?.cancel();
     timerBlink?.cancel();
     timerLocation?.cancel();
+    audioPlayer.dispose();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
@@ -310,18 +313,14 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
         if (audioPlayer.state != PlayerState.playing) {
           audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
         }
-        timerBlink = Timer(const Duration(milliseconds: 1000), () {
-          setState(() {
-            isBlink = !isBlink;
-          });
+        setState(() {
+          isBlink = true;
         });
       }
-      if (state.isSafety && previous?.isSafety != next.isSafety) {
-        audioPlayer.stop();
+      if (state.isSafety && previous!.isSafety != next.isSafety) {
         setState(() {
           isBlink = false;
         });
-        timerBlink?.cancel();
       }
     });
     return Scaffold(

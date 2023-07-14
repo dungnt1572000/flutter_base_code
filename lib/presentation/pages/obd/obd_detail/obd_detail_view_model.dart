@@ -46,7 +46,7 @@ class ObdDetailViewModel extends StateNotifier<ObdDetailState> {
   SaveShowFuelConsumptionUseCase saveShowFuelConsumptionUseCase;
 
   void updateSpeed(double speed) {
-    if (speed >= 350) {
+    if (speed >= 80) {
       state = state.copyWith(speed: speed, isSafety: false);
     } else {
       state = state.copyWith(speed: speed, isSafety: true);

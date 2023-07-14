@@ -55,6 +55,7 @@ dependencies:
   telephony: ^0.2.0
   flutter_tts: ^3.6.3
   speech_to_text: ^6.1.1
+  wakelock: ^0.6.2
 
 dev_dependencies:
   flutter_test:
