@@ -228,9 +228,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     Navigator.pop(context);
                   }
                 } catch (e) {
-                  Navigator.pop(context);
-                  showErrorSnackBar(
-                      context: context, errorMessage: "Lost connect to Device");
+                  rethrow;
                 }
               }
             });
@@ -309,18 +307,18 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
   @override
   Widget build(BuildContext context) {
     ref.listen(_provider, (ObdDetailState? previous, ObdDetailState next) {
-      if (!state.isSafety && previous!.isSafety != next.isSafety) {
-        if (audioPlayer.state != PlayerState.playing) {
-          audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
-        }
+      if((state.rpm >= 3000 || state.speed >=80)){
         setState(() {
           isBlink = true;
         });
-      }
-      if (state.isSafety && previous!.isSafety != next.isSafety) {
+        if (audioPlayer.state != PlayerState.playing) {
+          audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
+        }
+      }else{
         setState(() {
           isBlink = false;
         });
+        audioPlayer.stop();
       }
     });
     return Scaffold(

@@ -269,7 +269,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               controller: _startLocation,
               focusNode: _startNode,
               decoration: InputDecoration(
-                labelText: 'Start Location',
+                labelText: 'Your current Location',
                 hintText: 'Enter start location',
                 labelStyle: AppTextStyles.labelLarge
                     .copyWith(color: context.colors.primaryMain),
