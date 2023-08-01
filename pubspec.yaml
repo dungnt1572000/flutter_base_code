@@ -49,7 +49,10 @@ dependencies:
   location: ^4.4.0
   latlong2: ^0.8.1
   flutter_riverpod: ^2.3.4
-  flutter_bluetooth_serial: ^0.4.0
+  flutter_bluetooth_serial:
+    git:
+      url: https://github.com/dungnt1572000/flutter_bluetooth_serial.git
+      ref: master
   audioplayers: ^4.0.1
 
   telephony: ^0.2.0
