@@ -15,13 +15,16 @@ class AppIconButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.action,
         shape: CircleBorder(
-          side: BorderSide(color: context.colors.primaryBackground),
+          side: BorderSide(color: context.colors.primaryMain),
         ),
       ),
       onPressed: onTap,
-      child: Icon(
-        icon,
-        color: iconColor ?? context.colors.iconPrimary,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          icon,
+          color: iconColor ?? context.colors.primaryMain,
+        ),
       ),
     );
   }

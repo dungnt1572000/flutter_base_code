@@ -32,8 +32,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
               gradient: LinearGradient(colors: [
                 Colors.deepPurple,
                 Colors.deepPurpleAccent,
-                Colors.purpleAccent,
-                Colors.pinkAccent
+                Colors.white
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
             ),
             child: const Center(
