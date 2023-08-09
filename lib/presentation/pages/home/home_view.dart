@@ -188,8 +188,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.surface,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: context.colors.primaryMain),
-        ),
+            side: BorderSide(color: context.colors.primaryMain),
+            borderRadius: BorderRadius.circular(8)),
       ),
       child: Text(
         'Instruction',
@@ -244,7 +244,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           polylines: [
             Polyline(
                 points: state.listForPolyLine,
-                // color: Colors.red,
                 borderColor: Colors.blue,
                 borderStrokeWidth: 5),
           ],
@@ -350,8 +349,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: context.colors.surface,
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(color: context.colors.primaryMain),
-                    ),
+                        side: BorderSide(color: context.colors.primaryMain),
+                        borderRadius: BorderRadius.circular(8.0)),
                   ),
                   child: Text(
                     'Close',
@@ -402,8 +401,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.surface,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: context.colors.primaryMain),
-        ),
+            side: BorderSide(color: context.colors.primaryMain),
+            borderRadius: BorderRadius.circular(8)),
       ),
       child: Text(
         'Find Way',
@@ -517,7 +516,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               color: state.routeMethod == RouteMethod.walking
                   ? context.colors.primaryMain.withOpacity(0.6)
                   : Colors.white,
-              border: Border.all(color: context.colors.border),
+              border: Border.all(color: context.colors.primaryMain, width: 1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -540,8 +539,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       style: ElevatedButton.styleFrom(
         backgroundColor: context.colors.surface,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: context.colors.primaryMain),
-        ),
+            side: BorderSide(color: context.colors.primaryMain),
+            borderRadius: BorderRadius.circular(8)),
       ),
       child: Text(
         'OBD',

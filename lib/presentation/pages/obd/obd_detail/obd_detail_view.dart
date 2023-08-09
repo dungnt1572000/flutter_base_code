@@ -76,6 +76,8 @@ class ObdDetailView extends ConsumerStatefulWidget {
 
 class _ObdDetailView extends ConsumerState<ObdDetailView>
     with SingleTickerProviderStateMixin {
+  double currentLatitude = AppConstant.latitude;
+  double currentLongitude = AppConstant.longitude;
   String mytalk = '';
   String phoneNumber = '';
   BluetoothConnection? connection;
@@ -86,11 +88,17 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
   final speechToText = SpeechToText();
   bool listeningUser = false;
 
+  double speed = 0;
+  double rpm = 0;
+  double fuelConsumption = 0;
+
   bool isBlink = false;
 
   ObdDetailViewModel get viewModel => ref.read(_provider.notifier);
 
   ObdDetailState get state => ref.watch(_provider);
+
+  bool checkLastLocation = false;
 
   final FlutterTextToSpeech flutterTextToSpeech = FlutterTextToSpeech();
 
@@ -144,9 +152,13 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
               Timer.periodic(const Duration(seconds: 4), (timer) async {
             try {
               locationData = await location!.getLocation();
-              viewModel.updateCurrentLocation(LatLng(
-                  locationData.latitude ?? state.currentLatitude,
-                  locationData.longitude ?? state.currentLongitude));
+              setState(() {
+                currentLongitude = locationData.longitude ?? currentLongitude;
+                currentLatitude = locationData.latitude ?? currentLatitude;
+              });
+              // viewModel.updateCurrentLocation(LatLng(
+              //     locationData.latitude ?? state.currentLatitude,
+              //     locationData.longitude ?? state.currentLongitude));
               if (state.following) {
                 mapController.move(
                     LatLng(state.currentLatitude, state.currentLongitude), 18);
@@ -196,7 +208,6 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 await Future.delayed(const Duration(milliseconds: 250));
                 connection?.output
                     .add(Uint8List.fromList(utf8.encode("01A2\r\n")));
-
                 if (widget.obdDetailArgument.simulatorMode) {
                   await Future.delayed(const Duration(milliseconds: 250));
 
@@ -234,46 +245,62 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
             });
             connection?.input?.listen((event) {
               String string = String.fromCharCodes(event);
+              // print("Day la string ${string.replaceAll(RegExp(r'[^0-9,.]'), '')} abcd");
               List<String> speedL = string.split(' ');
-              if (widget.obdDetailArgument.simulatorMode) {
+              if (widget.obdDetailArgument.simulatorMode &&
+                  speedL[0].length > 4) {
                 /// Current Location Response
-                if (speedL[0].contains("LA")) {
-                  List<double> numbers = RegExp(r'\d+\.\d+')
-                      .allMatches(speedL[0])
-                      .map((match) => double.parse(match.group(0)!))
-                      .toList();
-                  viewModel
-                      .updateCurrentLocation(LatLng(numbers[0], numbers[1]));
+                // print("Day la speedL: ${speedL[0].replaceAll(" ", '')} abcd");
+                if (speedL[0].contains(";")) {
+                  var numbers =
+                      speedL[0].replaceAll(RegExp(r'[^0-9;.]'), '').split(";");
+
+                  setState(() {
+                    // print("Toa do moi: $currentLatitude - $currentLongitude");
+                    currentLatitude = double.parse(numbers[0].trim());
+                    currentLongitude = double.parse(numbers[1].trim());
+                  });
+                  // viewModel.updateCurrentLocation(LatLng(latitude, longitude));
                   if (state.following) {
-                    mapController.move(LatLng(numbers[0], numbers[1]), 17);
+                    mapController.move(
+                        LatLng(currentLatitude, currentLongitude), 17);
                   }
                 }
 
                 /// LastLocation Response
-                if (speedL[0].contains("LB")) {
-                  List<double> numbers = RegExp(r'\d+\.\d+')
-                      .allMatches(speedL[0])
-                      .map((match) => double.parse(match.group(0)!))
-                      .toList();
+                if (speedL[0].contains(",") && !checkLastLocation) {
+                  var numbers =
+                      speedL[0].replaceAll(RegExp(r'[^0-9,.]'), '').split(",");
+                  var latitude = double.parse(numbers[0].trim());
+                  var longitude = double.parse(numbers[1].trim());
+
                   ref
                       .read(destinationProvider.notifier)
-                      .update((state) => LatLng(numbers[0], numbers[1]));
-                  viewModel.getRoutes(LatLng(numbers[0], numbers[1]),
-                      LatLng(state.currentLatitude, state.currentLongitude));
+                      .update((state) => LatLng(latitude, longitude));
+                  viewModel.getRoutes(LatLng(latitude, longitude),
+                      LatLng(currentLatitude, currentLongitude));
+                  checkLastLocation = false;
                 }
               }
               if (string.length > 3 && speedL.length > 2) {
                 if (speedL[1] == '0D') {
-                  viewModel
-                      .updateSpeed((int.parse(speedL[2], radix: 16) * 3.6));
+                  speed = (int.parse(speedL[2], radix: 16) * 3.6);
+                  if (speed != state.speed) {
+                    viewModel.updateSpeed(speed);
+                  }
                 } else if (speedL[1] == '0C') {
-                  viewModel.updateRmp(((int.parse(speedL[2], radix: 16) * 256) +
+                  rpm = ((int.parse(speedL[2], radix: 16) * 256) +
                           int.parse(speedL[3], radix: 16)) /
-                      4);
+                      4;
+                  if (rpm != state.rpm) {
+                    viewModel.updateRmp(rpm);
+                  }
                 }
                 if (speedL[1] == 'A2') {
-                  viewModel.updateFuelConsumption(
-                      int.parse(speedL[2], radix: 16) / 10);
+                  fuelConsumption = int.parse(speedL[2], radix: 16) / 10;
+                  if (fuelConsumption != state.fuelConsumption) {
+                    viewModel.updateFuelConsumption(fuelConsumption);
+                  }
                 }
               }
             });
@@ -307,14 +334,14 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
   @override
   Widget build(BuildContext context) {
     ref.listen(_provider, (ObdDetailState? previous, ObdDetailState next) {
-      if((state.rpm >= 3000 || state.speed >=80)){
+      if ((state.rpm >= 3000 || state.speed >= 80)) {
         setState(() {
           isBlink = true;
         });
         if (audioPlayer.state != PlayerState.playing) {
           audioPlayer.play(AssetSource('sound/alert_sound.mp3'));
         }
-      }else{
+      } else {
         setState(() {
           isBlink = false;
         });
@@ -336,8 +363,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 MarkerLayer(
                   markers: [
                     Marker(
-                        point: LatLng(
-                            state.currentLatitude, state.currentLongitude),
+                        point: LatLng(currentLatitude, currentLongitude),
                         builder: (context) =>
                             Image.asset(AppImages.carLocationIcon)),
                     if (ref.watch(destinationProvider) != null)
@@ -486,10 +512,10 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     width: isBlink ? 5 : 2)),
             alignment: Alignment.center,
             child: Stack(fit: StackFit.loose, children: [
-              Positioned(
+              const Positioned(
                 right: 5,
                 child: Row(
-                  children: const [
+                  children: [
                     Icon(Icons.speed),
                     Text(" rpm"),
                   ],
@@ -547,13 +573,15 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 children: [
                   Checkbox(
                     value: state.following,
+                    activeColor: context.colors.primaryMain,
                     onChanged: (value) =>
                         viewModel.updateFollowing(value ?? true),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       "Follow location",
-                      style: AppTextStyles.labelSmall,
+                      style: AppTextStyles.labelSmall
+                          .copyWith(color: context.colors.primaryMain),
                       maxLines: 2,
                     ),
                   )
@@ -562,26 +590,30 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
               Row(children: [
                 Checkbox(
                   value: state.showSpeed,
+                  activeColor: context.colors.primaryMain,
                   onChanged: (value) async =>
                       viewModel.updateOption(showSpeed: value),
                 ),
-                const Expanded(
+                Expanded(
                     child: Text(
                   "Show speed",
-                  style: AppTextStyles.labelSmall,
+                  style: AppTextStyles.labelSmall
+                      .copyWith(color: context.colors.primaryMain),
                   maxLines: 2,
                 )),
               ]),
               Row(children: [
                 Checkbox(
                   value: state.showRpm,
+                  activeColor: context.colors.primaryMain,
                   onChanged: (value) async =>
                       viewModel.updateOption(showRpm: value),
                 ),
-                const Expanded(
+                Expanded(
                     child: Text(
                   "Show rpm",
-                  style: AppTextStyles.labelSmall,
+                  style: AppTextStyles.labelSmall
+                      .copyWith(color: context.colors.primaryMain),
                   maxLines: 2,
                 )),
               ]),
@@ -592,13 +624,15 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 children: [
                   Checkbox(
                     value: state.showDistance,
+                    activeColor: context.colors.primaryMain,
                     onChanged: (value) =>
                         viewModel.updateOption(showDistance: value),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       "Show distance",
-                      style: AppTextStyles.labelSmall,
+                      style: AppTextStyles.labelSmall
+                          .copyWith(color: context.colors.primaryMain),
                       maxLines: 2,
                     ),
                   )
@@ -611,13 +645,15 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 children: [
                   Checkbox(
                     value: state.showTime,
+                    activeColor: context.colors.primaryMain,
                     onChanged: (value) =>
                         viewModel.updateOption(showTime: value),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       "Show Time",
-                      style: AppTextStyles.labelSmall,
+                      style: AppTextStyles.labelSmall
+                          .copyWith(color: context.colors.primaryMain),
                       maxLines: 2,
                     ),
                   )
@@ -630,13 +666,15 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                 children: [
                   Checkbox(
                     value: state.showFuelConsumption,
+                    activeColor: context.colors.primaryMain,
                     onChanged: (value) => viewModel.updateOption(
                         showFuelConsumption: value ?? true),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       "Show Fuel Consumption",
-                      style: AppTextStyles.labelSmall,
+                      style: AppTextStyles.labelSmall
+                          .copyWith(color: context.colors.primaryMain),
                       maxLines: 2,
                     ),
                   )

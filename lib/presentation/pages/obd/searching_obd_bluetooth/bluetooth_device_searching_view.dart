@@ -8,6 +8,7 @@ import 'package:baseproject/presentation/resources/app_colors.dart';
 import 'package:baseproject/presentation/resources/app_text_styles.dart';
 import 'package:baseproject/presentation/widget/app_dialog.dart';
 import 'package:baseproject/presentation/widget/app_indicator/app_loading_overlayed.dart';
+import 'package:baseproject/presentation/widget/gradient_divider.dart';
 import 'package:baseproject/presentation/widget/snack_bar/infor_snack_bar.dart';
 import 'package:baseproject/ultilities/app_constant.dart';
 import 'package:baseproject/ultilities/loading_status.dart';
@@ -97,16 +98,14 @@ class _BluetoothDeviceSearchViewState
   // Stop scanning for Bluetooth devices
   void stopScan() {
     flutterBluetoothSerial.cancelDiscovery();
-    viewModel.initData(
-        [..._devicesBluetoothList]);
+    viewModel.initData([..._devicesBluetoothList]);
     viewModel.ending();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     flutterBluetoothSerial.cancelDiscovery();
+    super.dispose();
   }
 
   @override
@@ -199,53 +198,121 @@ class _BluetoothDeviceSearchViewState
                             ),
                             ...state.listDevice
                                 .map(
-                                  (e) => TextButton(
-                                    onPressed: () async {
-                                      await showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            content: const Text(
-                                                'Continue with Simulator Mode'),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                    ref
-                                                        .read(
-                                                            appNavigatorProvider)
-                                                        .navigateTo(
-                                                            AppRoutes.obdDetail,
-                                                            arguments:
-                                                                ObdDetailArgument(
-                                                                    e.address,
-                                                                    true,));
-                                                  },
-                                                  child: const Text("OK")),
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                    ref
-                                                        .read(
-                                                            appNavigatorProvider)
-                                                        .navigateTo(
-                                                            AppRoutes.obdDetail,
-                                                            arguments:
-                                                                ObdDetailArgument(
-                                                                    e.address,
-                                                                    false));
-                                                  },
-                                                  child: const Text("NO"))
-                                            ],
+                                  (e) => Column(
+                                    children: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  // Adjust the radius as per your preference
+                                                  side: BorderSide(
+                                                    color: context
+                                                        .colors.primaryMain,
+                                                    // Border color
+                                                    width: 1.5, // Border width
+                                                  ),
+                                                ),
+                                                content: Text(
+                                                  'Continue with Simulator Mode',
+                                                  style: AppTextStyles
+                                                      .labelLargeLight
+                                                      .copyWith(
+                                                          color: context.colors
+                                                              .primaryMain),
+                                                ),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      ref
+                                                          .read(
+                                                              appNavigatorProvider)
+                                                          .navigateTo(
+                                                              AppRoutes
+                                                                  .obdDetail,
+                                                              arguments:
+                                                                  ObdDetailArgument(
+                                                                e.address,
+                                                                true,
+                                                              ));
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor: context
+                                                          .colors.surface,
+                                                      shape: RoundedRectangleBorder(
+                                                          side: BorderSide(
+                                                              color: context
+                                                                  .colors
+                                                                  .primaryMain),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8)),
+                                                    ),
+                                                    child: Text("OK",
+                                                        style: AppTextStyles
+                                                            .labelSmallLight
+                                                            .copyWith(
+                                                                color: context
+                                                                    .colors
+                                                                    .primaryMain)),
+                                                  ),
+                                                  ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                        ref
+                                                            .read(
+                                                                appNavigatorProvider)
+                                                            .navigateTo(
+                                                                AppRoutes
+                                                                    .obdDetail,
+                                                                arguments:
+                                                                    ObdDetailArgument(
+                                                                        e.address,
+                                                                        false));
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        backgroundColor: context
+                                                            .colors.surface,
+                                                        shape: RoundedRectangleBorder(
+                                                            side: BorderSide(
+                                                                color: context
+                                                                    .colors
+                                                                    .primaryMain),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8)),
+                                                      ),
+                                                      child: Text("NO",
+                                                          style: AppTextStyles
+                                                              .labelSmallLight
+                                                              .copyWith(
+                                                                  color: context
+                                                                      .colors
+                                                                      .primaryMain))),
+                                                ],
+                                              );
+                                            },
                                           );
                                         },
-                                      );
-                                    },
-                                    child: Text(
-                                      '${e.name} ${e.address}',
-                                      style: AppTextStyles.labelSmall.copyWith(
-                                          color: context.colors.primaryMain),
-                                    ),
+                                        child: Text(
+                                          '${e.name} ${e.address}',
+                                          style: AppTextStyles.labelSmall
+                                              .copyWith(
+                                                  color: context
+                                                      .colors.primaryMain),
+                                        ),
+                                      ),
+                                      const GradientColorDivider()
+                                    ],
                                   ),
                                 )
                                 .toList()
