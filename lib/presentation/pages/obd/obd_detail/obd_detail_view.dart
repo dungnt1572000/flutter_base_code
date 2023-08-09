@@ -400,6 +400,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     if (state.showDistance)
                       Container(
                         decoration: BoxDecoration(
+                          color: Colors.white,
                             border:
                                 Border.all(color: context.colors.primaryMain)),
                         padding: const EdgeInsets.all(15),
@@ -421,6 +422,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     if (state.showTime)
                       Container(
                         decoration: BoxDecoration(
+                          color: Colors.white,
                             border:
                                 Border.all(color: context.colors.primaryMain)),
                         padding: const EdgeInsets.all(15),
@@ -442,6 +444,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
                     if (state.showFuelConsumption)
                       Container(
                         decoration: BoxDecoration(
+                          color: Colors.white,
                             border: Border.all(
                                 color: isBlink
                                     ? Colors.red
@@ -479,6 +482,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
           Container(
             constraints: const BoxConstraints(minHeight: 95, minWidth: 105),
             decoration: BoxDecoration(
+              color: Colors.white,
                 border: Border.all(
                     color: isBlink ? Colors.red : context.colors.primaryMain,
                     width: isBlink ? 5 : 2)),
@@ -507,6 +511,7 @@ class _ObdDetailView extends ConsumerState<ObdDetailView>
           Container(
             constraints: const BoxConstraints(minHeight: 95, minWidth: 105),
             decoration: BoxDecoration(
+              color: Colors.white,
                 border: Border.all(
                     color: isBlink ? Colors.red : context.colors.primaryMain,
                     width: isBlink ? 5 : 2)),
